@@ -1,0 +1,25 @@
+> 截止Java8的介绍，来自《Java技术手册》，之后的版本，来自网络。
+
+## 版本
+
+Java的主要版本
+- Java1.0（1996年），第一个公开发行版
+- Java1.1（1997年），引入“内部类”和第一版反射API
+- Java1.2（1998年），重要版本，新增集合API，新增大量功能
+- Java1.3（2000年），维护版本，用于修正缺陷，提升性能。引入 HotSpot JVM。
+- Java1.4（2002年），重要版本，增加了一些重要的功能，如高性能底层IO、正则表达式、XML和XSLT库、SSL支持、日志API和加密支持
+- Java5（2004年），大幅更新，引入范型、枚举类型、注解、变长参数方法、自动装包和新版for循环、并发编程实用工具、远程管理框架和类、JVM的监测程序
+- Java6（2006年），维护和提升，引入编译器API，扩展注解的用法和适用范围，提供了绑定，对JVM和SWing GUI进行改进
+- Java7（2011年），Oracle接手第一个版本，引入处理资源的try语句和NIO2API。
+- Java8（2014年），变化幅度很大，引入lambda表达式，接口默认方法和静态方法，实现运行在JVM中的Javascript（Nashorn），新的日期和时间支持，以及Java配置。
+
+参见 [聊聊 Java8 以后各个版本的新特性](https://www.cnblogs.com/javazhiyin/p/11394448.html) 。官方网站在 Java8之后，只能看到 Java11，Java12 这两个版本。
+
+- Java11（2018年，融合Java9+Java10），Jigsaw模块系统，JShell REPL交互解释器，接口私有方法，类型推断，各种API的提高。
+- Java12（2019年），没有什么提升，switch表达式。
+
+## 规律
+
+在此之前，Java 基本上是两年一个版本，除了 Java SE 7 经过了五年，Java SE 8 经过了三年。在此之后，就是每六个月发布一次新版本。但是不是每个版本都是 LTS（Long-Term-Support）。按照 Oracle 的计划，每三年会有一个 LTS 版本。最近的 LTS 版本就是 Java SE 11 了。
+
+
