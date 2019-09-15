@@ -1,9 +1,12 @@
 # master-java-in-one-month
 
-尝试在一个月时间内，初步掌握Java Web。
+已经使用过PHP和JavaScript，了解这两种语言的语法、范式、应用开发、生态体系。尝试在一个月时间内，初步掌握Java Web。
 掌握的标准：
 - 是可以使用JavaWeb框架，编写一个服务程序，计算前段传来的四则运算表达式，并记录日志。
 - 了解JavaWeb生态系统的概貌，对常见名词不陌生，对核心名词有了解
+
+值得注意的是，Java的基于继承的对象，完全不同于PHP的过程、JS的基于原型的对象。  
+需要重点关注Java的**继承**、**重载**、**封装**等特性，以及**设计模式**。
 
 计划是：
 - [x]了解java[版本历史](./history.md)，不同版本的主要差异
@@ -24,3 +27,6 @@
 # 名词
 
 Tomcat, Jetty, Glassfish, Cassandra, Jenkins
+
+manifest
+
