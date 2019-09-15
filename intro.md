@@ -163,6 +163,49 @@ options参数有三种：标准参数、当前开发环境支持的交叉编译�
 
 ## javap
 
+Use the javap command to disassemble one or more class files.
+
+```bash
+javap [options] classes...
+```
+
+当没有任何参数指定时，javap只打印 protected 和 public 成员。
+
+javap打印输出到stdout。
+
+重要参数：
+- `-l` 打印本地变量和行数的表格。
+- `-package` 显示 package/protected/public 类和成员(默认)。
+- `-public` 只显示 public 类和成员。
+- `-protected` 只显示 protected ／ public 类和成员。
+- `-private` or `-p` 显示所有类和成员。
+- `-s` 打印内部类型签名。
+- `-sysinfo` 显示当前处理类的系统信息(path, size, date, MD5 hash)。
+- `-constants` 显示 `static final` 常量。
+- `--module module` or `-m module` 指定包含将被反编译的类的模块。
+- `--module-path path` 指定模块的路径。
+- `--class-path path`, `-classpath path`, or `-cp path` 指定javap用于寻找用户类文件的路径。这将覆盖默认值或CLASSPATH（如果未设置的话）。
+- `-bootclasspath path` Overrides the location of bootstrap class files.
+- `-Joption` 传递指定参数到JVM，例如: `javap -J-version`
+
+以HelloWorld.java为例
+```java
+public class HelloWorld
+{
+    public static void main(String args[])
+    {
+        System.out.println("Hello World");
+    }
+}
+```
+反编译HelloWorld.class的结果
+```java
+public class HelloWorld {
+  public HelloWorld();
+  public static void main(java.lang.String[]);
+}
+```
+
 ## java
 
 ## javadoc
