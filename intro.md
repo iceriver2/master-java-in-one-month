@@ -208,6 +208,63 @@ public class HelloWorld {
 
 ## java
 
+Use the java command to launch a Java application.
+
+```bash
+# To launch a class file:
+java [options] mainclass [args...] # args: the arguments for the main method.
+
+# To launch the main class in a JAR file:
+java [options] -jar jarfile [args...] # The jarfile argument is the name of a JAR file with a manifest that contains a line in the form `Main-Class:classname` that defines the class with the `public static void main(String[] args)` method that serves as your application's starting point.
+
+# To launch the main class in a module:
+java [options] --module module[/mainclass] [args...] # Executes the main class in a module specified by `mainclass` if it is given, or, if it is not given, the value in the module. `mainclass` can be used when it is not specified by the module.
+
+# To launch a single source-file program:
+java [options] source-file [args...] # Only used to launch a single source-file program. Specifies the source file that contains the main class when using source-file mode. The --source option can be used to specify the source version or N of the source code.
+```
+
+java允许时，启动jre，加载class文件，调用main()方法。 main() 的定义必须为 `public static void main(String[] args)`，必须为 public static ，必须无返回值，必须接受一个字符串数组作为参数。
+
+JDK_JAVA_OPTIONS环境变量可用于预先设置java命令的参数。
+
+标准参数，用于通用操作如：检查jre版本、设置classpath。  
+扩展参数，用于Java HotSpot VM，以`-X`开头。  
+高级参数，不推荐任意使用，以`-XX`开头，包括：Advanced Runtime Options、Advanced JIT Compiler Options、Advanced Serviceability Options、Advanced Garbage Collection Options。
+
+重要的标准参数：
+- `--class-path classpath`, `-classpath classpath`, or `-cp classpath` 分号隔开的目录、jar压缩文件、zip压缩文件，用于搜索类文件。这将覆盖 CLASSPATH 环境变量，默认为当前目录。可以使用 * 符，如 `mydir/*`。
+- `--module-path modulepath...` or `-p modulepath` 分号隔开的目录，每个目录都是一个模块目录。
+- `--upgrade-module-path modulepath...` 分号隔开的目录列表，每个目录都是一个模块目录，用于代替在运行时映像中可升级的模块。
+- `--add-modules module[,module...]` 在初始化模块之外指定根模块，还可以是ALL-DEFAULT, ALL-SYSTEM, 和 ALL-MODULE-PATH。
+- `--disable-@files` 可在命令行任何地方使用，包括参数文件。这个参数后，将停止展开 `@-argfiles` 。
+- `--list-modules` 列出显式模块后退出。
+- `-d module name or --describe-module module_name` 描述一个指定的模块后退出。
+- `--dry-run` 创建VM但不执行main 方法。这在验证命令行参数（如模块系统配置）时很有用。
+- `--validate-modules` 验证所有的模块后退出。这对于发现模块和模块路径的冲突和其他错误很有帮助。
+- `-Dproperty=value` 设置一个属性值。
+- `--show-version` 打印产品版本号到输出流后继续。
+- `-verbose:class` 显示每个被加载的类的信息。
+- `-verbose:gc` 显示每个gc事件的信息。
+- `-verbose:jni` 显示自带方法的使用信息，和其他Java Native Interface (JNI) 活动的信息。
+- `-verbose:module` 显示使用中的模块的信息。
+- `-version` 打印产品版本号到输出流后退出。
+- `@argfile` 指定一个或多个参数文件，以`@`符开头。参数文件也可以包含主类名和所有参数。
+
+重要扩展参数：
+- `-Xbatch` 禁用后台编译，改为前台编译。
+- `-Xbootclasspath/a:directories|zip|JAR-files` 指定目录、jar文件、zip文件的列表，最佳到默认 bootstrap class 路径。
+- `-Xdiag` 显示额外的诊断消息。
+- `-Xfuture` 启用严格的类文件格式检查，以获得接近类文件格式说明中的性能。开发者开发新代码时应该使用本选项。
+- `-Xinternalversion` 显示Jvm版本信息的细节后退出。
+- `-Xlog:option` Configure or enable logging with the Java Virtual Machine (JVM) unified logging framework. The default configuration is `-Xlog:all=warning:stdout:uptime,level,tags`
+- `-Xmn size` 设置初始和最大的新生代使用的堆大小，单位byte，也可以使用k，m，g。新生代的堆用于新对象的使用。推荐把这个值设置为全部堆大小的25%-50%。也可以将初始值和最大值分开设置，`-XX:NewSize` 和 `-XX:MaxNewSize`。
+- `-Xms size` 设置堆的初始大小。单位支持k，m，g。
+- `-Xmx size` 指定内存池的最大大小，单位bytes，支持k，m，g。`-Xms` 和 `-Xmx` 经常设置为同样大小。
+- `-Xss size` 设置线程栈大小。单位支持k，m，g。
+- `-XshowSettings` 显示所有设置后继续
+- `-XshowSettings:category` 显示设置后继续，category可能为：all，locale，properties，vm，system。
+
 ## javadoc
 
 ## jar
