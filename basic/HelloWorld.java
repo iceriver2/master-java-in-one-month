@@ -7,6 +7,8 @@
  * 编译和执行使用javac的参数@filename
  * 编译 javac @options-sourcefile
  * 执行 cd classdir; java HelloWorld
+ * 
+ * 打包 jar --create --file HelloWorld.jar HelloWorld.class
  */
 
 public class HelloWorld

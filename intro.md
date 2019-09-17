@@ -269,6 +269,88 @@ JDK_JAVA_OPTIONS环境变量可用于预先设置java命令的参数。
 
 ## jar
 
+jar命令可以用于创建class文件和资源的压缩文件，操纵或恢复压缩包中的单个类或资源。
+
+jar命令是个通用的打包和压缩工具，基于zip和zlib压缩格式。
+
+The jar command also enables individual entries in a file to be signed so that their origin can be authenticated.
+
+```bash
+jar [OPTION...] [ [--release VERSION] [-C dir] files] ...
+```
+
+Jar文件可以被用过class path入口。
+
+当一个压缩包在指定目录的根或jar包的根上包含一个模块描述文件module-info.class时，就会变成一个模块jar。
+
+主要操作模式（jar使用时必选）
+- `-c` or `--create` 创建压缩包
+- `-i=FILE` or `--generate-index=FILE` 为指定的jar文件生成索引信息
+- `-t` or `--list` 列出压缩包的内容
+- `-u` or `--update` 更新一个已经存在的jar文件。
+- `-x` or `--extract` 从压缩包中解压指定文件或全部文件
+- `-d` or `--describe-module` 打印模块描述器或自动模块名称
+
+所有模式通用的操作修饰符
+- `-C DIR` 改变指定的目录，并在命令行的末尾包含指定的文件（可以使用`.`）
+- `-f=FILE` or `--file=FILE` 指定压缩包的名称
+- `--release VERSION` 创建一个多版本的jar文件。将所有指定文件放入到jar文件中一个编号的目录`META-INF/versions/VERSION/`中。运行时，当一个类存在多个版本时，JDK会使用它找到的第一个，开始时搜索与JDK主版本号匹配VERSION的目录，然后相继搜索较低版本号的目录，最后搜索jar根目录。
+- `-v` or `--verbose` 发送或打印可视化输出到表stdout。
+
+只对create和update有用的操作修饰符
+- `-e=CLASSNAME` 或 `--main-class=CLASSNAME` 指定模块捆绑的独立应用或可执行jar文件的入口点。
+- `-m=FILE` 或 `--manifest=FILE` 从指定的manifest文件中引入manifest信息。
+- `-M` 或 `--no-manifest` 不为入口创建manifest文件。
+- `--module-version=VERSION` 当创建或更新jar文件时，指定模块版本。
+- `--hash-modules=PATTERN` 创建模块化jar文件或更新非模块化jar文件时，计算并记录匹配指定pattern的模块的hash值。
+- `-p path` 或 `--module-path path` 指定用于生成hash的模块依赖的位置。
+- `@file` 从文本文件中读取jar参数和文件名称。
+
+只对create、update、Generate-index有用的操作修饰符
+- `-0` or `--no-compress` 不使用zip压缩
+
+使用示例
+```bash
+# Create an archive, classes.jar, that contains two class files, Foo.class and Bar.class.
+jar --create --file classes.jar Foo.class Bar.class
+
+# Create an archive, classes.jar, by using an existing manifest, mymanifest, that contains all of the files in the directory foo/.
+jar --create --file classes.jar --manifest mymanifest -C foo/
+
+# Create a modular JAR archive, foo.jar, where the module descriptor is located in classes module-info.class.
+jar --create --file foo.jar --main-class com.foo.Main --module-version 1.0 -C foo/classes resources
+
+# Update an existing non-modular JAR, foo.jar, to a modular JAR file.
+jar --update --file foo.jar --main-class com.foo.Main --module-version 1.0 -C foo/module-info.class
+
+# Create an archive, my.jar, by reading options and lists of class files from the file classes.list.
+jar --create --file my.jar @classes.list
+```
+
+```bash
+# 创建一个版本化或多发布的jar，foo.jar，将 classes 目录的文件放在 jar 的根，classes-10 目录的文件放在 jar 的 META-INF/versions/10 目录。
+# 本例中，classes/com/foo目录包含2个class，com.foo.Hello(入口class)和com.foo.NameProvider，均基于JDK8编译。classes-10/com/foo目录包含一个不同版本的com.foo.NameProvider，这个class包含JDK10特定的代码并基于JDK10编译.
+# 从包含classes和classes-10目录的目录下，运行以下命令，创建一个多发布的jar文件foo.jar。
+jar --create --file foo.jar --main-class com.foo.Hello -C classes . --release 10 -C classes-10 .
+
+# JAR文件foo.jar的内容：
+# - META-INF/
+# - META-INF/MANIFEST.MF
+# - com/
+# - com/foo/
+# - com/foo/Hello.class
+# - com/foo/NameProvider.class
+# - META-INF/versions/10/com/
+# - META-INF/versions/10/com/foo/
+# - META-INF/versions/10/com/foo/NameProvider.class 
+
+# META-INF/MANIFEST.MF文件，包含以下内容，以指明这是个多发布的jar文件，入口点是com.foo.Hello。
+# - Main-Class: com.foo.Hello
+# - Multi-Release: true
+
+# 假定com.foo.Hello调用com.foo.NameProvider的方法，运行在JDK10时需要保证com.foo.NameProvider存在于META-INF/versions/10/com/foo/下，运行在JDK8时需要保证com.foo.NameProvider在jar的根下的目录com/foo下。
+```
+
 ## jshell
 
 JShell is a Read-Evaluate-Print Loop (REPL), which evaluates declarations, statements, and expressions as they are entered and immediately shows the results.
