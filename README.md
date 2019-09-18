@@ -21,12 +21,3 @@
 - [ ]重构整个服务程序
 - [ ]以docker方式发布服务程序
 
-
-> 计划会随时更改，因为现在对Java还没有系统认识。保留修改痕迹，记录修改日期及理由。
-
-# 名词
-
-Tomcat, Jetty, Glassfish, Cassandra, Jenkins
-
-manifest
-
