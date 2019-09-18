@@ -389,3 +389,16 @@ JShell启动脚本是一个文件中的一系列代码片段和命令，可以�
 - `/edit` 启动外部编辑器（可`/set editor`设置），编辑所有代码片段
 
 ## jconsole
+
+Use the jconsole command to start a graphical console to monitor and manage Java applications.
+
+```bash
+jconsole [-interval=n] [-notile] [-plugin path] [-version] [connection ... ] [-Jinput_arguments]
+jconsole -help
+```
+
+主要参数
+- `-interval` 设置更新间隔为n秒(默认4秒)。
+- `-pluginpath path` 指定jconsole使用的插件的目录。插件路径应该包含一个名为META-INF/services/com.sun.tools.jconsole.JConsolePlugin的配置文件，文件每一行对应一个插件。 每一行指定一个应用了com.sun.tools.jconsole.JConsolePlugin的类的全名。
+- `connection = pid | host:port | jmxURL` 由pid、host:port或jmxURL描述的连接。
+- `-Jinput_arguments` 将input_arguments传递给jconsole运行的JVM。
