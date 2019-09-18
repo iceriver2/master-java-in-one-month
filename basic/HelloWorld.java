@@ -1,6 +1,8 @@
 /**
  * HelloWorld 类名必须与文件名相同
  * 
+ * @author Iceman Tong
+ * 
  * 检查使用-Xlint参数
  * 检查 javac -Xlint HelloWorld.java
  * 
@@ -9,6 +11,8 @@
  * 执行 cd classdir; java HelloWorld
  * 
  * 打包 jar --create --file HelloWorld.jar HelloWorld.class
+ * 
+ * 文档 javadoc -d ./html HelloWorld.java
  */
 
 public class HelloWorld

@@ -85,6 +85,8 @@ source /etc/environment
 
 参见[官方文档](https://docs.oracle.com/en/java/javase/12/tools/tools-and-command-reference.html)的介绍。
 
+> 工具就是要多用，熟练生巧，其他没什么可说的。
+
 主要工具：
 - javac: 读取类和接口定义文件，并编译为字节码和class文件。
 - javap: 反编译class文件。
@@ -266,6 +268,74 @@ JDK_JAVA_OPTIONS环境变量可用于预先设置java命令的参数。
 - `-XshowSettings:category` 显示设置后继续，category可能为：all，locale，properties，vm，system。
 
 ## javadoc
+
+javadoc读取源码的特定内容，并转为一种内部格式。其结构是：`The structure is: (source-files)->[javadoc-tool:doclet]->(generated files)`。其中，doclet类似后端插件，用于分析这种内部格式。doclet不同，可能生成不同的文件，如HTML、MIF、XML等。默认使用Standard Doclet。
+
+Javadoc特性包括：Javadoc搜索，支持生成HTML5输出，支持模块系统中的文档注释，简化的Doclet API。
+
+Javadoc能处理的文件包括：java源码文件，包注释文件，概述注释文件，和其他未处理文件。
+
+每个应用程序或包可有有自己的概述注释文件，javadoc将合并其内容以生成概述页。overview.html可以放在任何地方，当一般放置于源码树的顶层。  
+概述注释文件是HTML格式的一个大的文档注释。第一句是关于应用程序或包的简介。不要在body标签和第一句话之间放置标题或任何文字。所有标签，除了内连标签如`{@link}`，必须出现在主描述之后。如果增加`@see`标签，它必须拥有一个全名。  
+运行javadoc时，通过`-overview`指定概述注释文件的位置。其后续处理与包的注释文件相似，过程为：（1）拷贝body部分的所有内容待处理（2）处理出现的概述标签（3）处理过的文本插入到概述页的底部（4）将第一句简介拷贝到概述简介页的顶部。
+```html
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+jMonkeyEngine is a game engine made for developers who want to create 3D games following modern technology standards.
+</body>
+</html>
+```
+
+源码文件可以包含任何想要javadoc工具拷贝到目标目录的文件。这些文件通常包括图形文件，示例代码，html文件。
+要包含这些未处理文件，将它们放入名为doc-files的目录。doc-files目录可能是任何包目录的子目录。每个包都可以有一个doc-files子目录。
+注意，javadoc不会处理这些文件只是拷贝，因此，所有指向未处理文件的链接必须要使用html代码指定，如
+```java
+/**
+ * <p> This button looks like this:</p> 
+ * <img src="doc-files/Button.gif"/>
+ */
+```
+
+测试文件和模板文件也会保存在源码目录中，也会有.java后缀。
+要想不被javadoc处理，可以将其放入一个不可能是包名的子目录中，例如test-files（含有连字符）。
+如果这些文件中含有注释，可以单独运行一次javadoc，以便生成文档，例如`javadoc com/package1/test-files/*.java`。
+
+
+javadoc使用方法是： `javadoc [options] [packagenames] [sourcefiles] [@files]`。
+如果指定源文件名称，可以控制哪些文件被处理。但多数开发者不这么做，因为直接传入一个包名跟简单。
+如果不指定源文件名称，可以传入包名，使用`-subpackages`参数，或使用通配符匹配源文件。
+
+使用示例
+```bash
+# Recursive Run from One or More Packages.
+# This example uses -sourcepath so the javadoc command can be run from any directory for recursion. It traverses the subpackages of the Java directory excluding packages rooted at java.net and java.lang. Notice this excludes java.lang.ref, a subpackage of java.lang. To also traverse down other package trees, append their names to the -subpackages argument, such as java:javax:org.xml.sax.
+javadoc -d /home/html -sourcepath /home/src -subpackages java -exclude
+
+# Run Explicit Packages
+# To also traverse down other package trees, append their names to the -subpackages argument, such as java:javax:org.xml.sax.
+javadoc -d /home/html java.awt java.awt.event
+
+# Run from Any Directory on Explicit Packages in One Tree
+javadoc -d /home/html -sourcepath /home/src java.awt java.awt.event
+
+# Run from Any Directory on Explicit Packages in Multiple Trees
+javadoc -d /home/html -sourcepath /home/src1:/home/src2 java.awt java.awt.event
+
+# Document One or More Classes
+javadoc -d /home/html java/awt/Button.java java/math/BigDecimal.java
+
+# Document Files from Any Directory
+javadoc -d /home/html /home/src/java/awt/Button.java /home/src/java/awt/Graphics*.java
+
+# Document Packages and Classes
+javadoc -d /home/html -sourcepath /home/src java.awt /home/src/java/math/BigDecimal.java
+```
+
 
 ## jar
 
