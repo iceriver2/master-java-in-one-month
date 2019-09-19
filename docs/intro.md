@@ -15,7 +15,7 @@
 
 Java由多个不同环境和规范组成，包括 JavaME、JavaSE、JavaEE。
 
-Java语言受Java语言规范（Java Language Specification, JLS）的约束。
+Java语言受**Java语言规范（Java Language Specification, JLS）**的约束。
 
 **JVM是运行Java程序所需的运行时环境。** JVM运行的是class文件。JVM运行时能监控并优化在其中运行的程序。  
 JVM算是解释器（通过JIT编译大幅提升性能）。  
@@ -63,7 +63,7 @@ sudo apt install oracle-java12-installer
 手动安装jdk
 ```bash
 ## 下载最新版本 https://www.oracle.com/technetwork/java/javase/downloads/index.html ##
-## 注意匹配版本与架构 ##
+## 注意匹配版本与架构，32位or64位 ##
 wget -c --header "Cookie: oraclelicense=accept-securebackup-cookie" https://download.oracle.com/otn-pub/java/jdk/12.0.2+10/e482c34c86bd4bf8b56c0b35558996b9/jdk-12.0.2_linux-x64_bin.tar.gz
 
 ## 解压即是安装 ##
@@ -226,7 +226,7 @@ java [options] --module module[/mainclass] [args...] # Executes the main class i
 java [options] source-file [args...] # Only used to launch a single source-file program. Specifies the source file that contains the main class when using source-file mode. The --source option can be used to specify the source version or N of the source code.
 ```
 
-java允许时，启动jre，加载class文件，调用main()方法。 main() 的定义必须为 `public static void main(String[] args)`，必须为 public static ，必须无返回值，必须接受一个字符串数组作为参数。
+java运行时，启动jre，加载class文件，调用main()方法。 main() 的定义必须为 `public static void main(String[] args)`，必须为 `public static` ，必须无返回值，必须接受一个字符串数组作为参数。
 
 JDK_JAVA_OPTIONS环境变量可用于预先设置java命令的参数。
 

@@ -10,6 +10,8 @@
  * 编译 javac @options-sourcefile
  * 执行 cd classdir; java HelloWorld
  * 
+ * 反编译 javap HelloWorld
+ * 
  * 打包 jar --create --file HelloWorld.jar HelloWorld.class
  * 
  * 文档 javadoc -d ./html HelloWorld.java
