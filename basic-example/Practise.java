@@ -20,6 +20,7 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.File;
 
 public class Practise
 {
@@ -112,8 +113,11 @@ class Code
     }
 
     public void readFileMD() {
-        String root = "/Users/iceman/Documents/Workshop/master-java-in-one-month";
-        String path = root + "/docs/java file read and write.md"; // 文件名可以含有空格
+        String relativePath = "../docs/java file read and write.md"; // 文件名可以含有空格
+        out.println(relativePath+" will be read");
+
+        File fp = new File(relativePath);
+        String path = fp.getAbsolutePath();
         out.println(path+" will be read");
 
         String content = "";
