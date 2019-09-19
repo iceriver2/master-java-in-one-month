@@ -144,6 +144,16 @@ synchronized语句用于在多线程工作时避免冲突。执行时，Java会�
 
 throw语句抛出一个异常对象。Java执行throw语句时，会立即停止常规的程序执行，开始寻找能捕获或处理异常的程序。如果有catch和finally会先处理，否则，向上冒泡到能处理的语句。
 
+try语句的catch可以多次出现以捕获不同的异常，或可以一次捕获多个异常。
+```java
+try {}
+catch (IndexOutOfBoundsException e) {}
+catch (IOException e) {}
+
+try{}
+catch (IndexOutOfBoundsException | IOException e) {}
+```
+
 try语句从Java7开始提供一种自动关闭资源的语句TWR（try-with-resource）。不管try以任何方式退出，都会自动清理资源。
 ```java
 try (InputStream is = new FileInputStream("/path/to/file")) {
