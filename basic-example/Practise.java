@@ -45,7 +45,10 @@ public class Practise
                 code.calc(3, 4, OP.MULTI);
             }
             if (cmd.equals("file")) {
-                code.readFileMD();
+                try {
+                    code.readFileMD();
+                } catch (IOException e) { // 捕获readFileMD的getCanonicalPath()可能抛出的IOException
+                }
             }
         }
     }
@@ -112,17 +115,13 @@ class Code
         return c;
     }
 
-    public void readFileMD() {
+    public void readFileMD() throws IOException, FileNotFoundException {
         String relativePath = "../docs/java file read and write.md"; // 文件名可以含有空格
         out.println(relativePath+" will be read");
 
-        File fp = new File(relativePath);
         String path = "";
-        try {
-            path = fp.getCanonicalPath();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        File fp = new File(relativePath);
+        path = fp.getCanonicalPath(); // 此方法可能抛出 IOException
         out.println(path+" will be read");
 
         String content = "";
