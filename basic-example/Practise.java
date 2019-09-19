@@ -117,7 +117,12 @@ class Code
         out.println(relativePath+" will be read");
 
         File fp = new File(relativePath);
-        String path = fp.getAbsolutePath();
+        String path = "";
+        try {
+            path = fp.getCanonicalPath();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         out.println(path+" will be read");
 
         String content = "";
