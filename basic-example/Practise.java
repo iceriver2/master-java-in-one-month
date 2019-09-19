@@ -7,7 +7,7 @@
  * - [x]比较两个数的大小
  * - [x]一个简单的四则运算方法
  * - [x]从console读取输入，并打印
- * - []读取一个文件的内容
+ * - [x]读取一个文件的内容
  * - []创建一个文件，并写入内容
  * - []从URL读入内容，并执行文本搜索
  * - []对一个list执行遍历
@@ -15,7 +15,11 @@
  * - []对集合元素执行搜索
  */
 
- import static java.lang.System.out;
+import static java.lang.System.out;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class Practise
 {
@@ -38,6 +42,9 @@ public class Practise
             }
             if (cmd.equals("calc")) {
                 code.calc(3, 4, OP.MULTI);
+            }
+            if (cmd.equals("file")) {
+                code.readFileMD();
             }
         }
     }
@@ -104,4 +111,33 @@ class Code
         return c;
     }
 
+    public void readFileMD() {
+        String root = "/Users/iceman/Documents/Workshop/master-java-in-one-month";
+        String path = root + "/docs/java file read and write.md"; // 文件名可以含有空格
+        out.println(path+" will be read");
+
+        String content = "";
+
+        // 没有这两个catch动作，编译会报错。
+        try {
+            BufferedInputStream in = new BufferedInputStream(new FileInputStream(path));
+            byte[] buffer = new byte[1024];
+            int n = -1;
+            while((n = in.read(buffer, 0, buffer.length)) != -1) {
+                content += new String(buffer, 0, n, "utf8");
+            }
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int pos = content.indexOf("\n");
+        if (pos != -1) {
+            out.println(content.substring(0, pos));
+        } else {
+            out.println("No content found");
+        }
+    }
 }
