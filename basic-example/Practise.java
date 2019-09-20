@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.File;
+import java.util.Arrays;
 
 public class Practise
 {
@@ -43,6 +44,9 @@ public class Practise
             }
             if (cmd.equals("calc")) {
                 code.calc(3, 4, OP.MULTI);
+            }
+            if (cmd.equals("sort")) {
+                code.sortArray();
             }
             if (cmd.equals("file")) {
                 try {
@@ -86,6 +90,13 @@ class Code
         if (a < b) {
             out.println(Float.valueOf(a).toString() + "<" + Float.valueOf(b).toString());
         }
+    }
+
+    public void sortArray() {
+        int[] a = new int[] {1, 45, 8, 23};
+        out.println("1st element before sort is 45: " + a[1]);
+        Arrays.sort(a);
+        out.println("1st element after sort is 8:" + a[1]);
     }
 
     public int calc(int a, int b, OP op) {
