@@ -5,12 +5,14 @@
  * javac -d classdir ObjectBasic.java; java -cp classdir/ ObjectBasic
  */
 import static java.lang.System.out;
+import java.util.Calendar;
 
 public class ObjectBasic
 {
     public static void main(String[] args) {
         showOverride();
         showAbstract();
+        showInterface();
     }
 
     private static void showOverride() {
@@ -36,6 +38,12 @@ public class ObjectBasic
     private static void showAbstract() {
         CClass c = new CClass();
         out.println(c.uname());
+    }
+
+    private static void showInterface() {
+        MClass m = new MClass();
+        m.say();
+        out.println(m.id());
     }
 }
 
@@ -64,5 +72,16 @@ abstract class ABClass { // 抽象类
 class CClass extends ABClass { // 具体类
     public String uname() { // 实现抽象方法。如果没有这个函数，编译报错
         return "World!";
+    }
+}
+
+/* 接口的使用 */
+interface Mask {
+    void say();
+    default String id() { return Calendar.getInstance().getTime().toString(); }
+}
+class MClass implements Mask {
+    public void say() {
+        out.println("I am an instance of MClass.");
     }
 }

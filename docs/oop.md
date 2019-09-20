@@ -64,6 +64,8 @@ public class TrigCircle {
 
 继承是面向对象编程范式的核心。
 
+类只能继承一个类。
+
 使用final修饰的类无法被继承。
 
 每个自定义的类都有超类，如果没有指定，那超类就是 java.lang.Object 。 Object是特殊的类，其没有超类。

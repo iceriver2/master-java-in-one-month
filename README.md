@@ -12,8 +12,9 @@
 - [x]了解java[版本历史](./docs/history.md)，不同版本的主要差异
 - [x]掌握[基本语法](./docs/basic.md)，关键字
 - [x]掌握java的[安装和自带工具的使用](./docs/intro.md)，如：javac，java
-- [ ]熟悉[OO基本思想](./docs/oop.md)
-- [x]一些简单的单应用，熟悉常用的类，如数组排序，文件读写
+- [x]熟悉[OO基本思想](./docs/oop.md)
+- [x]其他[内容](./docs/misc.md)，如注解、JVM等。
+- [x]一些简单的单应用，熟悉[常用的类](./docs/objects.md)，如数组排序，文件读写
 - [ ]codewar做一些题目
 - [ ]掌握tomcat的基本使用，实际使用时可考虑使用docker
 - [ ]编写一个单文件的服务程序，用于计算四则运算表达式
