@@ -60,7 +60,7 @@ Unicode字符、区分大小写
   - null、true、false——值类型
 - 线程（2个）
   - synchronized——线程同步（修饰方法、代码块，方法、代码块的同步）
-  - volatile——线程同步（修饰属性，属性的同步）
+  - volatile——线程同步（修饰属性，属性的同步，属性的值必须始终从主存储器读取，不能被线程缓存）
 - 异常（5个）
   - throw——抛出方法代码中的异常给方法自身。使用位置：方法中间
   - throws——抛出方法中的异常给调用者。使用位置：方法外部
@@ -70,7 +70,7 @@ Unicode字符、区分大小写
 - 返回（1个） return
 - 循环、条件（10个） if、else、switch、case、break、default、continue、while、do、for
 - 包（2个） package、import
-- 瞬时的（1个） transient
+- 瞬时的（1个） transient（不是对象持久状态的一部分，无需常用序列化）
 - 断言（1个） assert
 - 调用底层代码（C\C++）（1个） native
 - 不可变的——final（1个）
