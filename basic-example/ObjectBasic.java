@@ -70,6 +70,7 @@ abstract class ABClass { // 抽象类
     public abstract String uname(); // 抽象方法
 }
 class CClass extends ABClass { // 具体类
+    @Override
     public String uname() { // 实现抽象方法。如果没有这个函数，编译报错
         return "World!";
     }

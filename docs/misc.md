@@ -3,6 +3,8 @@
   - [范型](#范型)
   - [枚举](#枚举)
   - [注解](#注解)
+  - [嵌套类型](#嵌套类型)
+  - [lambda表达式](#lambda表达式)
 - [内存管理](#内存管理)
 - [并发编程](#并发编程)
 
@@ -247,6 +249,81 @@ Enum是所有 Java 语言枚举类型的公共基本类（注意Enum是抽象类
 | `static<T extends Enum<T>> T` | `static valueOf(Class<T> enumType, String name)` | 返回带指定名称的指定枚举类型的枚举常量。
 
 ## 注解
+
+注解是一种特殊的接口，作用是注解Java程序的某个部分。**注解没有直接作用**，只是为注解的方法提供额外的信息，可为编译器、IDE或其他工具提供提示。
+
+基本注解包括：
+- @Override 方法是覆盖的
+- @Deprecated 方法废弃了
+- @SuppressWarning 静默编译器的警告，需要提供值，如：deprecation、unchecked、fallthrough、path、serial、finally、all（不全）
+- @SafeVarargs 为变长参数方法提供增强的警告静默功能
+- @FunctionalInterface 接口可用作lambda表达式的目标
+- @Retention 元注解，指明javac和java运行时如何处理自定义的注解类型，可用的值在枚举RetentionType中定义：SOURCE（只保留在源码中）、CLASS（保留在类文件中，很少使用）、RUNTIME（运行时可通过反射访问）。
+- @Target 元注解，指明自定义的新注解能在源码的什么地方用，可用的值在枚举ElementType中定义，包括：TYPE、FIELD、METHOD、PARAMETER、CONSTRUCTOR、LOCAL_VARIABLE、ANNOTATION_TYPE、PACKAGE、TYPE_PARAMETER、TYPE_USE。
+
+
+与普通的接口相比，注解有些特殊的特性：都隐式扩展 java.lang.annotation.Annotation 接口；不能范型化；不能扩展其他接口；**只能定义没有参数的方法**；**不能定义会抛出异常的方法**；方法的返回类型有限制；方法可以有一个默认返回值。
+
+一个简单的示例
+```java
+@Override
+public void toString() {
+}
+```
+
+自定义注解的步骤：先指明注解能出现在哪里，然后是保留原则，最后是注解的名称。
+
+自定义注解的示例
+```java
+// MyTarget.java 定义一个注解，注意写法
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyTarget
+{
+
+}
+
+// 其他文件 ，使用注解
+public class MyTargetTest
+{
+    @MyTarget
+    public void doSomething()
+    {
+        System.out.println("hello world");
+    }
+}
+```
+
+注解也是接口，因此，也可以有成员。
+```java
+// MyAnnotation.java 定义注解
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyAnnotation
+{
+    String hello() default "gege"; // 注意default的用法
+    String world();
+    int[] array() default { 2, 4, 5, 6 };
+    EnumTest.TrafficLamp lamp() ;
+    TestAnnotation lannotation() default @TestAnnotation(value = "ddd");
+    Class style() default String.class;
+}
+
+// 其他文件使用，可以传值。这些传入的值，只有使用反射才能读取。
+@MyAnnotation(hello = "beijing", world="shanghai",array={},lamp=TrafficLamp.RED,style=int.class)
+public class MyTest
+{
+    @MyAnnotation(lannotation=@TestAnnotation(value="baby"), world = "shanghai",array={1,2,3},lamp=TrafficLamp.YELLOW)
+    @Deprecated
+    @SuppressWarnings("")
+    public void output()
+    {
+        System.out.println("output something!");
+    }
+}
+```
+
+## 嵌套类型
+
+## lambda表达式
 
 # 内存管理
 
