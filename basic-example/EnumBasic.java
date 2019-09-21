@@ -22,8 +22,9 @@ public class EnumBasic
     }
 
     public static void showEnumInEnum() {
-        out.println(Meal.APPETIZER.toString());
         out.println(Meal.APPETIZER.getValues()); // 得到一个 Food[]
+        out.println(Meal.APPETIZER.toString()); // 将 Food[] 转为字符串
+        out.println(Meal.Food.Coffee.TEA.toString()); // 这是我认为嵌套又嵌套的枚举的正确用法
     }
 
     private static String getWeekdaysAsString(WeekDay[] d) {
