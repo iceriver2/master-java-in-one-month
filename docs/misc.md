@@ -253,8 +253,8 @@ Enum是所有 Java 语言枚举类型的公共基本类（注意Enum是抽象类
 注解是一种特殊的接口，作用是注解Java程序的某个部分。**注解没有直接作用**，只是为注解的方法提供额外的信息，可为编译器、IDE或其他工具提供提示。
 
 基本注解包括：
-- @Override 方法是覆盖的
-- @Deprecated 方法废弃了
+- **@Override 方法是覆盖的**
+- **@Deprecated 方法废弃了**
 - @SuppressWarning 静默编译器的警告，需要提供值，如：deprecation、unchecked、fallthrough、path、serial、finally、all（不全）
 - @SafeVarargs 为变长参数方法提供增强的警告静默功能
 - @FunctionalInterface 接口可用作lambda表达式的目标
@@ -322,6 +322,53 @@ public class MyTest
 ```
 
 ## 嵌套类型
+
+嵌套类型，又称内部类。嵌套类有两个目的，都与封装有关，可能某个类型与另一个类型联系非常紧密，也可能某个类型只在局部区域使用。
+
+嵌套类型的4种方式：静态成员类型、非静态成员类型、局部类、匿名类。
+- 静态成员类型是定义为static的类型，嵌套的接口、枚举和注解使用是静态成员类型。
+- 非静态成员类型是未使用static的类型。只有类才能作为非静态成员类型。
+- 局部类，在代码块中定义的类。接口、枚举和注解不能定义为局部类型。
+- 匿名类，是没有名称的局部类。接口、枚举和注解不能定义为匿名类。
+
+【静态成员类型】
+
+静态成员类型的特性
+- 静态成员类型类似于类的其他静态成员：静态字段和静态方法
+- **静态成员类型和所在类的任何实例都不关联**（即没有this对象）
+- 静态成员类型只能访问所在类的静态成员
+- **静态成员类型能访问所在类型中的所有静态成员（包括其他静态成员类型）**
+- 嵌套的接口、枚举和注解都隐式声明为静态类型
+- 接口或注解中的嵌套类型也都隐式声明为静态类型。
+- 静态成员类型可以在顶层类型中定义，也可以嵌入任何深度的其他静态成员类型中
+- 静态成员类型不能在其他嵌套类型中定义。
+
+简单的说：静态访问静态，静态嵌套静态。接口、枚举和注解默认是静态。
+
+```java
+public class LinkedStack {
+    // 静态成员
+    static interface Linkable {
+        public Linkable getNext();
+        public void setNext(Linkable node);
+    }
+
+    Linkable head;
+}
+public LinkableInteger implements LinkedStack.Linkable {
+    public LinkedStack.Linkable getNext() { }
+    public void setNext(LinkedStack.Linkable node) { }
+}
+```
+
+> iceman注：有一种想法，顶层类如果视为一个包的话，那么顶层类中的静态成员就相当于该包中的类，自动获得包访问权，但相互之间并不是直接关联。
+
+
+【非静态成员类型】
+
+【局部类】
+
+【匿名类】
 
 ## lambda表达式
 
