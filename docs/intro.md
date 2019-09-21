@@ -10,6 +10,7 @@
   - [jar](#jar)
   - [jshell](#jshell)
   - [jconsole](#jconsole)
+  - [jdeps](#jdeps)
 
 # Java简介
 
@@ -129,6 +130,8 @@ Java Accessibility Utilities
 
 ## javac
 
+> 生产部署时，多数项目会使用单独的构架工具，如 Maven、Ant、Gradle 等。一般的IDE也会自带编译工具。
+
 Use the javac tool and its options to read Java class and interface definitions and compile them into bytecode and class files. The javac command can also process annotations in Java source files and classes.
 
 ```bash
@@ -154,11 +157,13 @@ options参数有三种：标准参数、当前开发环境支持的交叉编译�
 - `-d directory` 生成class文件的目录。
 - `-s directory` 生成源文件的目录。
 - `--source-path path` or `-sourcepath path` 指定源文件的位置。
+- `-g` 把调试信息添加到类文件中。
 
 重要的交叉编译参数：
 - `-Xlint` 使用所有推荐的警告。
 - `-Xlint:[-]key(,[-]key)*` 禁用某些警告。
-- `-Xdoclint` 检查javadoc中推荐检查的问题
+- `-Xdoclint` 检查javadoc中推荐检查的问题。
+- `-Xstdout` 将编译过程中的输出存入一个文件。
 - `-Xdoclint:(all|none|[-]group)[/access]` 启用或禁用某些组的检查
 
 当编译时，编译器需要寻找在源文件中被使用、扩展、应用的每个类和接口的类型信息，包括没有明确被使用类的父类。所以，当使用了不在当前目录中的类和接口时，需要使用 `CLASSPATH` 环境变量或 `-classpath` 指定用户类的位置。
@@ -237,6 +242,7 @@ JDK_JAVA_OPTIONS环境变量可用于预先设置java命令的参数。
 重要的标准参数：
 - `--class-path classpath`, `-classpath classpath`, or `-cp classpath` 分号隔开的目录、jar压缩文件、zip压缩文件，用于搜索类文件。这将覆盖 CLASSPATH 环境变量，默认为当前目录。可以使用 * 符，如 `mydir/*`。
 - `--module-path modulepath...` or `-p modulepath` 分号隔开的目录，每个目录都是一个模块目录。
+- `-jar` 运行一个可执行的jar文件。
 - `--upgrade-module-path modulepath...` 分号隔开的目录列表，每个目录都是一个模块目录，用于代替在运行时映像中可升级的模块。
 - `--add-modules module[,module...]` 在初始化模块之外指定根模块，还可以是ALL-DEFAULT, ALL-SYSTEM, 和 ALL-MODULE-PATH。
 - `--disable-@files` 可在命令行任何地方使用，包括参数文件。这个参数后，将停止展开 `@-argfiles` 。
@@ -351,7 +357,11 @@ jar [OPTION...] [ [--release VERSION] [-C dir] files] ...
 
 Jar文件可以被用过class path入口。
 
-当一个压缩包在指定目录的根或jar包的根上包含一个模块描述文件module-info.class时，就会变成一个模块jar。
+当一个压缩包在指定目录的根或jar包的根上包含一个模块描述文件module-info.class时，就会变成一个模块jar。  
+包含 Main-Class 属性的 jar文件可以通过 java -jar 命令直接执行。
+
+创建jar文件时，jar工具会自动添加一个名为 META-INF 的目录，并在其中创建一个名为 MANIFEST.MF 的文件，用于保存元数据，格式为首部与值配对。默认情况下，MANIFEST.MF 文件只包含两个首部： Manifest-version， Created-By 。  
+只有使用 m 修饰符，才会把额外的信息添加到 MANIFEST.MF 文件中。经常添加的属性是 Main-Class ，指定应用入口点。
 
 主要操作模式（jar使用时必选）
 - `-c` or `--create` 创建压缩包
@@ -368,7 +378,7 @@ Jar文件可以被用过class path入口。
 - `-v` or `--verbose` 发送或打印可视化输出到表stdout。
 
 只对create和update有用的操作修饰符
-- `-e=CLASSNAME` 或 `--main-class=CLASSNAME` 指定模块捆绑的独立应用或可执行jar文件的入口点。
+- `-e=CLASSNAME` 或 `--main-class=CLASSNAME` 指定模块捆绑的独立应用或可执行jar文件的入口点（写入元文件）。
 - `-m=FILE` 或 `--manifest=FILE` 从指定的manifest文件中引入manifest信息。
 - `-M` 或 `--no-manifest` 不为入口创建manifest文件。
 - `--module-version=VERSION` 当创建或更新jar文件时，指定模块版本。
@@ -472,3 +482,13 @@ jconsole -help
 - `-pluginpath path` 指定jconsole使用的插件的目录。插件路径应该包含一个名为META-INF/services/com.sun.tools.jconsole.JConsolePlugin的配置文件，文件每一行对应一个插件。 每一行指定一个应用了com.sun.tools.jconsole.JConsolePlugin的类的全名。
 - `connection = pid | host:port | jmxURL` 由pid、host:port或jmxURL描述的连接。
 - `-Jinput_arguments` 将input_arguments传递给jconsole运行的JVM。
+
+## jdeps
+
+jdeps 是个静态分析工具，用于分析包或类的依赖。这个工具有多种用途，可以识别开发者编写的代码中对 JDK 内部未注释的API的调用，还能帮助跟踪传递依赖。
+jdeps还能确认jar文件是否能在某个紧凑配置中运行。
+
+指定要分析的类，输出依赖信息。指定的类可以是类路径中的任何类、文件路径、目录或jar文件。
+```bash
+jdeps com.me.MyClass
+```
