@@ -61,7 +61,15 @@ class Outter
         return name;
     }
     public void print() {
-        out.println("2 exists: " + name + " " + mi.getName());
+        int c = 99;
+        // 局部类定义
+        class printMe {
+            public printMe(String x) {
+                out.print("It uses a local class " + Integer.toString(c) + ". "); // 使用了一个局部变量。书上说只能使用 final 变量，但本句执行成功。
+                out.println("2 exists: " + x);
+            }
+        }
+        new printMe(name + " " + mi.getName()); // 直接建立局部类的一个实例
     }
 }
 class B implements Outter.If { // 实现If接口
