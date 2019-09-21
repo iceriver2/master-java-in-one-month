@@ -22,7 +22,8 @@ public class EnumBasic
     }
 
     public static void showEnumInEnum() {
-        out.println(Meal.APPETIZER.toString()); // 得到一个 Food[]，但不是我想要的，我想要直接获得Food.Coffee.LATTE
+        out.println(Meal.APPETIZER.toString());
+        out.println(Meal.APPETIZER.getValues()); // 得到一个 Food[]
     }
 
     private static String getWeekdaysAsString(WeekDay[] d) {
@@ -72,13 +73,13 @@ interface Food {
 
 // 枚举嵌套枚举
 enum Meal{
-    APPETIZER(Food.Appetizer.class),
+    APPETIZER(Food.Appetizer.class), // 调用构造方法
     MAINCOURSE(Food.MainCourse.class),
     DESSERT(Food.Dessert.class),
     COFFEE(Food.Coffee.class);
-  
+
     private Food[] values;
-    private Meal(Class<? extends Food> kind) {
+    private Meal(Class<? extends Food> kind) { // 构造方法
         values = kind.getEnumConstants(); //通过class对象获取枚举实例
     }
     public Food[] getValues() {

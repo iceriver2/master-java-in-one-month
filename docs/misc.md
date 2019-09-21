@@ -74,6 +74,24 @@ public enum Color {
 枚举值（实例）由JVM自动创建，不能手动实例化。  
 枚举的值必须定义在所有枚举类型的方法之前。
 
+枚举可以结合switch，但直接使用枚举值即可。
+```java
+enum Color {GREEN,RED,BLUE}
+
+// Switch中的Color
+switch (color){
+    case BLUE: //无需使用Color进行引用
+        System.out.println("蓝色");
+        break;
+    case RED:
+        System.out.println("红色");
+        break;
+    case GREEN:
+        System.out.println("绿色");
+        break;
+}
+```
+
 举例一个枚举类型
 ```java
 // WeekDay.java 文件
