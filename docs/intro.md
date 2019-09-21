@@ -2,6 +2,8 @@
   - [与其他语言的简单比较](#与其他语言的简单比较)
   - [下载与安装](#下载与安装)
 - [目录树](#目录树)
+- [命名约定](#命名约定)
+- [注释文档](#注释文档)
 - [常用工具](#常用工具)
   - [javac](#javac)
   - [javap](#javap)
@@ -81,6 +83,60 @@ source /etc/environment
 # 目录树
 
 包结构与文件目录保持一致，类`com.mysoft.mypack.MyClass`对应的源码文件是`./com/mysoft/mypack/MyClass.java`。
+
+# 命名约定
+
+公开可见的包要尽量使用唯一的包名。常见的做法是将网站域名倒过来。所有的包名都应该使用小写字母。
+
+引用类型的名称应该以大写字母开头，而且要大小写混用，如 String 。如果有多个单词，那么每个单词的首字母大写，如 StringBufer。单词是缩写的，可以全部大写，如 HTMLParser 。
+
+类或枚举是为了表示对象，因此用名词。  
+接口为实现这个接口的类提供额外信息，一般使用形容词。  
+方法名第一个词应该是动词。
+
+方法始终以小写字母开头，如 insert；包含多个单词的，后续几个单词的首字母大写，如 insertObject 。
+
+非常量字段的大小写与方法一样。  
+常量应该全大写，多个单词以下划线分割。  
+枚举一般也是全大写。
+
+参数的大小写与非常量字段一样。
+
+局部变量不限制，但应该易于阅读和理解。
+
+# 注释文档
+
+文档注释是普通的多行注释，以 `/**`开头，以`*/`结尾。除供阅读外，javadoc可以将注释提炼为文档。
+
+文档注释标签
+- @author name
+- @version text
+- @param parameter-name description
+- @return description
+- @exception full-classname description
+- @throws full-classname description 是 @exception 的别名
+- @see reference
+- @deprecated explanation
+- @since version
+
+行内文档注释标签
+- {@link reference} 链接
+- {@linkplain reference} 普通文本链接
+- {@inheritDoc} 从被覆盖的方法中继承注释
+- {@docRoot} 文档的根目录
+- {@literal text} 转义html
+- {@code text} 使用代码字体显示
+- {@value} 在static final字段的注释中使用，会被替换成当前字段的常量
+- {@value reference} 上个标签的变体，指向一个 static final 字段。
+
+@see，{@link} {@linkplain} {@value} 可以创建交叉内容引用。
+reference 有三种格式：
+- 以引号开头，表示书名或其他出版物名称，参数的值保持不变。
+- 以`<`开头，表示超链接，将原封不动插入文档
+- `feture [label]` 第三种格式，label是显示文本，指向 feature 的内容，可以是 pkgname， pkgname.typename，typename，typename#methodname，typename#methodname(paramtypes)，#methodname，#methodname(paramtypes)，typename#fieldname，#fieldname 。
+
+javadoc 会在包所在目录下，寻找名为 package.html 的文件，这是包的文档。这个文件可以包含简单的 HTML 文档， 也可以使用 @see, @link, @deprecated 和 @since 标签。  
+此外，还可以为一组包提供概括性文档，方法是在这组包的源码树中创建一个 overview.html 文件。javadoc解析这个源码树时，会提取 overview.html 文件中的内容，作为最高层概览显示出来。
 
 # 常用工具
 
