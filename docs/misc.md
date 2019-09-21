@@ -59,7 +59,7 @@ Java集合库使用了大量的协变和逆变，确保范型“做正确的事�
 ## 枚举
 
 枚举是类的变种，终归是类，也可以拥有成员。编译后也是一个class文件。  
-枚举的特殊属性：**隐式扩展 java.lang.Enum 类**；不能范型化；**可以实现接口**；**不能被扩展**；如果枚举中的所有值都有实现主体，那么只能定义为抽象方法；**只能有一个私有（或使用默认访问权限）的构造方法**。
+枚举的特殊属性：**隐式扩展自 java.lang.Enum 类**；不能范型化；**可以实现接口**；**不能被扩展**；如果枚举中的所有值都有实现主体，那么只能定义为抽象方法；**只能有一个私有（或使用默认访问权限）的构造方法**。
 > iceman注：
 
 ```java
@@ -68,7 +68,7 @@ public enum Color {
 }
 ```
 
-> iceman注：《Java技术手册》对枚举的介绍较少，又参考了一些[网络文章](https://www.cnblogs.com/liaojie970/p/6474733.html)。以下为自行整理的部分。
+> iceman注：《Java技术手册》对枚举的介绍较少，又参考了一些[网络文章](https://my.oschina.net/u/1421583/blog/1843469)。以下为自行整理的部分。
 
 枚举的每一个值都是枚举类型的一个实例，而且始终保持每个值只有一个实例。因此，枚举值的比较可以使用`==`。  
 枚举值（实例）由JVM自动创建，不能手动实例化。  
@@ -85,7 +85,7 @@ public enum WeekDay {
         this.day = day;
         out.println("I am " + day); // 打印了7次，确实证明了枚举的每个值都在运行时被创建了一个实例
     }
-    public String getDay() { 
+    public String getDay() { // 实例方法
         return day; 
     }
 }
@@ -93,7 +93,7 @@ public enum WeekDay {
 // 其他文件
 {
     out.println(WeekDay.Mon); // 打印 Mon 
-    out.println(WeekDay.Tue.getDay()); // 打印 Tuesday
+    out.println(WeekDay.Tue.getDay()); // 打印 Tuesday // 从 getDay() 的调用可以看出，每个枚举值就是一个实例
 }
 ```
 该枚举类型的反编译后的内容为
@@ -106,7 +106,7 @@ public final class WeekDay extends java.lang.Enum{
     public static final WeekDay Fri;
     public static final WeekDay Sat;
     public static final WeekDay Sun;
-    static {}; 
+    static {};
     public java.lang.String getDay();
     public static WeekDay[] values(); // JVM自动插入
     public static WeekDay valueOf(java.lang.String); // JVM自动插入
@@ -123,24 +123,110 @@ public interface Food {
         FRUIT, CAKE, GELATO
     }
 }
+// 编译后会形成3个类文件： Food.class Food$Coffee.class Food$Dessert.class
+```
+更复杂的用法，是枚举嵌套枚举。
+```java
+/* 认真学习下这个用法 */
+public enum Meal{
+  APPETIZER(Food.Appetizer.class),
+  MAINCOURSE(Food.MainCourse.class),
+  DESSERT(Food.Dessert.class),
+  COFFEE(Food.Coffee.class);
+
+  private Food[] values;
+  private Meal(Class<? extends Food> kind) {
+    values = kind.getEnumConstants(); //通过class对象获取枚举实例
+  }
+
+  public interface Food {
+    enum Appetizer implements Food {
+      SALAD, SOUP, SPRING_ROLLS;
+    }
+    enum MainCourse implements Food {
+      LASAGNE, BURRITO, PAD_THAI,
+      LENTILS, HUMMOUS, VINDALOO;
+    }
+    enum Dessert implements Food {
+      TIRAMISU, GELATO, BLACK_FOREST_CAKE,
+      FRUIT, CREME_CARAMEL;
+    }
+    enum Coffee implements Food {
+      BLACK_COFFEE, DECAF_COFFEE, ESPRESSO,
+      LATTE, CAPPUCCINO, TEA, HERB_TEA;
+    }
+  }
+} 
 ```
 
 java.util.EnumSet和java.util.EnumMap是两个枚举集合。  
 EnumSet保证集合中的元素不重复;EnumMap中的 key是enum类型，而value则可以是任意类型。
+> EnumSet／EnumMap 与 Enum 最大的区别是，Enum是抽象类。
 
 所有的枚举类型都是Enum类的子类。它们继承了这个类的许多方法。  
-其中最有用的一个方法是`toString()`，这个方法能够返回枚举常量名。  
+其中最有用的一个方法是`toString()`，这个方法能够返回枚举常量名。`toString()`是枚举类型唯一可以覆盖的超类方法。  
 `toString()`方法的逆方法是静态方法`valueOf(Class, String)`。  
 `ordinal()` 方法返回enum声明中枚举常量的位置，位置从0开始计数。  
 Enum类实现了Comparable接口 `int compareTo(E other)`，如果枚举常量在other之前，则返回一个负值；如果this==other，则返回0；否则，返回正值。枚举常量的出现次序在enum声明中给出。
 
 `values()` 方法是编译器插入到enum定义中的static方法，所以，将enum实例向上转型为父类Enum时，`values()`就不可访问了。解决办法：在Class中有一个`getEnumConstants()`方法，所以即便Enum接口中没有`values()`方法，仍然可以通过Class对象取得所有的enum实例。
+```java
+Day[] ds=Day.values(); //正常使用
+
+Enum e = Day.MONDAY; //向上转型Enum
+//e.values(); //无法调用,没有此方法
+
+//获取class对象引用
+Class<?> clasz = e.getDeclaringClass();
+if(clasz.isEnum()) { // 只有enum才能使用
+    Day[] dsz = (Day[]) clasz.getEnumConstants();
+    System.out.println("dsz:"+Arrays.toString(dsz));
+}
+```
 
 使用EnumSet代替标志。enum要求其成员都是唯一的，但是enum中不能删除添加元素。
-
-EnumMap的key是enum，value是任何其他Object对象。
+```java
+public class Test {
+    public static void main(String[] args) {
+        EnumSet<WeekDay> week = EnumSet.noneOf(WeekDay.class);
+        week.add(WeekDay.MON);
+        System.out.println("EnumSet中的元素：" + week);
+        week.remove(WeekDay.MON);
+        System.out.println("EnumSet中的元素：" + week);
+        week.addAll(EnumSet.complementOf(week));
+        System.out.println("EnumSet中的元素：" + week);
+        week.removeAll(EnumSet.range(WeekDay.FRI, WeekDay.SAT));
+        System.out.println("EnumSet中的元素：" + week);
+    }
+}
+```
 
 enum允许程序员为eunm实例编写方法。所以可以为每个enum实例赋予各自不同的行为。
+```java
+public enum EnumDemo3 {
+    FIRST {
+        @Override
+        public String getInfo() { return "FIRST TIME"; }
+    },
+    SECOND {
+        @Override
+        public String getInfo() { return "SECOND TIME"; }
+    };
+    // 定义抽象方法，在每个实例中分别实现
+    public abstract String getInfo();
+}
+```
+
+Enum是所有 Java 语言枚举类型的公共基本类（注意Enum是抽象类）以下是它的常见方法：
+| 返回类型 | 方法名称 | 方法说明 |
+|--------|---------|----------|
+| `int` | `compareTo(E o)` | 比较此枚举与指定对象的顺序
+| `boolean` | `equals(Object other)` | 当指定对象等于此枚举常量时，返回 true。
+| `Class<?>` | `getDeclaringClass()` | 返回与此枚举常量的枚举类型相对应的 Class 对象
+| `String` | `name()` | 返回此枚举常量的名称，在其枚举声明中对其进行声明
+| `int` | `ordinal()` | 返回枚举常量的序数（它在枚举声明中的位置，其中初始常量序数为零），不推荐使用
+| `String` | `toString()` | 返回枚举常量的名称，它包含在声明中
+| `static<T extends Enum<T>> T` | `static valueOf(Class<T> enumType, String name)` | 返回带指定名称的指定枚举类型的枚举常量。
 
 ## 注解
 

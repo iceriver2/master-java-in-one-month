@@ -8,6 +8,7 @@ public class EnumBasic
     public static void main(String[] args) {
         showSize();
         showWeek();
+        showEnumInEnum();
     }
 
     public static void showSize() {
@@ -18,6 +19,10 @@ public class EnumBasic
         out.println(WeekDay.Mon); // 打印 Mon 
         out.println(WeekDay.Tue.getDay()); // 打印 Tuesday
         out.println(getWeekdaysAsString(WeekDay.values())); // 打印 Mon,Tue,Wed,Thu,Fri,Sat,Sun
+    }
+
+    public static void showEnumInEnum() {
+        out.println(Meal.APPETIZER.toString()); // 得到一个 Food[]，但不是我想要的，我想要直接获得Food.Coffee.LATTE
     }
 
     private static String getWeekdaysAsString(WeekDay[] d) {
@@ -55,7 +60,8 @@ enum WeekDay {
     }
 }
 
-interface Food { // 我以为要报错的，但是，居然没有报错！这是什么操作？？
+// 接口嵌套枚举
+interface Food {
     enum Coffee implements Food {
         BLACK_COFFEE, DECAF_COFFEE, LATTE, CAPPUCCINO
     }
@@ -63,3 +69,44 @@ interface Food { // 我以为要报错的，但是，居然没有报错！这是
         FRUIT, CAKE, GELATO
     }
 }
+
+// 枚举嵌套枚举
+enum Meal{
+    APPETIZER(Food.Appetizer.class),
+    MAINCOURSE(Food.MainCourse.class),
+    DESSERT(Food.Dessert.class),
+    COFFEE(Food.Coffee.class);
+  
+    private Food[] values;
+    private Meal(Class<? extends Food> kind) {
+        values = kind.getEnumConstants(); //通过class对象获取枚举实例
+    }
+    public Food[] getValues() {
+        return values;
+    }
+    public String toString() {
+        String x = "";
+        for(Food f: values) {
+            x += f.toString() + ",";
+        }
+        return x.substring(0, x.length()-1);
+    }
+  
+    public interface Food {
+      enum Appetizer implements Food {
+        SALAD, SOUP, SPRING_ROLLS;
+      }
+      enum MainCourse implements Food {
+        LASAGNE, BURRITO, PAD_THAI,
+        LENTILS, HUMMOUS, VINDALOO;
+      }
+      enum Dessert implements Food {
+        TIRAMISU, GELATO, BLACK_FOREST_CAKE,
+        FRUIT, CREME_CARAMEL;
+      }
+      enum Coffee implements Food {
+        BLACK_COFFEE, DECAF_COFFEE, ESPRESSO,
+        LATTE, CAPPUCCINO, TEA, HERB_TEA;
+      }
+    }
+  } 
