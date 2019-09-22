@@ -1,5 +1,6 @@
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.*;
+
+import static java.lang.System.out;
 
 /**
  * 简单演示Collection的用法
@@ -10,41 +11,66 @@ import java.util.HashSet;
  * 有一些书上的写法，在vsc中会报错，例如 `Collection<String> c = new HashSet<>();`
  * 因为 Collection 是接口
  */
-import static java.lang.System.out;
 
 public class Collection
 {
   public static void main(String[] args) {
-    TestClass tc = new TestClass();
-    HashSet<String> tcc = tc.testHashSet();
+   TestClass obj = new TestClass();
 
-    Object[] d = tcc.toArray(); // 直接赋值给对象数组
-    out.println(d.toString());
+   String[] example = new String[] {"this", "is", "a", "test"};
 
-    String[] e = tcc.toArray(new String[tcc.size()]); // 复制给字符串数组
-    out.println(e.toString());
+   Set set = obj.testSet(example);
+   out.println(set.toString());
 
-    out.println(tcc.toString());
-    out.println(tcc.contains("zero"));
-    // tcc.clear();
-    // out.println(tcc.toString());
-    out.println("empty: " + tcc.isEmpty() + " size: " + tcc.size());
+   List list = obj.testList(example);
+
+   Map map = obj.testMap(example);
+   out.println("map contains `world` ? " + map.containsKey("world"));
+   out.println("value of a:" + map.get("a"));
+   out.println(map.toString());
   }
 }
 
 /** 
  * 测试类，主要从 Map、Set、List 接口中各找一个主要类进行试用
- * - Map
+ * - Map--H阿水Map
  * - Set--HashSet
- * - List
+ * - List--ArrayList
  * 
  */
 class TestClass {
-  public HashSet<String> testHashSet() {
-    HashSet<String> c = new HashSet<>();
-    c.add("zero");
-    c.add("one");
-    c.remove("one");
-    return c;
+  public Set<?> testSet(String[] s) {
+    Set<String> x = new HashSet<>(); // 不使用泛型，会有提示“使用了未检查或不安全的操作“
+    x.addAll(Arrays.asList(s));
+
+    // 进行一些操作
+    out.print(x.size() + "->");
+    x.add("hello,world");
+    out.println(x.size());
+
+    return x;
+  }
+
+  public List<?> testList(String[] s) {
+    List<String> x = new ArrayList<>();
+    x.addAll(Arrays.asList(s));
+    
+    // 进行一些操作
+    out.print(x.size() + "->");
+    x.add("hello,world");
+    out.println(x.size());
+
+    x.set(0, "first");
+    out.println(x.toString());
+
+    return x;
+  }
+
+  public Map<?, ?> testMap(String[] s) {
+    Map<String, Integer> x = new HashMap<>();
+    for(int i=0; i<s.length; i++) {
+      x.put(s[i], i);
+    }
+    return x;
   }
 }
