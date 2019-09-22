@@ -246,6 +246,12 @@ System.out.println(containisDigits);
 
 # 数字与数学
 
+浮点数是不精确的，只是近似值。
+
+java.lang.Math 定义了很多**静态辅助方法**，如： abs(), 三角函数, max(), min(), floor(), ceil(), pow(), exp(), log()。
+
+Math.random() 方法，首次调用时，会创建一个 java.util.Random 类的实例。返回一个 [0.0, 1.0) 之间的浮点数。random()生成的随机数，并不是真正的随机数，而是伪随机数。为了提高随机性，可以使用一个随机种子，例如，CPU计数器的值。
+
 # 时间日期
 
 # 文件相关

@@ -1,5 +1,6 @@
 import static java.lang.System.out;
 
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +12,9 @@ public class StringAndNumber
 
     ms.a();
     ms.pattern();
+
+    out.println(mn.random1());
+    out.println(mn.random2());
   }
 }
 
@@ -43,5 +47,16 @@ class MyString
 
 class MyNumber
 {
+  public int random1() {
+    // Random r = new Random(1); // 指定种子，每次都能得出同一个值
+    Random r = new Random(System.currentTimeMillis()); // 随机种子，每次不同的值
+    int ran1 = r.nextInt(100);
+    return ran1;
+  }
 
+  public int random2() {
+    int max=100,min=1;
+    int ran2 = (int) (Math.random()*(max-min)+min); // 每次不同的值
+    return ran2;
+  }
 }
