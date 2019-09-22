@@ -9,6 +9,7 @@
 - [数字与数学](#%e6%95%b0%e5%ad%97%e4%b8%8e%e6%95%b0%e5%ad%a6)
 - [时间日期](#%e6%97%b6%e9%97%b4%e6%97%a5%e6%9c%9f)
 - [文件相关](#%e6%96%87%e4%bb%b6%e7%9b%b8%e5%85%b3)
+  - [异步](#%e5%bc%82%e6%ad%a5)
 - [网络](#%e7%bd%91%e7%bb%9c)
 - [元操作](#%e5%85%83%e6%93%8d%e4%bd%9c)
   - [类加载](#%e7%b1%bb%e5%8a%a0%e8%bd%bd)
@@ -271,9 +272,193 @@ String text = date.format(formatter);
 LocalDate parsedDate = LocalDate.parse(text, formatter);
 ```
 
-> iceman注：时间日期虽然是个较小的部分，但是，涉及到的类却很多，需要重点沿袭一下。
+> iceman注：时间日期虽然是个较小的部分，但是，涉及到的类却很多，需要重点研究一下。
 
 # 文件相关
+
+File类有很多方法，但根本没有直接提供一些基本功能（如读取文件内容）
+```java
+File f = new File();
+
+//权限管理
+boolean canX = f.canExecute();
+boolean canR = f.canRead();
+boolean canW = f.canWrite();
+
+boolean ok;
+ok = f.setReadOnly();
+ok = f.setExecutable(true);
+ok = f.setReadable(true);
+ok = f.setWritable(false);
+
+// 使用不同的方式表示文件名
+File absF = f.getAbsoluteFile();
+File canF = f.getCanonicalFile();
+String absName = f.getAbsolutePath();
+String canName = f.getCanonicalPath();
+String name = f.getName();
+String pName = f.getParent();
+URI fileURI = f.toURI(); // 创建文件路径的URI形式
+
+// 文件的元数据
+boolean exists = f.exists();
+boolean isAbs = f.isAbsolute();
+boolean isDir = f.isDirectory();
+boolean ifFile = f.isFile();
+boolean ifHidden = f.isHidden();
+long modTime = f.lastModified(); // 距离 epoch 时间的毫秒
+boolean updateOk = f.setLastModified(updateTime); // 毫秒
+long fileLen = f.length();
+
+// 文件管理操作
+boolean renamed = f.renameTo(destFile);
+boolean deleted = f.delete();
+
+// 创建文件不会覆盖现有文件
+boolean createdOk = f.createNewFile();
+
+// 处理临时文件
+File tmp = File.createTempFile("somename", ".tmp");
+tmp.deleteOnExit();
+
+// 处理目录
+boolean createdDir = dir.mkdir();
+String[] fileNames = dir.list();
+File[] files = dir.listFiles();
+
+// 其他
+long free, total, usable;
+free = f.getFreeSpace();
+total = f.getTotalSpace();
+usable = f.getUsableSpace();
+
+File[] roots = File.listRoots(); // 列出可用的文件系统根目录
+```
+
+文件读写的工作，开始是使用IO流进行的，即 InputStream 和 OutStream 。实际上，标准输入和输出流（System.in 和 System.out），就是这种流。  
+IO流的两个子类 FileInputStream 和 FileOutputStream 用于以字节流方式操作文件。但这种方式效率较低，因此，一般是结合 Reader 和 Writer 类使用。这两个类还有几个子类，一般结合使用：FileReader/FileWriter, BufferedReader/BufferedWriter, InputStreamReader。  
+**InputStream/OutputStream 是字节流，Reader/Writer 是字符流。**
+
+```java
+try(BufferedReader in = new BufferedReader(new FileReader(filename))) {
+  String line;
+  while((line = in.readLine()) != null) {
+    System.out.println(line);
+  }
+} catch(IOException e) {
+
+}
+```
+
+对于要使用类似于管道式通信的线程来说，还可以选择 PipedInputStream 和 PipedReader 类及对应的写入器。
+
+TWR（try-with-resource）的关键是一个新接口 AutoClosable ，它是 Closeable 的直接超接口，表示资源必须自动关系。
+在TWR的资源子句中，只能声明实现了 AutoClosable 接口的对象，数量不限。
+```java
+try(BufferedReader in=new BufferedReader(new FileReader(filename));
+    PrintWriter out=new PrintWriter(new BufferWriter(new FileWriter(othername)))
+) {
+  //...
+} catch(IOException e) {
+  //...
+}
+```
+
+Java7引入了全新的IO API（一般称为NIO.2），几乎可以完全取代以前使用File类处理IO的方式。新添加的各个类都在 java.nio.file 包。新API分为两大部分，第一部分是一个新抽象 Path接口；第二部分是很多处理文件和文件系统的新方法。
+> iceman注：从新API来看，就是将之前的实例方法，转为类方法。
+
+Files类的重要方法
+```java
+Path source, target;
+Attributes attr;
+Charset cs = StandardCharsets.UTF_8;
+
+// 创建文件
+Files.createFile(target, attr);
+
+// 删除文件
+Files.delete(target);
+boolean deleted = Files.deleteIfExists(target);
+
+// 复制/移动
+Files.copy(source, target);
+Files.move(source, target);
+
+// 读取信息
+long size = Files.size(target);
+
+FileTime fTime = Files.getLastModifiedTime(target);
+
+// 处理文件类型
+boolean isDir = Files.isDirectory(target);
+boolean isSym = Files.isSymbolicLink(target);
+
+// 处理读写操作
+List<String> lines = Files.readAllLines(target, cs);
+byte[] b = Files.readAllBytes(target);
+
+BufferedReader br = Files.newBufferedReader(target, cs);
+BufferedWriter bwr = Files.newBufferedWriter(target, cs);
+
+InputStream is = Files.newInputStream(target);
+OutputStream os = Files.newOutputStream(target);
+```
+
+Path 接口用于在文件系统中定位文件。Path是接口，而不是类。  
+Paths 类提供了两个 get() 方法，用于创建 Path 对象。普通版本接受一个String对象，使用默认的文件系统提供方；另一个版本接受一个URI对象。
+
+Path对象和File对象之间可以轻易的相互转换。
+```java
+Path p = Paths.get("/tmp/1.txt");
+
+File f = p.toFile();
+Path p2 = f.toPath();
+```
+
+## 异步
+
+新异步功能的关键组成部分是实现 Channel 接口的类，这些类可以处理需要交给后台线程完成的IO操作。这种哦功能功能还可以应用于长期运行的大型操作和其他几种场合。
+
+几个异步的类
+- AsynchronousFileChannel 类处理文件 IO
+- AsynchronousSocketChannel 处理客户端套接字IO
+- AsynchronousServerSocketChannel 类处理能接受连入连接的异步套接字
+
+和异步通道交互有两种不同的方式：使用 Feture接口和回调。
+- Feture接口有两个关键方法： isDone(), get()
+- 回调基于 CompletionHandler 接口，接口有两个方法： completed() 和 failed() 。
+
+```java
+// Future 方式
+try(AsynchronousFileChannel channel = AsynchronousFileChannel.open(Paths.get(fillname))) {
+  ByteBuffer buffer = ByteBuffer.allocateDirect(1024*1024*100);
+  Future<Integer> result = channel.read(buffer, 0);
+
+  while(!result.isDone()) {
+    // ...
+  }
+  System.out.println("Bytes read:" + result.get());
+} catch(Exception e) {
+
+}
+
+// 回调方式
+byte[] data = {1,2,3};
+ByteBuffer buffy = ByteBuffer.wrap(data);
+
+CompletionHandler<Integer, Object> h = new CompletionHandler() {
+  public void completed(Integer written, Object o) {
+    System.out.println("Bytes written"+ written);
+  }
+  public void failed(Throwable x, Object o) {
+    System.out.println("Asynch write failed" + x.getMessage());
+  }
+}
+try(AsynchronousFileChannel channel = AsynchronousFileChannel.open(Paths.get(filename), StandardOpenOption.CREATE， StandardOpenOption.WRITE)) { 
+  channel.write(buffy, 0, null, h); // 这个格式确实比较像JS的回调
+  Thread.sleep(1000); // 必须这么做，防止太快退出
+}
+```
 
 # 网络
 
