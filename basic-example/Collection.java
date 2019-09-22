@@ -48,6 +48,8 @@ class TestClass {
     x.add("hello,world");
     out.println(x.size());
 
+    out.println("set implements iterable ? " + (x instanceof Iterable));
+
     return x;
   }
 
@@ -63,6 +65,8 @@ class TestClass {
     x.set(0, "first");
     out.println(x.toString());
 
+    out.println("list implements iterable ? " + (x instanceof Iterable));
+
     return x;
   }
 
@@ -71,6 +75,7 @@ class TestClass {
     for(int i=0; i<s.length; i++) {
       x.put(s[i], i);
     }
+    out.println("map implements iterable ? " + (x instanceof Iterable));
     return x;
   }
 }

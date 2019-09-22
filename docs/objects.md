@@ -67,7 +67,7 @@ Collection接口提供了一些方法，可以用于Set、List或Queue。如：a
 **在数据和集合之间，经常需要来回转换，需要用到两个方法： Arrays.asList() 和 Collection.toArray() 。**
 > iceman注：猜测，因为 Collection 中，只有 List 的属性与 Array 相似，所以，Array 可以转为 List 。
 
-> iceman住：目前，对于在不同类型之间的转来转去，还是有些模糊。书中的样例代码的写法形如 `Collection<String> c = new HashSet<>();`。但 openjdk 1.8 下编译报错。
+> iceman住：目前，对于在不同类型之间的转来转去，还是有些模糊。书中的样例代码的写法形如 `Collection<String> c = new HashSet<>();`，但 openjdk 1.8 下编译报错，提示 Collection 没有这种写法。但 List，Set，Map 就没有这个问题。
 
 【Set接口】
 
@@ -76,7 +76,7 @@ Collection接口提供了一些方法，可以用于Set、List或Queue。如：a
 除了Collection接口定义的方法外，Set没有定义其他方法，但对这些方法做了额外的限制。
 
 **实现Set接口的类：HashSet，LinkedHashSet，EnumSet，TreeSet，CopyOnWriteArraySet。**
-- HashSet 内部使用哈希表表示，无序，最佳通用实现
+- **HashSet 内部使用哈希表表示，无序，最佳通用实现**
 - LinkedHashSet 内部使用哈希链表表示，元素顺序为插入的顺序
 - EnumSet 内部使用位域表示，只能保存非null枚举值
 - TreeSet 内部使用红黑树表示，元素升序排列，元素所属的类型要实现 Comparable 或 Comparator 接口
@@ -121,7 +121,7 @@ Map接口最常用的几个方法：put(), get(), remove()。
 Map的重要特性之一是，可以视为集合。虽然Map对象不是Collection类型，但映射的键可以看成Set对象，映射的值可以看作Collection对象，而映射的键值对可以看成由 Map.Entry 对象组成的Set对象。
 
 **实现了Map接口的类：HashMap、ConcurrentHashMap、ConcurrentSkipListMap、EnumMap、LinkedHashMap、TreeMap、IdentityHashMap、WeakHashMap、Properties。**
-- HashMap 内部用哈希表表示，通用实现
+- **HashMap 内部用哈希表表示，通用实现**
 - ConcurrentHashMap 内部用哈希表实现，通用的线程安全实现
 - ConcurrentSkipListMap 内部用哈希表实现，专用的线程安全实现
 - EnumMap 内部用数组表示，键是枚举类型
