@@ -254,6 +254,25 @@ Math.random() 方法，首次调用时，会创建一个 java.util.Random 类的
 
 # 时间日期
 
+Java8之前使用 java.util.Date 类处理时间和日期。这个包有很多问题。
+
+Java8引入一个新包 java.time，包含了很多时间日期的核心类。
+- java.time.chrono 非ISO标准历法，如日本历法。
+- java.time.format 将时间日期格式化伪字符串，以及把字符串解析成日期和时间对象。
+- java.time.temporal 日期和时间的核心类所需的接口，还抽象了一些日期方面的高级操作
+- java.time.zone 时区
+
+使用 Instant 对象表示一个时间点。使用 Duration 类表示时间间隔。
+
+```java
+LocalDate date = LocalDate.now();
+DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
+String text = date.format(formatter);
+LocalDate parsedDate = LocalDate.parse(text, formatter);
+```
+
+> iceman注：时间日期虽然是个较小的部分，但是，涉及到的类却很多，需要重点沿袭一下。
+
 # 文件相关
 
 # 网络
