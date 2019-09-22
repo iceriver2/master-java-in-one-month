@@ -1,6 +1,13 @@
-import java.util.*;
-
 import static java.lang.System.out;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 简单演示Collection的用法
@@ -28,6 +35,8 @@ public class Collection
    out.println("map contains `world` ? " + map.containsKey("world"));
    out.println("value of a:" + map.get("a"));
    out.println(map.toString());
+
+   obj.testStream();
   }
 }
 
@@ -77,5 +86,16 @@ class TestClass {
     }
     out.println("map implements iterable ? " + (x instanceof Iterable));
     return x;
+  }
+
+  public void testStream() {
+    String[] input = {"tiger", "cat", "TIGER", "Tiger", "leopard"};
+    List<String> cats = Arrays.asList(input);
+
+    String search = "tiger";
+    String tigers = cats.stream()
+                  .filter(s -> s.equalsIgnoreCase(search))
+                  .collect(Collectors.joining(","));
+    out.println(tigers);
   }
 }

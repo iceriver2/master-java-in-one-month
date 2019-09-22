@@ -4,6 +4,7 @@
   - [访问](#%e8%ae%bf%e9%97%ae)
   - [实用方法](#%e5%ae%9e%e7%94%a8%e6%96%b9%e6%b3%95)
   - [数组和辅助方法](#%e6%95%b0%e7%bb%84%e5%92%8c%e8%be%85%e5%8a%a9%e6%96%b9%e6%b3%95)
+  - [函数式与流式表达式](#%e5%87%bd%e6%95%b0%e5%bc%8f%e4%b8%8e%e6%b5%81%e5%bc%8f%e8%a1%a8%e8%be%be%e5%bc%8f)
 - [文本处理](#%e6%96%87%e6%9c%ac%e5%a4%84%e7%90%86)
 - [数字与数学](#%e6%95%b0%e5%ad%97%e4%b8%8e%e6%95%b0%e5%ad%a6)
 - [时间日期](#%e6%97%b6%e9%97%b4%e6%97%a5%e6%9c%9f)
@@ -182,6 +183,38 @@ Object[] items = list.toArray();
 ```
 
 Arrays 的一些重要方法： Arrays.asList(), Arrays.sort(), Arrays.binarySearch()， Arrays.equals(), Arrays.fill() 。
+
+## 函数式与流式表达式
+
+Java的函数式编程表达式，主要设计4个方法：filter(), map(), forEach(), reduce()。
+
+filter() 方法的参数是一个 Predicate 接口的实例。Predicate接口在 java.util.function 中定义，只有一个非默认方法。
+
+map() 方法使用接口是 `Function<T,R>`，也是在 java.util.function 中定义，只有一个默认方法 apply()。
+
+forEach() 方法的参数是一个 `Consumer<T>` 类型的对象，这是个函数式接口，要求使用副作用执行操作，签名是 `(T t) -> void` 。
+
+reduce() 方法有两个参数：一个是初始值，另一个是一个执行函数。这个函数属于 `BinaryOperator<T>` 类型。`BinaryOperator<T>`也是函数式接口，有两个类型相同的参数，返回值也是同一类型。
+
+一个示例
+```java
+String[] input = {"tiger", "cat", "TIGER", "Tiger", "leopard"};
+List<String> cats = Arrays.asList(input);
+
+String search = "tiger";
+String tigers = cats.stream()
+              .filter(s -> s.equalsIgnoreCase(search))
+              .collect(Collectors.joining(","));
+System.out.println(tigers);
+```
+
+
+库的设计者之所以引入流API，是因为集合核心接口的大量实现已经广泛使用。设计者引入了一层新的抽象-- Stream。Stream对象可以通过 stream() 方法从集合对象上生成。  
+在处理集合的新方式中，**Stream对象的作用类似于 Iterator对象**。总体思想是让开发者把一系列操作（也叫“管道”）当成一个整体运用在集合上。具体执行的各个操作一般使用 lambda 表达式。  
+在管道的末尾需要收集结果，或再次“具化”为真正的集合。这一步使用 Collector 对象完成，或者以“终结方式”（如 reduce()）结束管道，返回一个具体的值。  
+整个过程差不多是这样的 `Collection -> Stream -> Collection` 。
+
+Stream类也需要使用引用类型参数化。不过，多数情况下需要使用基本类型，尤其是 int 和 double 类型构成的流，但是又没有 `Stream<int>` 类型，所以， java.util.Stream 包提供了专用的类，如 IntStream 和 DoubleStream 。这些类是 Stream 类的基本类型特化。
 
 # 文本处理
 
