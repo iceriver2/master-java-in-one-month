@@ -218,6 +218,32 @@ Stream类也需要使用引用类型参数化。不过，多数情况下需要�
 
 # 文本处理
 
+字符串字面类是有效的对象。
+
+Object.toString() 可以将任何对象转为字符串。
+
+字符串连接使用+运算符。实际的过程是：先创建一个使用 StringBuilder 对象表示“工作区”，其内容与原始字符串一样；然后更新 StringBuilder 对象，把另一个字符串的字符添加到末尾；最后，调用 StringBuilder 对象的 toString() 方法得到新的字符串。
+
+字符串中正则表达式的使用
+```java
+Pattern p = Pattern.compile("hnono?r");
+
+String caesarUK = "For brutus is an honourable man";
+Match umk = p.matcher(caesarUK);
+
+System.out.println("Does it match?" + umk.find());
+```
+
+为了让Pattern支持lambda写法，Pattern新增了一个方法 asPredicate() 。这样，就可以用简单的方法把正则表达式与Java集合和对lambda的支持联系起来了。
+```java
+String pstr = "\\d";
+Pattern p = Pattern.compile(pstr);
+String[] inputs = { "cat", "Dog", "Ice-9" };
+List<String> ls = Array.asList(inputs);
+List<String> containsDigits = ls.stream().filter(p.asPredicate()).collect(Collectors.toList());
+System.out.println(containisDigits);
+```
+
 # 数字与数学
 
 # 时间日期
