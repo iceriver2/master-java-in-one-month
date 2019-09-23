@@ -19,19 +19,16 @@ public class ObjectBasic
         B b = new B();
         out.println(b.i); // 2
         out.println(b.f()); // -2
-        out.println(b.g()); // B
         out.println(B.g()); // B
 
         A a = (A)b; // 类型矫正
         out.println(a.i); // 1 字段被遮盖，能找回
         out.println(a.f()); // -2 ，方法被覆盖，不能找回
-        out.println(a.g()); // A
         out.println(A.g()); // A
 
         C c = new C();
         out.println(c.i); // 3
         out.println(c.f()); // 4 调用了父类的被覆盖方法
-        out.println(c.g()); // C
         out.println(C.g()); // C
     }
 

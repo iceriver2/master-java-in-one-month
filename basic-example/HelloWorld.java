@@ -22,7 +22,8 @@ public class HelloWorld
     /* main()函数是每个应用的入口点 */
     public static void main(String args[]) // args 将输入视为字符串数组
     {
-        Int divideByZero = 42 / 0;
+        int divideByZero = 42 / 0;
+        System.out.println(divideByZero);
         System.out.println("Hello World"); // 调用系统包打印
     }
 }
