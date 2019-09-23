@@ -462,6 +462,79 @@ try(AsynchronousFileChannel channel = AsynchronousFileChannel.open(Paths.get(fil
 
 # 网络
 
+Java支持大量的标准网络协议。网络协议的核心API在 java.net 包中，其他扩展在 javax.net 包中（尤其是 javax.net.ssl 包）。
+
+HTTP是最常见的协议，URL是关键的类。
+```java
+URL url = new URL("http://exmaple.com");
+try(
+  InputStream in = url.openStream();
+) {
+  Files.copy(in, Paths.get("out.txt"));
+} catch (IOException ex) {
+  //
+}
+```
+
+要深入底层控制，如获取请求和响应的元数据，可以使用 URLConnection 类。
+```java
+try {
+  URLConnection conn = url.openConnection();
+
+  String type = conn.getContentType();
+  String encoding = conn.getContentEncoding();
+  Date lastModified = new Date(conn.getLastModified());
+  int len = conn.getContentLength();
+  InputStream in = conn.getInputStream();
+} catch (IOException e) {
+  //...
+}
+```
+
+URLConnection类还有很多其他方法，例如发起请求。
+```java
+HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+conn.setRequestMethod("POST");
+
+// ...
+
+conn.setDoOutput(true);
+OutputStream os = conn.getOutputStream();
+os.write("");
+
+int response = conn.getResponseCode();
+if (response == HttpURLConnection.HTTP_MOVED_PERM
+  || response == HttpURLConnection.HTTP_MOVED_TEMP) { // HttpURLConnection的缺陷，不能处理重定向请求
+    //...
+  }
+```
+
+TCP是双向通信通道，可以保证可靠的通信。为了在同一个网络主机上支持多个不同的服务，TCP使用端口号识别服务。
+Java使用 Socket 类表示客户端，ServerSocket 类表示服务端。当然，在生产环境中，很少需要自己写服务端，一般框架都会提供。
+```java
+// 服务端通信的核心代码之一（另一个部分，就是一个无限循环，不断调用本类完成处理）
+private static class HttpHandler implememts Runnable {
+  private final Socket sock;
+  HttpHandler(Socket client) { this.sock = client;}
+
+  public void run() {
+    try(
+      BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+      PrintWriter out = new PrintWriter(new OutputStream(sock.getOutputStream()));
+    ) {
+      out.print("HTTP/1.0 200\r\nContent: text/plain\r\n\r\n");
+      String line;
+      while((line = in.readLine()) != null) {
+        if (line.length() == 0) break;
+        out.println(line);
+      }
+    } catch (Exception e) {
+      //
+    }
+  }
+}
+```
+
 ----------------------------
 
 # 元操作
