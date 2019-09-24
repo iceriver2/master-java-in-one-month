@@ -216,11 +216,23 @@ Stream类也需要使用引用类型参数化。不过，多数情况下需要�
 
 # 文本处理
 
+Character的常用方法：isLetter(), isDigit(), isWhiteSpace(), isUpperCase(), isLowerCase(), toUpperCase(), toLowerCase()。
+
+
 字符串字面类是有效的对象。
 
 Object.toString() 可以将任何对象转为字符串。
 
 字符串连接使用+运算符。实际的过程是：先创建一个使用 StringBuilder 对象表示“工作区”，其内容与原始字符串一样；然后更新 StringBuilder 对象，把另一个字符串的字符添加到末尾；最后，调用 StringBuilder 对象的 toString() 方法得到新的字符串。
+
+StringBuilder不是线程安全的，但是速度很快。
+```java
+StringBuilder sb = new StringBuilder();
+sb.append("hello");
+sb.delete(1, 3);
+sb.insert(1, "here");
+out.println(sb);
+```
 
 字符串中正则表达式的使用
 ```java
@@ -250,6 +262,10 @@ java.lang.Math 定义了很多**静态辅助方法**，如： abs(), 三角函�
 
 Math.random() 方法，首次调用时，会创建一个 java.util.Random 类的实例。返回一个 [0.0, 1.0) 之间的浮点数。random()生成的随机数，并不是真正的随机数，而是伪随机数。为了提高随机性，可以使用一个随机种子，例如，CPU计数器的值。
 
+Number类有一系列xxxValue()方法，将 Number 对象转为xxx数据类型，包括：byteValue(), doubleValue(), floatValue(), intValue(), longValue(), shortValue() 。
+
+.valueOf() 静态方法，可以生成一个执行数据类型的实例。
+
 # 时间日期
 
 Java8之前使用 java.util.Date 类处理时间和日期。这个包有很多问题。
@@ -268,6 +284,8 @@ DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy MM dd");
 String text = date.format(formatter);
 LocalDate parsedDate = LocalDate.parse(text, formatter);
 ```
+
+时间的显示，也可以通过 System.out.printf() 进行。
 
 > iceman注：时间日期虽然是个较小的部分，但是，涉及到的类却很多，需要重点研究一下。
 
