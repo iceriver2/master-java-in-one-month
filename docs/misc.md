@@ -31,10 +31,43 @@
 
 有时定义全空的接口很有用。类实现这种接口不需要实现任何方法。这种接口，又称标记接口。 java.io.Serializable 就是一种标记接口。
 
+## 序列化
+
+Java 提供了一种对象序列化的机制，该机制中，一个对象可以被表示为一个字节序列，该字节序列包括该对象的数据、有关对象的类型的信息和存储在对象中数据的类型。
+将序列化对象写入文件之后，可以从文件中读取出来，并且对它进行反序列化，也就是说，对象的类型信息、对象的数据，还有对象中的数据类型可以用来在内存中新建对象。
+
+类 ObjectInputStream 和 ObjectOutputStream 是高层次的数据流，它们包含反序列化和序列化对象的方法。
+```java
+// 序列化对象
+FileOutputStream fileOut = new FileOutputStream("/tmp/employee.ser");
+ObjectOutputStream out = new ObjectOutputStream(fileOut);
+out.writeObject(e);
+out.close();
+fileOut.close();
+
+// 反序列化对象
+FileInputStream fileIn = new FileInputStream("/tmp/employee.ser");
+ObjectInputStream in = new ObjectInputStream(fileIn);
+Employee e = (Employee) in.readObject();
+in.close();
+fileIn.close();
+```
+
+需要序列化的对象实现 Serializable 接口，同时，必须确保对象的所有属性都可以序列化。
+当序列化一个对象到文件时， 按照 Java 的标准约定是给文件一个 .ser 扩展名。
+
 ## 范型
 
 Java提供一种语法，指明某种类型是个容器，这个容器中保存着其他引用类型的实例。容器中保存的负载类型在尖括号中指定。这种语法能让编译器捕获大量不安全的代码。
 > iceman注：对这句话的理解是：有些容器（如`List`），既可以存储A又可以存储B，但读取时无法判断其准确类型，容易出错。因此，对该容器加入限制，只允许存储A，如 `List<A>`，这样取出时就不会出错了。这是范型最初的用法。
+
+泛型一个不太看的习惯的写法（有些陌生）
+```java
+public static <T extends Comparable<T>> T maximum(T x, T y, T z)
+{                     
+
+}
+```
 
 容器类型一般叫做范型。尖括号连同其中的负载类型，称为类型参数。  
 类型参数始终代表引用类型，不能使用基本类型。类型参数可以在方法的签名和主体中使用，就像真正的类型一样。  
@@ -515,12 +548,20 @@ HotSpot做了大量的优化工作，减少STW的影响。
 
 一个线程是一个完整的执行单元，但仍属于一个进程，进程的地址空间在组成该进程的所有线程之间共享。也就是说，每个线程可以独立调度，而且有自己的栈和程序计数器，但会和同个进程中的其他线程共享内存和对象。
 
+一个线程的完整生命周期 ![线程生命周期](https://www.runoob.com/wp-content/uploads/2014/01/java-thread.jpg) 。
+
 ```java
 Thread t = new Thread(() -> {System.out.println("Hello thread");})
 t.start();
 ```
 
 基于很多原因，由开发者自行管理线程已经不能满足需求了。而运行时应该提供“发后不理”能力，让程序指定需要做什么，但怎么做由运行时完成。
+
+
+Java 提供了三种创建线程的方法：
+- 通过实现 Runnable 接口；
+- 通过继承 Thread 类本身；
+- 通过 Callable 和 Future 创建线程。
 
 
 要编写正确的多线程代码，需要满足一个条件：在一个程序中，不管调用什么方法，也不管操作系统如何调度应用线程，一个对象看到的任何其他对象都不处于非法或不一致的状态，这样的程序才称得上是安全的多线程程序。

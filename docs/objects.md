@@ -620,6 +620,18 @@ private static class HttpHandler implememts Runnable {
 }
 ```
 
+以下步骤在两台计算机之间使用套接字建立TCP连接时会出现：
+- 服务器实例化一个 ServerSocket 对象，表示通过服务器上的端口通信。
+- 服务器调用 ServerSocket 类的 accept() 方法，该方法将一直等待，直到客户端连接到服务器上给定的端口。
+- 服务器正在等待时，一个客户端实例化一个 Socket 对象，指定服务器名称和端口号来请求连接。
+- Socket 类的构造函数试图将客户端连接到指定的服务器和端口号。如果通信被建立，则在客户端创建一个 Socket 对象能够与服务器进行通信。
+- 在服务器端，accept() 方法返回服务器上一个新的 socket 引用，该 socket 连接到客户端的 socket。
+- 连接建立后，通过使用 I/O 流在进行通信，每一个socket都有一个输出流和一个输入流，客户端的输出流连接到服务器端的输入流，而客户端的输入流连接到服务器端的输出流。
+
+ServerSocket类的主要方法： getLocalPort(), accept(), setSoTimeout(), bind() 。  
+Socket 类的主要方法： connect(), getInetAddress(), getPort(), getLocalPort(), getRemoteSocketAddress(), getInputStream(), getOutputStream(), close() 。  
+InetAddress 类的常用方法： getByAddress(), getByAddress(), getByName(), getHostAddress(), getHostName(), getLocalHost(), 
+
 ----------------------------
 
 # 元操作
