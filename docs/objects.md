@@ -1,5 +1,6 @@
 > Java的常用库。需要说明的是，内容来自《Java技术手册》，部分内容可能已经过时。
 
+- [异常](#%e5%bc%82%e5%b8%b8)
 - [集合](#%e9%9b%86%e5%90%88)
   - [访问](#%e8%ae%bf%e9%97%ae)
   - [实用方法](#%e5%ae%9e%e7%94%a8%e6%96%b9%e6%b3%95)
@@ -13,6 +14,28 @@
 - [网络](#%e7%bd%91%e7%bb%9c)
 - [元操作](#%e5%85%83%e6%93%8d%e4%bd%9c)
 
+
+# 异常
+
+异常与过程的关系
+```
+Throwable
+- Error
+- Exception
+  - IOException
+  - RuntimeException
+```
+
+所有的异常类是从 java.lang.Exception 类继承的子类。
+异常类有两个主要的子类：IOException 类和 RuntimeException 类。
+
+Java 语言定义了一些异常类在 java.lang 标准包中。
+常见的非检查性异常有：ArithmeticException，ArrayIndexOutOfBoundsException，ArrayStoreException，ClassCastException，IllegalArgumentException，IllegalMonitorStateException，IllegalStateException，IllegalThreadStateException，IndexOutOfBoundsException，NegativeArraySizeException，NullPointerException，NumberFormatException，SecurityException，StringIndexOutOfBoundsException，UnsupportedOperationException。
+检查性异常类有：ClassNotFoundException、CloneNotSupportedException、IllegalAccessException、InstantiationException、InterruptedException、NoSuchFieldException、NoSuchMethodException。
+
+Throwable的主要方法：getMessage(), getCause(), printStackTrace(), getStackTrace(), fillInStackTrace() 。
+
+可以自定义异常，所有异常都是 Thowable 的子类。如果希望写一个检查性异常类，则需要继承 Exception 类。如果想写一个运行时异常类，那么需要继承 RuntimeException 类。
 
 # 集合
 
