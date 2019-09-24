@@ -234,12 +234,15 @@ sb.insert(1, "here");
 out.println(sb);
 ```
 
+ava.util.regex 包主要包括以下三个类：Pattern， Matcher， PatternSyntaxException。
+Matcher的重要方法： start(), end(), find(), repalceAll(), replaceFirst()
+
 字符串中正则表达式的使用
 ```java
 Pattern p = Pattern.compile("hnono?r");
 
 String caesarUK = "For brutus is an honourable man";
-Match umk = p.matcher(caesarUK);
+Matcher umk = p.matcher(caesarUK);
 
 System.out.println("Does it match?" + umk.find());
 ```
@@ -269,6 +272,7 @@ Number类有一系列xxxValue()方法，将 Number 对象转为xxx数据类型�
 # 时间日期
 
 Java8之前使用 java.util.Date 类处理时间和日期。这个包有很多问题。
+时间是用 Date 类。日期是用 Calendar 类。GregorianCalendar是Calendar类的一个具体实现。
 
 Java8引入一个新包 java.time，包含了很多时间日期的核心类。
 - java.time.chrono 非ISO标准历法，如日本历法。
@@ -290,6 +294,28 @@ LocalDate parsedDate = LocalDate.parse(text, formatter);
 > iceman注：时间日期虽然是个较小的部分，但是，涉及到的类却很多，需要重点研究一下。
 
 # 文件相关
+
+Java.io 包几乎包含了所有操作输入、输出需要的类。所有这些流类代表了输入源和输出目标。Java 为 I/O 提供了强大的而灵活的支持，使其更广泛地应用到文件传输和网络编程中。
+
+系统输入输出的使用，通过将 System.in 和 System.out 关联到 BufferedReader 和 BufferedWriter 。
+```java
+import java.io.*;
+ 
+public class BRRead {
+    public static void main(String args[]) throws IOException {
+        char c;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("输入字符, 按下 'q' 键退出。");
+        // 读取字符
+        do {
+            c = (char) br.read();
+            System.out.println(c);
+        } while (c != 'q');
+    }
+}
+```
+
+文件读写类的一个图：![文件读写类导图](https://www.runoob.com/wp-content/uploads/2013/12/iostream2xx.png)
 
 File类有很多方法，但根本没有直接提供一些基本功能（如读取文件内容）
 ```java
@@ -348,6 +374,27 @@ total = f.getTotalSpace();
 usable = f.getUsableSpace();
 
 File[] roots = File.listRoots(); // 列出可用的文件系统根目录
+```
+
+Scanner 类可以用于获取用户输入。
+```java
+import java.util.Scanner; 
+
+public class ScannerDemo {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        // 从键盘接收数据
+ 
+        // next方式接收字符串
+        System.out.println("next方式接收：");
+        // 判断是否还有输入
+        if (scan.hasNext()) {
+            String str1 = scan.next();
+            System.out.println("输入的数据为：" + str1);
+        }
+        scan.close();
+    }
+}
 ```
 
 文件读写的工作，开始是使用IO流进行的，即 InputStream 和 OutStream 。实际上，标准输入和输出流（System.in 和 System.out），就是这种流。  
