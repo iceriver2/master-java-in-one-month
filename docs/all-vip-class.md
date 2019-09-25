@@ -1,4 +1,61 @@
-> 考虑到效率问题，资料来源是Java文档的中文版，最新的是[Java8](http://www.matools.com/api/java8)。从之前的资料可知，Java的最新几个长期版本正好是8，11。尤其是8，出现了大幅更新。BTW 最新版已经到13了。
+> 考虑到效率问题，资料来源是Java文档的中文版，最新的是[Java8](http://www.matools.com/api/java8)。从之前的资料可知，Java的最新几个长期版本正好是8，11。尤其是8，出现了大幅更新。BTW 最新版已经到13了。  
+> 分析核心库的主要目的，不是抄书，而是对核心类的使用有个基本了解，知道在什么时候需要使用什么类。其间，可能会可以忽略某些类，例如，大部分接口，安全类等。
+
+- [profile](#profile)
+- [Compact1](#compact1)
+  - [`java.io`](#javaio)
+  - [`java.lang`](#javalang)
+  - [`java.lang.annotation`](#javalangannotation)
+  - [`java.lang.invoke`](#javalanginvoke)
+  - [`java.lang.ref`](#javalangref)
+  - [`java.lang.reflect`](#javalangreflect)
+  - [`java.math`](#javamath)
+  - [`java.net`](#javanet)
+  - [`java.nio`](#javanio)
+  - [`java.nio.channels`](#javaniochannels)
+  - [`java.nio.channels.spi`](#javaniochannelsspi)
+  - [`java.nio.charset`](#javaniocharset)
+  - [`java.nio.charset.spi`](#javaniocharsetspi)
+  - [`java.nio.file`](#javaniofile)
+  - [`java.nio.file.attribute`](#javaniofileattribute)
+  - [`java.nio.file.spi`](#javaniofilespi)
+  - [`java.security`](#javasecurity)
+  - [`java.security.cert`](#javasecuritycert)
+  - [`java.security.interfaces`](#javasecurityinterfaces)
+  - [`java.security.spec`](#javasecurityspec)
+  - [`java.text`](#javatext)
+  - [`java.text.spi`](#javatextspi)
+  - [`java.time`](#javatime)
+  - [`java.time.chrono`](#javatimechrono)
+  - [`java.time.format`](#javatimeformat)
+  - [`java.time.temporal`](#javatimetemporal)
+  - [`java.time.zone`](#javatimezone)
+  - [`java.util`](#javautil)
+  - [`java.util.concurrent`](#javautilconcurrent)
+  - [`java.util.concurrent.atomic`](#javautilconcurrentatomic)
+  - [`java.util.concurrent.locks`](#javautilconcurrentlocks)
+  - [`java.util.function`](#javautilfunction)
+  - [`java.util.jar`](#javautiljar)
+  - [`java.util.logging`](#javautillogging)
+  - [`java.util.regex`](#javautilregex)
+  - [`java.util.spi`](#javautilspi)
+  - [`java.util.stream`](#javautilstream)
+  - [`java.util.zip`](#javautilzip)
+  - [`javax.crypto`](#javaxcrypto)
+  - [`javax.crypto.interfaces`](#javaxcryptointerfaces)
+  - [`javax.crypto.spec`](#javaxcryptospec)
+  - [`javax.net`](#javaxnet)
+  - [`javax.net.ssl`](#javaxnetssl)
+  - [`javax.script`](#javaxscript)
+  - [`javax.security.auth`](#javaxsecurityauth)
+  - [`javax.security.auth.callback`](#javaxsecurityauthcallback)
+  - [`javax.security.auth.login`](#javaxsecurityauthlogin)
+  - [`javax.security.auth.spi`](#javaxsecurityauthspi)
+  - [`javax.security.auth.x500`](#javaxsecurityauthx500)
+  - [`javax.security.cert`](#javaxsecuritycert)
+- [Compact2](#compact2)
+- [Compact3](#compact3)
+- [Full](#full)
 
 # profile
 
@@ -68,154 +125,278 @@ Java8提供不同级别的JRE配置，以适应不同环境的需求。默认的
 
 # Compact1
 
-`java.io`
+## `java.io`
+
+BufferedInputStream
+- `protected byte[] buf` / `protected int count` / `protected int pos`
+- `BufferedInputStream(InputStream in)` / `BufferedInputStream(InputStream in, int size)`
+- `int available()`
+- `int read()` / `int read(byte[] b, int off, int len)`
+- `long skip(long n)`
+- `void close()`
+
+BufferedOutputStream
+- `protected byte[] buf` / `protected int count`
+- `BufferedOutputStream(OutputStream out)` / `BufferedOutputStream(OutputStream out, int size)`
+- `void write(byte[] b, int off, int len)` / `void write(int b)`
+- `void flush()`
+
+BufferedReader
+- `BufferedReader(Reader in)` / `BufferedReader(Reader in, int sz)`
+- `boolean ready()`
+- `Stream<String> lines()`
+- `int read()` / `int read(char[] cbuf, int off, int len)`
+- `String readLine()`
+- `long skip(long n)`
+- `void close()`
+
+BufferedWriter
+- `BufferedWriter(Writer out)` / `BufferedWriter(Writer out, int sz)`
+- `void newLine()`
+- `void write(char[] cbuf, int off, int len)` / `void write(int c)` / `void write(String s, int off, int len)`
+- `void flush()`
+- `void close()`
+
+ByteArrayInputStream(类似BufferedInputStream)
+- `protected byte[] buf` / `protected int count` / `protected int pos`
+- `ByteArrayInputStream(byte[] buf)` / `ByteArrayInputStream(byte[] buf, int offset, int length)`
+- `int available()`
+- `int read()` / `int read(byte[] b, int off, int len)`
+- `long skip(long n)`
+- `void close()`
 
+ByteArrayOutputStream(类似BufferedOutputStream)
+- `protected byte[] buf` / `protected int count`
+- `ByteArrayOutputStream()` / `ByteArrayOutputStream(int size)`
+- `void write(byte[] b, int off, int len)` / `void write(int b)`
+- `void writeTo(OutputStream out)`
+- `byte[] toByteArray()`
+- `int size()`
+- `void close()`
+- `String toString()` / `String toString(String charsetName)`
 
-`java.lang`
+CharArrayReader
+- `protected char[] buf` / `protected int count` / `protected int pos`
+- `CharArrayReader(char[] buf)` / `CharArrayReader(char[] buf, int offset, int length)`
+- `boolean ready()`
+- `int read()` / `int read(char[] b, int off, int len)`
+- `long skip(long n)`
+- `void close()`
 
+CharArrayWriter
+- `protected char[] buf` / `protected int count`
+- `CharArrayWriter()` / `CharArrayWriter(int initialSize)`
+- `CharArrayWriter append(char c)` / `CharArrayWriter append(CharSequence csq)` / `CharArrayWriter append(CharSequence csq, int start, int end)`
+- `void write(char[] c, int off, int len)` / `void write(int c)` / `void write(String str, int off, int len)`
+- `void writeTo(Writer out)`
+- `int size()`
+- `char[] toCharArray()`
+- `String toString()`
+- `void flush()`
+- `void close()`
 
-`java.lang.annotation`
+DataInputStream
+DataOutputStream
 
+File
+FileDescriptor
+FilePermission
 
-`java.lang.invoke`
+FileInputStream
+FileOutputStream
 
+FileReader
+FileWriter
 
-`java.lang.ref`
+FilterInputStream
+FilterOutputStream
 
+FilterReader
+FilterWriter
 
-`java.lang.reflect`
+InputStream
+OutputStream
 
+InputStreamReader
+OutputStreamWriter
 
-`java.math`
+ObjectInputStream
+ObjectInputStream.GetField
+ObjectOutputStream
+ObjectOutputStream.PutField
 
+ObjectStreamClass
+ObjectStreamField
 
-`java.net`
+PipedInputStream
+PipedOutputStream
 
+PipedReader
+PipedWriter
 
-`java.nio`
+PrintStream
+PrintWriter
 
+PushbackInputStream
+PushbackReader
 
-`java.nio.channels`
+RandomAccessFile
 
+SequenceInputStream
+SerializablePermission
+StreamTokenizer
 
-`java.nio.channels.spi`
+StringReader
+StringWriter
 
+Reader
+Writer
 
-`java.nio.charset`
+## `java.lang`
 
 
-`java.nio.charset.spi`
+## `java.lang.annotation`
 
 
-`java.nio.file`
+## `java.lang.invoke`
 
 
-`java.nio.file.attribute`
+## `java.lang.ref`
 
 
-`java.nio.file.spi`
+## `java.lang.reflect`
 
 
-`java.security`
+## `java.math`
 
 
-`java.security.cert`
+## `java.net`
 
 
-`java.security.interfaces`
+## `java.nio`
 
 
-`java.security.spec`
+## `java.nio.channels`
 
 
-`java.text`
+## `java.nio.channels.spi`
 
 
-`java.text.spi`
+## `java.nio.charset`
 
 
-`java.time`
+## `java.nio.charset.spi`
 
 
-`java.time.chrono`
+## `java.nio.file`
 
 
-`java.time.format`
+## `java.nio.file.attribute`
 
 
-`java.time.temporal`
+## `java.nio.file.spi`
 
 
-`java.time.zone`
+## `java.security`
 
 
-`java.util`
+## `java.security.cert`
 
 
-`java.util.concurrent`
+## `java.security.interfaces`
 
 
-`java.util.concurrent.atomic`
+## `java.security.spec`
 
 
-`java.util.concurrent.locks`
+## `java.text`
 
 
-`java.util.function`
+## `java.text.spi`
 
 
-`java.util.jar`
+## `java.time`
 
 
-`java.util.logging`
+## `java.time.chrono`
 
 
-`java.util.regex`
+## `java.time.format`
 
 
-`java.util.spi`
+## `java.time.temporal`
 
 
-`java.util.stream`
+## `java.time.zone`
 
 
-`java.util.zip`
+## `java.util`
 
 
-`javax.crypto`
+## `java.util.concurrent`
 
 
-`javax.crypto.interfaces`
+## `java.util.concurrent.atomic`
 
 
-`javax.crypto.spec`
+## `java.util.concurrent.locks`
 
 
-`javax.net`
+## `java.util.function`
 
 
-`javax.net.ssl`
+## `java.util.jar`
 
 
-`javax.script`
+## `java.util.logging`
 
 
-`javax.security.auth`
+## `java.util.regex`
 
 
-`javax.security.auth.callback`
+## `java.util.spi`
 
 
-`javax.security.auth.login`
+## `java.util.stream`
 
 
-`javax.security.auth.spi`
+## `java.util.zip`
 
 
-`javax.security.auth.x500`
+## `javax.crypto`
 
 
-`javax.security.cert`
+## `javax.crypto.interfaces`
+
+
+## `javax.crypto.spec`
+
+
+## `javax.net`
+
+
+## `javax.net.ssl`
+
+
+## `javax.script`
+
+
+## `javax.security.auth`
+
+
+## `javax.security.auth.callback`
+
+
+## `javax.security.auth.login`
+
+
+## `javax.security.auth.spi`
+
+
+## `javax.security.auth.x500`
+
+
+## `javax.security.cert`
 
 
 

@@ -15,6 +15,7 @@
 - [x] 熟悉[OO基本思想](./docs/oop.md)
 - [x] 其他[内容](./docs/misc.md)，如注解、JVM等。
 - [x] 一些简单的单应用，熟悉[常用的类](./docs/objects.md)，如数组排序，文件读写
+- [-] [核心基础内容](./docs/all-vip-class.md)
 - [ ] codewar做一些题目
 - [ ] 掌握tomcat的基本使用，实际使用时可考虑使用docker
 - [ ] 编写一个单文件的服务程序，用于计算四则运算表达式
