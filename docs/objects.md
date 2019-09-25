@@ -88,7 +88,7 @@ Collection和Map及其子接口都没有扩展 Cloneable 或 Serializable 接口
 Collection接口提供了一些方法，可以用于Set、List或Queue。如：add(), addAll(), remove(), removeAll(), retainAll(), clear(), isEmpty(), size(), contains(), containisAll()。
 
 **在数据和集合之间，经常需要来回转换，需要用到两个方法： Arrays.asList() 和 Collection.toArray() 。**
-> iceman注：猜测，因为 Collection 中，只有 List 的属性与 Array 相似，所以，Array 可以转为 List 。
+> iceman注：猜测，因为 Collection 中，只有 List 的属性与 Array 相似，所以，Array 可以转为 List 。但需要注意二者的区别：List长度可变，Array长度固定。
 
 > iceman住：目前，对于在不同类型之间的转来转去，还是有些模糊。书中的样例代码的写法形如 `Collection<String> c = new HashSet<>();`，但 openjdk 1.8 下编译报错，提示 Collection 没有这种写法。但 List，Set，Map 就没有这个问题。
 

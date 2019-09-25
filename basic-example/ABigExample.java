@@ -21,7 +21,9 @@ public class ABigExample {
     // dt.compareString();
     // dt.splitString();
     // dt.reverseArray();
-    dt.concatArray();
+    // dt.concatArray();
+    // dt.intersetArray();
+    dt.unionArray();
 
     // showRepl();
   }
@@ -145,6 +147,40 @@ class MyDataType {
     list.addAll(Arrays.asList(f));
     Object[] d = list.toArray();
     System.out.println(Arrays.toString(d));
+  }
+
+  // 找出两个数组的交集
+  public void intersetArray() {
+    // 最简单的方法，是双重循环
+    int[] a = {1,2,3};
+    int[] b = {3,4,5,6};
+    for(int a1: a) {
+      for (int b1: b) {
+        if (a1 == b1) {
+          out.print(a1);
+        }
+      }
+    }
+    out.println();
+
+    // 借助 ArrayList.retainAll
+    Integer[] e = {1,2,3};
+    Integer[] f = {3,4,5,6};
+    ArrayList<Integer> c = new ArrayList<>(Arrays.asList(e));
+    ArrayList<Integer> d = new ArrayList<>(Arrays.asList(f));
+    c.retainAll(d);
+    out.println(c);
+  }
+  
+  public void unionArray() {
+    String[] arr1 = { "1", "2", "3" };
+    String[] arr2 = { "4", "5", "6" };
+
+    HashSet<String> hs = new HashSet<>();
+    hs.addAll(Arrays.asList(arr1));
+    hs.addAll(Arrays.asList(arr2));
+
+    out.println(hs);
   }
 }
 
