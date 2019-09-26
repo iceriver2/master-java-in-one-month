@@ -1,5 +1,6 @@
-> 考虑到效率问题，资料来源是Java文档的中文版，最新的是[Java8](http://www.matools.com/api/java8)（实话说，这一版的翻译真不行）。从之前的资料可知，Java的最新几个长期版本正好是8，11。尤其是8，出现了大幅更新。BTW 最新版已经到13了。  
-> 分析核心库的主要目的，不是抄书，而是对核心类的使用有个基本了解，知道在什么时候需要使用什么类。其间，可能会可以忽略某些类，例如，大部分接口，安全类等。
+> 2019-09-25 考虑到效率问题，资料来源是Java文档的中文版，最新的是[Java8](http://www.matools.com/api/java8)（实话说，这一版的翻译真不行）。从之前的资料可知，Java的最新几个长期版本正好是8，11。尤其是8，出现了大幅更新。BTW 最新版已经到13了。分析核心库的主要目的，不是抄书，而是对核心类的使用有个基本了解，知道在什么时候需要使用什么类。其间，可能会可以忽略某些类，例如，大部分接口，安全类等。
+
+> 2019-09-26 抄书一天半下来，发现：抄录全部方法，有一些效果，但效果的是在归类方法时发生的。整体来说，效率还是偏慢。后面打算采取的策略是：先过一遍类，对于重要的类再抄录方法，不重要的类只保留名称。
 
 - [profile](#profile)
 - [Compact1](#compact1)
@@ -449,7 +450,7 @@ PrintWriter
 
 推回流：PushbackInputStream, PushbackReader
 
-RandomAccessFile(随机读写)
+**RandomAccessFile**(随机读写)
 - `RandomAccessFile(File file, String mode)` / `RandomAccessFile(String name, String mode)`
 - `void close()`
 - `FileChannel getChannel()` / `FileDescriptor getFD()`
@@ -525,6 +526,155 @@ Writer
 - java.lang.Object: clone(), equals(), finalize(), getClass(), hashCode(), notify(), notifyAll(), toString(), wait(), wait(), wait()
 
 ## `java.lang`
+
+
+Character
+- `static class Character.Subset` / `static class Character.UnicodeBlock` / `static class Character.UnicodeScript`
+- `static int	BYTES` / Unicode Specification Categories / `static int	MAX_CODE_POINT` / `static int	MIN_CODE_POINT` / `static int	MAX_RADIX` / `static int	MIN_RADIX` / `static char	MAX_VALUE` / `static char	MIN_VALUE` / `static int	SIZE` / `static Class<Character>	TYPE`
+- `Character(char value)`
+- `static int charCount(int codePoint)` / `char charValue()`
+- 码点：`static int codePointAt(char[] a, int index)` / `static int codePointAt(char[] a, int index, int limit)` / `static int codePointAt(CharSequence seq, int index)` / `static int codePointBefore(char[] a, int index)` / `static int codePointBefore(char[] a, int index, int start)` / `static int codePointBefore(CharSequence seq, int index)` / `static int codePointCount(char[] a, int offset, int count)` / `static int codePointCount(CharSequence seq, int beginIndex, int endIndex)` / `static int offsetByCodePoints(char[] a, int start, int count, int index, int codePointOffset)` / `static int offsetByCodePoints(CharSequence seq, int index, int codePointOffset)`
+- `static int compare(char x, char y)` / `int compareTo(Character anotherCharacter)` / `boolean equals(Object obj)`
+- `static int digit(char ch, int radix)` / `static int digit(int codePoint, int radix)` / `static char forDigit(int digit, int radix)`
+- `static String getName(int codePoint)`
+- `static int getNumericValue(char ch)` / `static int getNumericValue(int codePoint)`
+- `static int getType(char ch)` / `static int getType(int codePoint)`
+- `int hashCode()` / `static int hashCode(char value)`
+- 判定：`static boolean isAlphabetic(int codePoint)` / `static boolean isBmpCodePoint(int codePoint)` / `static boolean isDefined(char ch)` / `static boolean isDefined(int codePoint)` / `static boolean isDigit(char ch)` / `static boolean isDigit(int codePoint)` / `static boolean isHighSurrogate(char ch)` / `static boolean isIdentifierIgnorable(char ch)` / `static boolean isIdentifierIgnorable(int codePoint)` / `static boolean isIdeographic(int codePoint)` / `static boolean isISOControl(char ch)` / `static boolean isISOControl(int codePoint)` / `static boolean isJavaIdentifierPart(char ch)` / `static boolean isJavaIdentifierPart(int codePoint)` / `static boolean isJavaIdentifierStart(char ch)` / `static boolean isJavaIdentifierStart(int codePoint)` / `static boolean isLetter(char ch)` / `static boolean isLetter(int codePoint)` / `static boolean isLetterOrDigit(char ch)` / `static boolean isLetterOrDigit(int codePoint)` / `static boolean isLowerCase(char ch)` / `static boolean isLowerCase(int codePoint)` / `static boolean isLowSurrogate(char ch)` / `static boolean isMirrored(char ch)` / `static boolean isMirrored(int codePoint)` / `static boolean isSpaceChar(char ch)` / `static boolean isSpaceChar(int codePoint)` / `static boolean isSupplementaryCodePoint(int codePoint)` / `static boolean isSurrogate(char ch)` / `static boolean isSurrogatePair(char high, char low)` / `static boolean isTitleCase(char ch)` / `static boolean isTitleCase(int codePoint)` / `static boolean isUnicodeIdentifierPart(char ch)` / `static boolean isUnicodeIdentifierPart(int codePoint)` / `static boolean isUnicodeIdentifierStart(char ch)` / `static boolean isUnicodeIdentifierStart(int codePoint)` / `static boolean isUpperCase(char ch)` / `static boolean isUpperCase(int codePoint)` / `static boolean isValidCodePoint(int codePoint)` / `static boolean isWhitespace(char ch)` / `static boolean isWhitespace(int codePoint)`
+- `static int toCodePoint(char high, char low)`
+- 大小写：`static char toLowerCase(char ch)` / `static int toLowerCase(int codePoint)` / `static char toUpperCase(char ch)` / `static int toUpperCase(int codePoint)`
+- `String toString()` / `static String toString(char c)`
+- `static Character valueOf(char c)`
+
+Boolean
+- `static Boolean FALSE` / `static Boolean TRUE` / `static Class<Boolean> TYPE`
+- `Boolean(boolean value)` / `Boolean(String s)`
+- `boolean booleanValue()`
+- `static int compare(boolean x, boolean y)` / `int compareTo(Boolean b)`
+- `boolean equals(Object obj)`
+- `static boolean getBoolean(String name)` / `static boolean parseBoolean(String s)`
+- `static boolean logicalAnd(boolean a, boolean b)` / `static boolean logicalOr(boolean a, boolean b)` / `static boolean logicalXor(boolean a, boolean b)`
+- `int hashCode()` / `static int hashCode(boolean value)`
+- `String toString()` / `static String toString(boolean b)`
+- `static Boolean valueOf(boolean b)` / `static Boolean valueOf(String s)`
+
+Byte
+- `static int BYTES` / `static byte MAX_VALUE` / `static byte MIN_VALUE` / `static int SIZE` / `static Class<Byte> TYPE`
+- `Byte(byte value)` / `Byte(String s)`
+- `byte byteValue()` / `double doubleValue()` / `float floatValue()` / `int intValue()` / `long longValue()` / `short shortValue()`
+- `static int compare(byte x, byte y)` / `int compareTo(Byte anotherByte)`
+- `static Byte decode(String nm)`
+- `boolean equals(Object obj)`
+- `static byte parseByte(String s)` / `static byte parseByte(String s, int radix)`
+- `int hashCode()` / `static int hashCode(byte value)`
+- `String toString()` / `static String toString(byte b)`
+- `static int toUnsignedInt(byte x)` / `static long toUnsignedLong(byte x)`
+- `static Byte valueOf(byte b)` / `static Byte valueOf(String s)` / `static Byte valueOf(String s, int radix)`
+
+Double
+- `static int BYTES` / `static int MAX_EXPONENT` / `static int MIN_EXPONENT` / `static double MAX_VALUE` / `static double MIN_VALUE` / `static double MIN_NORMAL` / `static double NaN` / `static double NEGATIVE_INFINITY` / `static double POSITIVE_INFINITY` / `static int SIZE` / `static Class<Double> TYPE`
+- `Double(double value)` / `Double(String s)`
+- 数值互转：`byte byteValue()` / `double doubleValue()` / `float floatValue()` / `int intValue()` / `long longValue()` / `short shortValue()`
+- 比较：`static int compare(double d1, double d2)` / `int compareTo(Double anotherDouble)` / `boolean equals(Object obj)`
+- `int hashCode()` / `static int hashCode(double value)`
+- 测试无限：`static boolean isFinite(double d)` / `boolean isInfinite()` / `static boolean isInfinite(double v)`
+- 测试非数字：`boolean isNaN()` / `static boolean isNaN(double v)`
+- 最大最小：`static double max(double a, double b)` / `static double min(double a, double b)`
+- 加和：`static double sum(double a, double b)`
+- 与字符串互转：`static String toHexString(double d)` / `String toString()` / `static String toString(double d)` / `static double parseDouble(String s)`
+- 转为对象：`static Double valueOf(double d)` / `static Double valueOf(String s)`
+
+Float
+- `static int BYTES` / `static int MAX_EXPONENT` / `static int MIN_EXPONENT` / `static double MAX_VALUE` / `static double MIN_VALUE` / `static double MIN_NORMAL` / `static double NaN` / `static double NEGATIVE_INFINITY` / `static double POSITIVE_INFINITY` / `static int SIZE` / `static Class<Double> TYPE`
+- `Float(double value)` / `Float(float value)` / `Float(String s)`
+- 数值互转：`byte byteValue()` / `double doubleValue()` / `float floatValue()` / `int intValue()` / `long longValue()` / `short shortValue()`
+- 比较：`static int compare(float f1, float f2)` / `int compareTo(Float anotherFloat)` / `boolean equals(Object obj)`
+- `int hashCode()` / `static int hashCode(float value)`
+- 测试无限：`static boolean isFinite(float f)` / `boolean isInfinite()` / `static boolean isInfinite(float v)`
+- 测试非数字：`boolean isNaN()` / `static boolean isNaN(float v)`
+- 最大最小：`static float max(float a, float b)` / `static float min(float a, float b)`
+- 加和：`static float sum(float a, float b)`
+- 与字符串互转：`static String toHexString(float f)` /`String toString()` / `static String toString(float f)` / `static float parseFloat(String s)`
+- 转为对象：`static Float valueOf(float f)` / `static Float valueOf(String s)`
+
+Integer
+- `static int BYTES` / `static int MAX_VALUE` / `static int MIN_VALUE` / `static int SIZE` / `static Class<Integer> TYPE`
+- `Integer(int value)` / `Integer(String s)`
+- 数值互转：`byte byteValue()` / `double doubleValue()` / `float floatValue()` / `int intValue()` / `long longValue()` / `short shortValue()`
+- 比较：`static int compare(int x, int y)` / `int compareTo(Integer anotherInteger)` / `static int compareUnsigned(int x, int y)` / `boolean equals(Object obj)`
+- 转为对象：`static Integer decode(String nm)` / `static Integer getInteger(String nm)` / `static Integer getInteger(String nm, int val)` / `static Integer getInteger(String nm, Integer val)`
+- 计算：`static int divideUnsigned(int dividend, int divisor)` / `static int remainderUnsigned(int dividend, int divisor)` / `static int signum(int i)` / `static int sum(int a, int b)`
+- `int hashCode()` / `static int hashCode(int value)`
+- 最大最小：`static int max(int a, int b)` / `static int min(int a, int b)`
+- 转为数值：`static int parseInt(String s)` / `static int parseInt(String s, int radix)` / `static int parseUnsignedInt(String s)` / `static int parseUnsignedInt(String s, int radix)`
+- 与字符串互转：`static String toBinaryString(int i)` / `static String toHexString(int i)` / `static String toOctalString(int i)` / `String toString()` / `static String toString(int i)` / `static String toString(int i, int radix)` / `static long toUnsignedLong(int x)` / `static String toUnsignedString(int i)` / `static String toUnsignedString(int i, int radix)`
+- 转为对象：`static Integer valueOf(int i)` / `static Integer valueOf(String s)` / `static Integer valueOf(String s, int radix)`
+
+Long
+- `static int BYTES` / `static int MAX_VALUE` / `static int MIN_VALUE` / `static int SIZE` / `static Class<Integer> TYPE`
+- `Long(long value)` / `Long(String s)`
+- 数值互转：`byte byteValue()` / `double doubleValue()` / `float floatValue()` / `int intValue()` / `long longValue()` / `short shortValue()`
+- 比较：`static int compare(long x, long y)` / `int compareTo(Long anotherLong)` / `static int compareUnsigned(long x, long y)` / `boolean equals(Object obj)`
+- 转为对象：`static Long decode(String nm)` / `static Long getLong(String nm)` / `static Long getLong(String nm, long val)` / `static Long getLong(String nm, Long val)`
+- 计算：`static long divideUnsigned(long dividend, long divisor)` / `static long remainderUnsigned(long dividend, long divisor)` / `static int signum(long i)` / `static long sum(long a, long b)`
+- `int hashCode()` / `static int hashCode(long value)`
+- 最大最小：`static long max(long a, long b)` / `static long min(long a, long b)` / `static long parseLong(String s)` / `static long parseLong(String s, int radix)` / `static long parseUnsignedLong(String s)` / `static long parseUnsignedLong(String s, int radix)`
+- 与字符串互转：`static String toBinaryString(long i)` / `static String toHexString(long i)` / `static String toOctalString(long i)` / `String toString()` / `static String toString(long i)` / `static String toString(long i, int radix)` / `static String toUnsignedString(long i)` / `static String toUnsignedString(long i, int radix)`
+- 转为对象：`static Long valueOf(long l)` / `static Long valueOf(String s)` / `static Long valueOf(String s, int radix)`
+
+Short
+- `static int BYTES` / `static int MAX_VALUE` / `static int MIN_VALUE` / `static int SIZE` / `static Class<Integer> TYPE`
+- `Short(short value)` / `Short(String s)`
+- 数值互转：`byte byteValue()` / `double doubleValue()` / `float floatValue()` / `int intValue()` / `long longValue()` / `short shortValue()`
+- 比较：`static int compare(short x, short y)` / `int compareTo(Short anotherShort)` / `boolean equals(Object obj)`
+- 转为对象：`static Short decode(String nm)`
+- `int hashCode()` / `static int hashCode(short value)`
+- 转为数值：`static short parseShort(String s)` / `static short parseShort(String s, int radix)`
+- 与字符串互转：`String toString()` / `static String toString(short s)` / `static int toUnsignedInt(short x)` / `static long toUnsignedLong(short x)`
+- 转为对象：`static Short valueOf(short s)` / `static Short valueOf(String s)` / `static Short valueOf(String s, int radix)`
+
+Number
+String
+StringBuffer
+StringBuilder
+
+`Enum<E extends Enum<E>>`
+
+`Class<T>`
+ClassLoader
+`ClassValue<T>`
+
+Compiler
+
+`InheritableThreadLocal<T>`
+
+Math
+StrictMath
+
+
+Object
+Package
+
+Process
+ProcessBuilder
+ProcessBuilder.Redirect
+
+Runtime
+RuntimePermission
+
+SecurityManager
+
+StackTraceElement
+
+System
+Thread
+ThreadGroup
+`ThreadLocal<T>`
+
+Throwable
+Void
+
+
 
 
 ## `java.lang.annotation`
