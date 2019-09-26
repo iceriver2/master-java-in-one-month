@@ -35,6 +35,8 @@ try {
     method += code[0].replace(/(<.*?>)/g, '') + ' ';
     method += code[1].replace(/(<.*?>)/g, '') + ' ';
     method = method.replace(/&nbsp;/g, ' ');
+    method = method.replace(/&lt;/g, '<');
+    method = method.replace(/&gt;/g, '>');
     method = method.replace(/ +/g, ' ');
     method = method.replace(/ +$/, '');
     output += `\`${method}\`\n`;
