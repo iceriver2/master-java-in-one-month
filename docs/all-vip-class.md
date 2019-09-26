@@ -527,10 +527,9 @@ Writer
 
 ## `java.lang`
 
-
-Character
+**Character**
 - `static class Character.Subset` / `static class Character.UnicodeBlock` / `static class Character.UnicodeScript`
-- `static int	BYTES` / Unicode Specification Categories / `static int	MAX_CODE_POINT` / `static int	MIN_CODE_POINT` / `static int	MAX_RADIX` / `static int	MIN_RADIX` / `static char	MAX_VALUE` / `static char	MIN_VALUE` / `static int	SIZE` / `static Class<Character>	TYPE`
+- `static int BYTES` / Unicode Specification Categories / `static int MAX_CODE_POINT` / `static int MIN_CODE_POINT` / `static int MAX_RADIX` / `static int MIN_RADIX` / `static char MAX_VALUE` / `static char MIN_VALUE` / `static int SIZE` / `static Class<Character> TYPE`
 - `Character(char value)`
 - `static int charCount(int codePoint)` / `char charValue()`
 - 码点：`static int codePointAt(char[] a, int index)` / `static int codePointAt(char[] a, int index, int limit)` / `static int codePointAt(CharSequence seq, int index)` / `static int codePointBefore(char[] a, int index)` / `static int codePointBefore(char[] a, int index, int start)` / `static int codePointBefore(CharSequence seq, int index)` / `static int codePointCount(char[] a, int offset, int count)` / `static int codePointCount(CharSequence seq, int beginIndex, int endIndex)` / `static int offsetByCodePoints(char[] a, int start, int count, int index, int codePointOffset)` / `static int offsetByCodePoints(CharSequence seq, int index, int codePointOffset)`
@@ -633,49 +632,135 @@ Short
 - 与字符串互转：`String toString()` / `static String toString(short s)` / `static int toUnsignedInt(short x)` / `static long toUnsignedLong(short x)`
 - 转为对象：`static Short valueOf(short s)` / `static Short valueOf(String s)` / `static Short valueOf(String s, int radix)`
 
-Number
-String
-StringBuffer
-StringBuilder
+Number(抽象类，子类 AtomicInteger ， AtomicLong ， BigDecimal ， BigInteger ， Byte ， Double ， DoubleAccumulator ， DoubleAdder ， Float ， Integer ， Long ， LongAccumulator ， LongAdder ， Short)
+- `Number()`
+- `byte byteValue()` / `abstract double doubleValue()` / `abstract float floatValue()` / `abstract int intValue()` / `abstract long longValue()` / `short shortValue()`
 
-`Enum<E extends Enum<E>>`
+**String**
+- `static Comparator<String> CASE_INSENSITIVE_ORDER`
+- `String()` / `String(byte[] bytes)` / `String(byte[] bytes, Charset charset)` / `String(byte[] bytes, int offset, int length)` / `String(byte[] bytes, int offset, int length, Charset charset)` / `String(byte[] bytes, int offset, int length, String charsetName)` / `String(byte[] bytes, String charsetName)` / `String(char[] value)` / `String(char[] value, int offset, int count)` / `String(int[] codePoints, int offset, int count)` / `String(String original)` / `String(StringBuffer buffer)` / `String(StringBuilder builder)`
+- 元素：`char charAt(int index)` / `int indexOf(int ch)` / `int indexOf(int ch, int fromIndex)` / `int indexOf(String str)` / `int indexOf(String str, int fromIndex)` / `int lastIndexOf(int ch)`/ `int lastIndexOf(int ch, int fromIndex)`/ `int lastIndexOf(String str)`/ `int lastIndexOf(String str, int fromIndex)` / `CharSequence subSequence(int beginIndex, int endIndex)` / `String substring(int beginIndex)` / `String substring(int beginIndex, int endIndex)`
+- 码点：`int codePointAt(int index)` / `int codePointBefore(int index)` / `int codePointCount(int beginIndex, int endIndex)` / `int offsetByCodePoints(int index, int codePointOffset)`
+- 比较：`int compareTo(String anotherString)` / `int compareToIgnoreCase(String str)` / `boolean contentEquals(CharSequence cs)` / `boolean contentEquals(StringBuffer sb)` / `boolean equals(Object anObject)` / `boolean equalsIgnoreCase(String anotherString)`
+- 操作：`static String copyValueOf(char[] data)` / `static String copyValueOf(char[] data, int offset, int count)` / `static String format(Locale l, String format, Object... args)` / `static String format(String format, Object... args)` / `String trim()`
+- 分与合：`String concat(String str)` / `static String join(CharSequence delimiter, CharSequence... elements)` / `static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements)` / `String[] split(String regex)` / `String[] split(String regex, int limit)`
+- 搜索与替换：`boolean matches(String regex)` / `boolean regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len)` / `boolean regionMatches(int toffset, String other, int ooffset, int len)` / `String replace(char oldChar, char newChar)` / `String replace(CharSequence target, CharSequence replacement)` / `String replaceAll(String regex, String replacement)` / `String replaceFirst(String regex, String replacement)`
+- 测试：`boolean contains(CharSequence s)` / `boolean endsWith(String suffix)` / `boolean startsWith(String prefix)` / `boolean startsWith(String prefix, int toffset)` / `boolean isEmpty()`
+- `byte[] getBytes()` / `byte[] getBytes(Charset charset)` / `byte[] getBytes(String charsetName)` / `void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)`
+- `int hashCode()`
+- `String intern()`
+- 属性：`int length()`
+- 大小写：`String toLowerCase()` / `String toLowerCase(Locale locale)` / `String toUpperCase()` / `String toUpperCase(Locale locale)`
+- 转换：`char[] toCharArray()` / `String toString()`
+- 转为对象：`static String valueOf(boolean b)` / `static String valueOf(char c)` / `static String valueOf(char[] data)` / `static String valueOf(char[] data, int offset, int count)` / `static String valueOf(double d)` / `static String valueOf(float f)` / `static String valueOf(int i)` / `static String valueOf(long l)` / `static String valueOf(Object obj)`
 
-`Class<T>`
-ClassLoader
-`ClassValue<T>`
+StringBuffer(线程安全的字符序列，单线程使用 StringBuilder)  
+**StringBuilder**(字符序列)
+- `StringBuilder()` / `StringBuilder(CharSequence seq)` / `StringBuilder(int capacity)` / `StringBuilder(String str)`
+- 追加：`StringBuilder append(boolean b)` / `StringBuilder append(char c)` / `StringBuilder append(char[] str)` / `StringBuilder append(char[] str, int offset, int len)` / `StringBuilder append(CharSequence s)` / `StringBuilder append(CharSequence s, int start, int end)` / `StringBuilder append(double d)` / `StringBuilder append(float f)` / `StringBuilder append(int i)` / `StringBuilder append(long lng)` / `StringBuilder append(Object obj)` / `StringBuilder append(String str)` / `StringBuilder append(StringBuffer sb)` / `StringBuilder appendCodePoint(int codePoint)`
+- 容量：`int capacity()` / `void ensureCapacity(int minimumCapacity)` / `void trimToSize()`
+- 元素：`char charAt(int index)` / `void setCharAt(int index, char ch)` / `void getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)` / `CharSequence subSequence(int start, int end)` / `String substring(int start)` / `String substring(int start, int end)`
+- 码点：`int codePointAt(int index)` / `int codePointBefore(int index)` / `int codePointCount(int beginIndex, int endIndex)` / `int offsetByCodePoints(int index, int codePointOffset)`
+- 删除：`StringBuilder delete(int start, int end)` / `StringBuilder deleteCharAt(int index)`
+- 索引：`int indexOf(String str)` / `int indexOf(String str, int fromIndex)` / `int lastIndexOf(String str)` / `int lastIndexOf(String str, int fromIndex)`
+- 插入：`StringBuilder insert(int offset, boolean b)` / `StringBuilder insert(int offset, char c)` / `StringBuilder insert(int offset, char[] str)` / `StringBuilder insert(int index, char[] str, int offset, int len)` / `StringBuilder insert(int dstOffset, CharSequence s)` / `StringBuilder insert(int dstOffset, CharSequence s, int start, int end)` / `StringBuilder insert(int offset, double d)` / `StringBuilder insert(int offset, float f)` / `StringBuilder insert(int offset, int i)` / `StringBuilder insert(int offset, long l)` / `StringBuilder insert(int offset, Object obj)` / `StringBuilder insert(int offset, String str)`
+- `int length()` / `void setLength(int newLength)`
+- 替换：`StringBuilder replace(int start, int end, String str)`
+- 翻转：`StringBuilder reverse()`
+- `String toString()`
 
-Compiler
+`Enum<E extends Enum<E>>`(公共基类)
 
-`InheritableThreadLocal<T>`
+`Class<T>`(正在运行的类或接口)
 
-Math
-StrictMath
+ClassLoader(加载类)
 
+Package(包的实现与规范)
+
+**Math**/StrictMath
+- `static double PI`
+- `static double abs(double a)` / `static float abs(float a)` / `static int abs(int a)` / `static long abs(long a)`
+- 临界：`static int addExact(int x, int y)` / `static long addExact(long x, long y)` / `static int decrementExact(int a)` / `static long decrementExact(long a)` / `static int incrementExact(int a)` / `static long incrementExact(long a)` / `static int multiplyExact(int x, int y)` / `static long multiplyExact(long x, long y)` / `static int negateExact(int a)` / `static long negateExact(long a)` / `static int subtractExact(int x, int y)` / `static long subtractExact(long x, long y)` / `static int toIntExact(long value)`
+- `static double hypot(double x, double y)` / `static double pow(double a, double b)` / `static double sqrt(double a)`
+- 舍入：`static double ceil(double a)` / `static double floor(double a)` / `static double rint(double a)` / `static long round(double a)` / `static int round(float a)`
+- 最大最小：`static double max(double a, double b)` / `static float max(float a, float b)` / `static int max(int a, int b)` / `static long max(long a, long b)` / `static double min(double a, double b)` / `static float min(float a, float b)` / `static int min(int a, int b)` / `static long min(long a, long b)`
+- 接近无限：`static double nextAfter(double start, double direction)` / `static float nextAfter(float start, double direction)` / `static double nextDown(double d)` / `static float nextDown(float f)` / `static double nextUp(double d)` / `static float nextUp(float f)`
+- `static double random()`
+- 符号：`static double signum(double d)` / `static float signum(float f)`
 
 Object
-Package
+- `Object()`
+- `protected Object clone()`
+- `boolean equals(Object obj)`
+- `protected void finalize()`
+- `Class<?> getClass()`
+- `int hashCode()`
+- `void notify()` / `void notifyAll()` / `void wait()` / `void wait(long timeout)` / `void wait(long timeout, int nanos)`
+- `String toString()`
 
-Process
-ProcessBuilder
-ProcessBuilder.Redirect
+
+ProcessBuilder(创建操作系统进程)
+- `static class ProcessBuilder.Redirect`
+- `ProcessBuilder(List<String> command)` / `ProcessBuilder(String... command)`
+- `List<String> command()` / `ProcessBuilder command(List<String> command)` / `ProcessBuilder command(String... command)`
+- `File directory()` / `ProcessBuilder directory(File directory)`
+- `Map<String,String> environment()`
+- `ProcessBuilder inheritIO()`
+- 重定向：`ProcessBuilder.Redirect redirectError()` / `ProcessBuilder redirectError(File file)` / `ProcessBuilder redirectError(ProcessBuilder.Redirect destination)` / `boolean redirectErrorStream()` / `ProcessBuilder redirectErrorStream(boolean redirectErrorStream)` / `ProcessBuilder.Redirect redirectInput()` / `ProcessBuilder redirectInput(File file)` / `ProcessBuilder redirectInput(ProcessBuilder.Redirect source)` / `ProcessBuilder.Redirect redirectOutput()` / `ProcessBuilder redirectOutput(File file)` / `ProcessBuilder redirectOutput(ProcessBuilder.Redirect destination)`
+- 启动：`Process start()`
+
+**Process**(ProcessBuilder.start()创建一个线程)
+- `Process()`
+- `abstract void destroy()` / `Process destroyForcibly()`
+- `abstract int exitValue()`
+- `boolean isAlive()`
+- `abstract InputStream getErrorStream()` / `abstract InputStream getInputStream()` / `abstract OutputStream getOutputStream()`
+- `abstract int waitFor()` / `boolean waitFor(long timeout, TimeUnit unit)`
+
 
 Runtime
-RuntimePermission
+- `static Runtime getRuntime()`
+- `void addShutdownHook(Thread hook)` / `boolean removeShutdownHook(Thread hook)`
+- `int availableProcessors()`
+- `Process exec(String command)` / `Process exec(String[] cmdarray)` / `Process exec(String[] cmdarray, String[] envp)` / `Process exec(String[] cmdarray, String[] envp, File dir)` / `Process exec(String command, String[] envp)` / `Process exec(String command, String[] envp, File dir)`
+- `void exit(int status)` / `void halt(int status)`
+- `long totalMemory()` / `long maxMemory()` / `long freeMemory()`
+- `void gc()`
+- `void load(String filename)`
+- `void loadLibrary(String libname)`
+- `void runFinalization()`
+- `void traceInstructions(boolean on)` / `void traceMethodCalls(boolean on)`
 
-SecurityManager
+SecurityManager(安全策略)
 
-StackTraceElement
+StackTraceElement(堆栈跟踪)
 
-System
-Thread
-ThreadGroup
-`ThreadLocal<T>`
+**System**
+- 流：`static PrintStream	err` / `static InputStream	in` / `static PrintStream	out` / `static void setErr(PrintStream err)` / `static void setIn(InputStream in)` / `static void setOut(PrintStream out)`
+- `static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)`
+- 属性：`static String setProperty(String key, String value)` / `static void setProperties(Properties props)` / `static Properties getProperties()` / `static String clearProperty(String key)` / `static String getProperty(String key)` / `static String getProperty(String key, String def)`
+- 系统级对象：`static Console console()` / `static void setSecurityManager(SecurityManager s)` / `static SecurityManager getSecurityManager()` / `static Channel inheritedChannel()`
+- 环境变量：`static Map<String,String> getenv()` / `static String getenv(String name)` / `static String lineSeparator()`
+- 时间：`static long currentTimeMillis()` / `static long nanoTime()`
+- 系统级操作：`static void gc()` / `static void exit(int status)`
+- `static int identityHashCode(Object x)`
+- 库：`static void load(String filename)` / `static void loadLibrary(String libname)` / `static String mapLibraryName(String libname)`
+- `static void runFinalization()`
 
-Throwable
-Void
+**Thread**(线程)
+ThreadGroup(线程组)
+`ThreadLocal<T>`(线程局部变量)
+`InheritableThreadLocal<T>`(继承的线程局部变量)
 
+**Throwable**(Error和Exception的父类)
+- `	Throwable()` / `Throwable(String message)` / `Throwable(String message, Throwable cause)` / `protected	Throwable(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)` / `Throwable(Throwable cause)`
+- `void addSuppressed(Throwable exception)` / `Throwable[] getSuppressed()`
+- `Throwable fillInStackTrace()` / `void setStackTrace(StackTraceElement[] stackTrace)` / `StackTraceElement[] getStackTrace()` / `void printStackTrace()`/ `void printStackTrace(PrintStream s)`/ `void printStackTrace(PrintWriter s)`
+- `Throwable getCause()` / `Throwable initCause(Throwable cause)`
+- `String getLocalizedMessage()` / `String getMessage()`
+- `String toString()`
 
-
+Void(占位符)
 
 ## `java.lang.annotation`
 
