@@ -11,7 +11,6 @@
   - [`java.nio`](#javanio)
   - [`java.nio.file`](#javaniofile)
   - [`java.text`](#javatext)
-  - [`java.text.spi`](#javatextspi)
   - [`java.time`](#javatime)
   - [`java.time.chrono`](#javatimechrono)
   - [`java.time.format`](#javatimeformat)
@@ -1404,11 +1403,146 @@ BreakIterator(文本中的边界)
 - `int hashCode()`
 - `String toPattern()`
 
-## `java.text.spi`
-
-
 ## `java.time`
 
+**Duration**(时间段)
+- 实例：`static Duration between(Temporal startInclusive, Temporal endExclusive)` / `static Duration of(long amount, TemporalUnit unit)` / `static Duration ofDays(long days)` / `static Duration ofHours(long hours)` / `static Duration ofMillis(long millis)` / `static Duration ofMinutes(long minutes)` / `static Duration ofNanos(long nanos)` / `static Duration ofSeconds(long seconds)` / `static Duration ofSeconds(long seconds, long nanoAdjustment)` / `static Duration parse(CharSequence text)` / `static Duration from(TemporalAmount amount)`
+- 比较：`boolean equals(Object otherDuration)` / `int compareTo(Duration otherDuration)`
+- 计算：
+  - `Duration minus(Duration duration)` / `Duration plus(Duration duration)`
+  - `Duration minus(long amountToSubtract, TemporalUnit unit)` / `Duration plus(long amountToAdd, TemporalUnit unit)`
+  - `Duration minusDays(long daysToSubtract)` / `Duration plusDays(long daysToAdd)`
+  - `Duration minusHours(long hoursToSubtract)` / `Duration plusHours(long hoursToAdd)`
+  - `Duration minusMillis(long millisToSubtract)` / `Duration plusMillis(long millisToAdd)`
+  - `Duration minusMinutes(long minutesToSubtract)` / `Duration plusMinutes(long minutesToAdd)`
+  - `Duration minusNanos(long nanosToSubtract)` / `Duration plusNanos(long nanosToAdd)`
+  - `Duration minusSeconds(long secondsToSubtract)` / `Duration plusSeconds(long secondsToAdd)`
+  - `Temporal addTo(Temporal temporal)` / `Temporal subtractFrom(Temporal temporal)`
+  - `Duration dividedBy(long divisor)` / `Duration multipliedBy(long multiplicand)`
+- 转换：`long toDays()` / `long toHours()` / `long toMillis()` / `long toMinutes()` / `long toNanos()` / `int getNano()` / `long getSeconds()` / `long get(TemporalUnit unit)`
+- 副本：`Duration abs()` / `Duration negated()` / `Duration withNanos(int nanoOfSecond)` / `Duration withSeconds(long seconds)`
+- 单位：`List<TemporalUnit> getUnits()`
+- `int hashCode()`
+- `boolean isNegative()` / `boolean isZero()`
+- `String toString()`
+
+**Instant**(时间点)
+- `static Instant EPOCH`(1970年新世纪) / `static Instant MAX` / `static Instant MIN`
+- 实例：`static Instant from(TemporalAccessor temporal)` / `static Instant now()` / `static Instant now(Clock clock)` / `static Instant ofEpochMilli(long epochMilli)` / `static Instant ofEpochSecond(long epochSecond)` / `static Instant ofEpochSecond(long epochSecond, long nanoAdjustment)` / `static Instant parse(CharSequence text)`
+- 比较：`int compareTo(Instant otherInstant)` / `boolean equals(Object otherInstant)`
+- 计算：
+  - `Instant minus(long amountToSubtract, TemporalUnit unit)` / `Instant plus(long amountToAdd, TemporalUnit unit)`
+  - `Instant minus(TemporalAmount amountToSubtract)` / `Instant plus(TemporalAmount amountToAdd)`
+  - `Instant minusMillis(long millisToSubtract)` / `Instant plusMillis(long millisToAdd)`
+  - `Instant minusNanos(long nanosToSubtract)` / `Instant plusNanos(long nanosToAdd)`
+  - `Instant minusSeconds(long secondsToSubtract)` / `Instant plusSeconds(long secondsToAdd)`
+  - `Temporal adjustInto(Temporal temporal)`
+  - `OffsetDateTime atOffset(ZoneOffset offset)`
+  - `ZonedDateTime atZone(ZoneId zone)`
+  - `Instant truncatedTo(TemporalUnit unit)`
+  - `long until(Temporal endExclusive, TemporalUnit unit)`
+- 副本：`Instant with(TemporalAdjuster adjuster)` / `Instant with(TemporalField field, long newValue)`
+- 测试：`boolean isAfter(Instant otherInstant)` / `boolean isBefore(Instant otherInstant)`
+- 转换：`int getNano()` / `int get(TemporalField field)` / `long getEpochSecond()` / `long getLong(TemporalField field)` / `long toEpochMilli()`
+- `int hashCode()`
+- `boolean isSupported(TemporalField field)` / `boolean isSupported(TemporalUnit unit)`
+- `<R> R query(TemporalQuery<R> query)`
+- `ValueRange range(TemporalField field)`
+- `String toString()`
+
+
+Clock(抽象)
+- `protected	Clock()`
+- `boolean equals(Object obj)`
+- 实例：`static Clock fixed(Instant fixedInstant, ZoneId zone)` / `static Clock offset(Clock baseClock, Duration offsetDuration)` / `static Clock system(ZoneId zone)` / `static Clock systemDefaultZone()` / `static Clock systemUTC()` / `static Clock tick(Clock baseClock, Duration tickDuration)` / `static Clock tickMinutes(ZoneId zone)` / `static Clock tickSeconds(ZoneId zone)`
+- 相关对象：`abstract ZoneId getZone()` / `abstract Instant instant()`
+- `long millis()`
+- 副本：`abstract Clock withZone(ZoneId zone)`
+
+
+**LocalDate**
+- 实例：`static LocalDate from(TemporalAccessor temporal)` / `static LocalDate now()` / `static LocalDate now(Clock clock)` / `static LocalDate now(ZoneId zone)` / `static LocalDate of(int year, int month, int dayOfMonth)` / `static LocalDate of(int year, Month month, int dayOfMonth)` / `static LocalDate ofEpochDay(long epochDay)` / `static LocalDate ofYearDay(int year, int dayOfYear)` / `static LocalDate parse(CharSequence text)` / `static LocalDate parse(CharSequence text, DateTimeFormatter formatter)`
+- 指定时间：`LocalDateTime atStartOfDay()` / `ZonedDateTime atStartOfDay(ZoneId zone)` / `LocalDateTime atTime(int hour, int minute)` / `LocalDateTime atTime(int hour, int minute, int second)` / `LocalDateTime atTime(int hour, int minute, int second, int nanoOfSecond)` / `LocalDateTime atTime(LocalTime time)` / `OffsetDateTime atTime(OffsetTime time)`
+- 比较：`int compareTo(ChronoLocalDate other)` / `boolean equals(Object obj)`
+- 格式化：`String format(DateTimeFormatter formatter)`
+- 字段：`IsoChronology getChronology()` / `int getDayOfMonth()` / `DayOfWeek getDayOfWeek()` / `int getDayOfYear()` / `Era getEra()` / `Month getMonth()` / `int getMonthValue()` / `int getYear()` / `int lengthOfMonth()` / `int lengthOfYear()`
+- 判定：`boolean isAfter(ChronoLocalDate other)` / `boolean isBefore(ChronoLocalDate other)` / `boolean isEqual(ChronoLocalDate other)` / `boolean isLeapYear()`
+- 运算：
+  - `Temporal adjustInto(Temporal temporal)`
+  - `LocalDate minus(long amountToSubtract, TemporalUnit unit)` / `LocalDate plus(long amountToAdd, TemporalUnit unit)`
+  - `LocalDate minus(TemporalAmount amountToSubtract)` / `LocalDate plus(TemporalAmount amountToAdd)`
+  - `LocalDate minusDays(long daysToSubtract)` / `LocalDate plusDays(long daysToAdd)`
+  - `LocalDate minusMonths(long monthsToSubtract)` / `LocalDate plusMonths(long monthsToAdd)`
+  - `LocalDate minusWeeks(long weeksToSubtract)` / `LocalDate plusWeeks(long weeksToAdd)`
+  - `LocalDate minusYears(long yearsToSubtract)` / `LocalDate plusYears(long yearsToAdd)`
+- 副本：`LocalDate with(TemporalAdjuster adjuster)` / `LocalDate with(TemporalField field, long newValue)` / `LocalDate withDayOfMonth(int dayOfMonth)` / `LocalDate withDayOfYear(int dayOfYear)` / `LocalDate withMonth(int month)` / `LocalDate withYear(int year)`
+- 转换：`int get(TemporalField field)` / `long getLong(TemporalField field)` / `long toEpochDay()` / `Period until(ChronoLocalDate endDateExclusive)` / `long until(Temporal endExclusive, TemporalUnit unit)`
+- `boolean isSupported(TemporalField field)` / `boolean isSupported(TemporalUnit unit)`
+- `<R> R query(TemporalQuery<R> query)`
+- `ValueRange range(TemporalField field)`
+- `String toString()`
+
+**LocalDateTime**(差不多LocalDate和LocalTime的合体)
+
+**LocalTime**
+- `static LocalTime	MIDNIGHT` / `static LocalTime	NOON`
+- 实例：`static LocalTime from(TemporalAccessor temporal)` / `static LocalTime now()` / `static LocalTime now(Clock clock)` / `static LocalTime now(ZoneId zone)` / `static LocalTime of(int hour, int minute)` / `static LocalTime of(int hour, int minute, int second)` / `static LocalTime of(int hour, int minute, int second, int nanoOfSecond)` / `static LocalTime ofNanoOfDay(long nanoOfDay)` / `static LocalTime ofSecondOfDay(long secondOfDay)` / `static LocalTime parse(CharSequence text)` / `static LocalTime parse(CharSequence text, DateTimeFormatter formatter)`
+- 字段：`int get(TemporalField field)` / `int getHour()` / `long getLong(TemporalField field)` / `int getMinute()` / `int getNano()` / `int getSecond()` / `int hashCode()` / `long toNanoOfDay()` / `int toSecondOfDay()`
+- 比较：`int compareTo(LocalTime other)` / `boolean equals(Object obj)`
+- 格式化：`String format(DateTimeFormatter formatter)`
+- 判定：`boolean isAfter(LocalTime other)` / `boolean isBefore(LocalTime other)`
+- `boolean isSupported(TemporalField field)` / `boolean isSupported(TemporalUnit unit)`
+- 运算：
+  - `LocalTime minus(long amountToSubtract, TemporalUnit unit)` / `LocalTime plus(long amountToAdd, TemporalUnit unit)`
+  - `LocalTime minus(TemporalAmount amountToSubtract)` / `LocalTime plus(TemporalAmount amountToAdd)`
+  - `LocalTime minusHours(long hoursToSubtract)` / `LocalTime plusHours(long hoursToAdd)`
+  - `LocalTime minusMinutes(long minutesToSubtract)` / `LocalTime plusMinutes(long minutesToAdd)`
+  - `LocalTime minusNanos(long nanosToSubtract)` / `LocalTime plusNanos(long nanosToAdd)`
+  - `LocalTime minusSeconds(long secondsToSubtract)` / `LocalTime plusSeconds(long secondstoAdd)`
+  - `Temporal adjustInto(Temporal temporal)`
+  - `LocalDateTime atDate(LocalDate date)`
+  - `OffsetTime atOffset(ZoneOffset offset)`
+  - `<R> R query(TemporalQuery<R> query)`
+  - `ValueRange range(TemporalField field)`
+  - `LocalTime truncatedTo(TemporalUnit unit)`
+  - `long until(Temporal endExclusive, TemporalUnit unit)`
+- 副本：`LocalTime with(TemporalAdjuster adjuster)` / `LocalTime with(TemporalField field, long newValue)` / `LocalTime withHour(int hour)` / `LocalTime withMinute(int minute)` / `LocalTime withNano(int nanoOfSecond)` / `LocalTime withSecond(int second)`
+- `String toString()`
+
+
+OffsetDateTime(UTC时间日期)
+OffsetTime(UTC时间)
+
+Year  
+YearMonth  
+MonthDay  
+
+ZoneId(时区，抽象)
+- `boolean equals(Object obj)`
+- 实例：`static ZoneId from(TemporalAccessor temporal)` / `static ZoneId of(String zoneId)` / `static ZoneId of(String zoneId, Map<String,String> aliasMap)` / `static ZoneId ofOffset(String prefix, ZoneOffset offset)` / `static ZoneId systemDefault()`
+- `static Set<String> getAvailableZoneIds()`
+- `String getDisplayName(TextStyle style, Locale locale)`
+- `abstract String getId()`
+- `abstract ZoneRules getRules()`
+- `int hashCode()`
+- `ZoneId normalized()`
+- `String toString()`
+
+ZoneOffset(ZoneId的子类，相对UTC的偏移)
+- `static ZoneOffset	MAX` / `static ZoneOffset	MIN` / `static ZoneOffset	UTC`(Z)
+- `Temporal adjustInto(Temporal temporal)`
+- 比较：`int compareTo(ZoneOffset other)` / `boolean equals(Object obj)`
+- 实例：`static ZoneOffset from(TemporalAccessor temporal)` / `static ZoneOffset of(String offsetId)` / `static ZoneOffset ofHours(int hours)` / `static ZoneOffset ofHoursMinutes(int hours, int minutes)` / `static ZoneOffset ofHoursMinutesSeconds(int hours, int minutes, int seconds)` / `static ZoneOffset ofTotalSeconds(int totalSeconds)`
+- `int get(TemporalField field)`
+- `String getId()`
+- `long getLong(TemporalField field)`
+- `ZoneRules getRules()`
+- `int getTotalSeconds()`
+- `int hashCode()`
+- `boolean isSupported(TemporalField field)`
+- `<R> R query(TemporalQuery<R> query)`
+- `ValueRange range(TemporalField field)`
+- `String toString()`
 
 ## `java.time.chrono`
 
