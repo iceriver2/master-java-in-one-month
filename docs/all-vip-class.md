@@ -1,22 +1,14 @@
 > 2019-09-25 考虑到效率问题，资料来源是Java文档的中文版，最新的是[Java8](http://www.matools.com/api/java8)（实话说，这一版的翻译真不行）。从之前的资料可知，Java的最新几个长期版本正好是8，11。尤其是8，出现了大幅更新。BTW 最新版已经到13了。分析核心库的主要目的，不是抄书，而是对核心类的使用有个基本了解，知道在什么时候需要使用什么类。其间，可能会可以忽略某些类，例如，大部分接口，安全类等。
 
-> 2019-09-26 抄书一天半下来，发现：抄录全部方法，有一些效果，但效果的是在归类方法时发生的。整体来说，效率还是偏慢。后面打算采取的策略是：先过一遍类，对于重要的类再抄录方法，不重要的类只保留名称。
+> 2019-09-26 抄书一天半下来，发现：抄录全部方法，有一些效果，但效果的是在归类方法时发生的。整体来说，效率还是偏慢。后面打算采取的策略是：先过一遍类，对于重要的类再抄录方法，不重要的类只保留名称。有些包可能整体被忽略，如 java.nio.channels, java.nio.charset 。
 
 - [profile](#profile)
 - [Compact1](#compact1)
   - [`java.io`](#javaio)
   - [`java.lang`](#javalang)
-  - [`java.lang.annotation`](#javalangannotation)
-  - [`java.lang.invoke`](#javalanginvoke)
-  - [`java.lang.ref`](#javalangref)
-  - [`java.lang.reflect`](#javalangreflect)
   - [`java.math`](#javamath)
   - [`java.net`](#javanet)
   - [`java.nio`](#javanio)
-  - [`java.nio.channels`](#javaniochannels)
-  - [`java.nio.channels.spi`](#javaniochannelsspi)
-  - [`java.nio.charset`](#javaniocharset)
-  - [`java.nio.charset.spi`](#javaniocharsetspi)
   - [`java.nio.file`](#javaniofile)
   - [`java.nio.file.attribute`](#javaniofileattribute)
   - [`java.nio.file.spi`](#javaniofilespi)
@@ -127,6 +119,8 @@ Java8提供不同级别的JRE配置，以适应不同环境的需求。默认的
 # Compact1
 
 ## `java.io`
+
+接口：Closeable, DataInput, DataOutput, Externalizable, FileFilter, FilenameFilter, Flushable, ObjectInput, ObjectOutput, ObjectInputValidation, ObjectStreamConstants, Serializable.
 
 BufferedInputStream
 - `protected byte[] buf` / `protected int count` / `protected int pos`
@@ -527,6 +521,9 @@ Writer
 
 ## `java.lang`
 
+接口：Appendable, AutoCloseable, CharSequence, Cloneable, `Comparable<T>`, `Iterable<T>`, Readable, Runnable, Thread.UncaughtExceptionHandler.  
+枚举：Character.UnicodeScript, ProcessBuilder.Redirect.Type, Thread.State.
+
 **Character**
 - `static class Character.Subset` / `static class Character.UnicodeBlock` / `static class Character.UnicodeScript`
 - `static int BYTES` / Unicode Specification Categories / `static int MAX_CODE_POINT` / `static int MIN_CODE_POINT` / `static int MAX_RADIX` / `static int MIN_RADIX` / `static char MAX_VALUE` / `static char MIN_VALUE` / `static int SIZE` / `static Class<Character> TYPE`
@@ -736,7 +733,7 @@ SecurityManager(安全策略)
 StackTraceElement(堆栈跟踪)
 
 **System**
-- 流：`static PrintStream	err` / `static InputStream	in` / `static PrintStream	out` / `static void setErr(PrintStream err)` / `static void setIn(InputStream in)` / `static void setOut(PrintStream out)`
+- 流：`static PrintStream err` / `static InputStream in` / `static PrintStream out` / `static void setErr(PrintStream err)` / `static void setIn(InputStream in)` / `static void setOut(PrintStream out)`
 - `static void arraycopy(Object src, int srcPos, Object dest, int destPos, int length)`
 - 属性：`static String setProperty(String key, String value)` / `static void setProperties(Properties props)` / `static Properties getProperties()` / `static String clearProperty(String key)` / `static String getProperty(String key)` / `static String getProperty(String key, String def)`
 - 系统级对象：`static Console console()` / `static void setSecurityManager(SecurityManager s)` / `static SecurityManager getSecurityManager()` / `static Channel inheritedChannel()`
@@ -753,7 +750,7 @@ ThreadGroup(线程组)
 `InheritableThreadLocal<T>`(继承的线程局部变量)
 
 **Throwable**(Error和Exception的父类)
-- `	Throwable()` / `Throwable(String message)` / `Throwable(String message, Throwable cause)` / `protected	Throwable(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)` / `Throwable(Throwable cause)`
+- ` Throwable()` / `Throwable(String message)` / `Throwable(String message, Throwable cause)` / `protected Throwable(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace)` / `Throwable(Throwable cause)`
 - `void addSuppressed(Throwable exception)` / `Throwable[] getSuppressed()`
 - `Throwable fillInStackTrace()` / `void setStackTrace(StackTraceElement[] stackTrace)` / `StackTraceElement[] getStackTrace()` / `void printStackTrace()`/ `void printStackTrace(PrintStream s)`/ `void printStackTrace(PrintWriter s)`
 - `Throwable getCause()` / `Throwable initCause(Throwable cause)`
@@ -762,41 +759,485 @@ ThreadGroup(线程组)
 
 Void(占位符)
 
-## `java.lang.annotation`
-
-
-## `java.lang.invoke`
-
-
-## `java.lang.ref`
-
-
-## `java.lang.reflect`
-
-
 ## `java.math`
 
+BigDecimal(不变的、任意精度的十进制数字)
+
+BigInteger(不变的、任意精度的整型)
+
+MathContext(描述一些规则)
 
 ## `java.net`
+
+Authenticator(网络连接认证)  
+PasswordAuthentication(Authenticator使用的数据持有者)
+
+CacheRequest(抽象类) CacheResponse(抽象类) SecureCacheResponse(抽象类)
+
+ContentHandler(从URLConnection中读取Object的所有类的超类，抽象类)
+
+CookieHandler(抽象类)
+- `CookieHandler()`
+- `abstract Map<String,List<String>> get(URI uri, Map<String,List<String>> requestHeaders)`
+- `static CookieHandler getDefault()` / `static void setDefault(CookieHandler cHandler)`
+- `abstract void put(URI uri, Map<String,List<String>> responseHeaders)`
+
+CookieManager(提供CookieHandler的具体应用)
+- `CookieManager()` / `CookieManager(CookieStore store, CookiePolicy cookiePolicy)`
+- `Map<String,List<String>> get(URI uri, Map<String,List<String>> requestHeaders)` / `void put(URI uri, Map<String,List<String>> responseHeaders)`
+- `CookieStore getCookieStore()` / `void setCookiePolicy(CookiePolicy cookiePolicy)`
+
+**HttpCookie**
+- `HttpCookie(String name, String value)`
+- `Object clone()`
+- `static boolean domainMatches(String domain, String host)`
+- `boolean equals(Object obj)`
+- 注释：`String getComment()` / `void setComment(String purpose)` / `String getCommentURL()` / `void setCommentURL(String purpose)`
+- 属性：
+  - `boolean getDiscard()` / `void setDiscard(boolean discard)`
+  - `boolean isHttpOnly()` / `void setHttpOnly(boolean httpOnly)`
+  - `String getDomain()` / `void setDomain(String pattern)`
+  - `long getMaxAge()` / `void setMaxAge(long expiry)`
+  - `String getName()`
+  - `String getPath()` / `void setPath(String uri)`
+  - `String getPortlist()` / `void setPortlist(String ports)`
+  - `boolean getSecure()` / `void setSecure(boolean flag)`
+  - `String getValue()` / `void setValue(String newValue)`
+  - `int getVersion()` / `void setVersion(int v)`
+- `boolean hasExpired()`
+- `int hashCode()`
+- `static List<HttpCookie> parse(String header)`
+- `String toString()`
+
+
+DatagramSocketImpl(DatagramPacket和DatagramSocket的抽象基类)
+
+**DatagramPacket**(数据包封装)
+- `DatagramPacket(byte[] buf, int length)` / `DatagramPacket(byte[] buf, int length, InetAddress address, int port)` / `DatagramPacket(byte[] buf, int offset, int length)` / `DatagramPacket(byte[] buf, int offset, int length, InetAddress address, int port)` / `DatagramPacket(byte[] buf, int offset, int length, SocketAddress address)` / `DatagramPacket(byte[] buf, int length, SocketAddress address)`
+- `InetAddress getAddress()` / `void setAddress(InetAddress iaddr)`
+- `byte[] getData()` / `void setData(byte[] buf)` / `void setData(byte[] buf, int offset, int length)`
+- `int getLength()` / `void setLength(int length)`
+- `int getOffset()`
+- `int getPort()` / `void setPort(int iport)`
+- `SocketAddress getSocketAddress()` / `void setSocketAddress(SocketAddress address)`
+
+**DatagramSocket**(数据发送接受)
+- `DatagramSocket()` / `protected DatagramSocket(DatagramSocketImpl impl)` / `DatagramSocket(int port)` / `DatagramSocket(int port, InetAddress laddr)` / `DatagramSocket(SocketAddress bindaddr)`
+- 开关：`void connect(InetAddress address, int port)` / `void connect(SocketAddress addr)` / `void disconnect()` / `void close()` / `boolean isClosed()` / `boolean isConnected()`
+- 广播：`boolean getBroadcast()` / `void setBroadcast(boolean on)`
+- `DatagramChannel getChannel()`
+- 地址端口：`void bind(SocketAddress addr)` / `boolean isBound()` / `InetAddress getInetAddress()` / `InetAddress getLocalAddress()` / `int getLocalPort()` / `SocketAddress getLocalSocketAddress()` / `int getPort()` / `SocketAddress getRemoteSocketAddress()`
+- `void setReuseAddress(boolean on)` / `boolean getReuseAddress()`
+- 缓冲区：`void setReceiveBufferSize(int size)` / `int getReceiveBufferSize()` / `int getSendBufferSize()` / `void setSendBufferSize(int size)`
+- 超时：`void setSoTimeout(int timeout)` / `int getSoTimeout()`
+- `void setTrafficClass(int tc)` / `int getTrafficClass()`
+- 发送接受：`void receive(DatagramPacket p)` / `void send(DatagramPacket p)`
+- `static void setDatagramSocketImplFactory(DatagramSocketImplFactory fac)`
+
+MulticastSocket(DatagramSocket的子类，多播)
+- `MulticastSocket()` / `MulticastSocket(int port)` / `MulticastSocket(SocketAddress bindaddr)`
+- `InetAddress getInterface()` / `void setInterface(InetAddress inf)`
+- `boolean getLoopbackMode()` / `void setLoopbackMode(boolean disable)`
+- `NetworkInterface getNetworkInterface()` / `void setNetworkInterface(NetworkInterface netIf)`
+- `int getTimeToLive()` / `void setTimeToLive(int ttl)`
+- `byte getTTL()` / `void setTTL(byte ttl)`
+- `void joinGroup(InetAddress mcastaddr)` / `void joinGroup(SocketAddress mcastaddr, NetworkInterface netIf)` / `void leaveGroup(InetAddress mcastaddr)` / `void leaveGroup(SocketAddress mcastaddr, NetworkInterface netIf)`
+- `void send(DatagramPacket p, byte ttl)`
+
+
+**URLConnection**(抽象类)
+- `protected boolean allowUserInteraction` / `protected boolean connected` / `protected boolean doInput` / `protected boolean doOutput` / `protected long ifModifiedSince` / `protected URL url` / `protected boolean useCaches`
+- `protected URLConnection(URL url)`
+- `URL getURL()`
+- 请求属性：`void addRequestProperty(String key, String value)` / `void setRequestProperty(String key, String value)` / `Map<String,List<String>> getRequestProperties()` / `String getRequestProperty(String key)`
+- `abstract void connect()`
+- 超时：`int getConnectTimeout()` / `void setConnectTimeout(int timeout)` / `void setReadTimeout(int timeout)` / `int getReadTimeout()`
+- `boolean getAllowUserInteraction()` / `static boolean getDefaultAllowUserInteraction()` / `static void setDefaultAllowUserInteraction(boolean defaultallowuserinteraction)` / `void setAllowUserInteraction(boolean allowuserinteraction)`
+- 头：`String getHeaderField(int n)` / `String getHeaderField(String name)` / `long getHeaderFieldDate(String name, long Default)` / `int getHeaderFieldInt(String name, int Default)` / `String getHeaderFieldKey(int n)` / `long getHeaderFieldLong(String name, long Default)` / `Map<String,List<String>> getHeaderFields()`
+- 内容：`Object getContent()` / `Object getContent(Class[] classes)` / `String getContentEncoding()` / `int getContentLength()` / `long getContentLengthLong()` / `String getContentType()`
+- `long getDate()` / `long getExpiration()`
+- `boolean getDefaultUseCaches()` / `void setDefaultUseCaches(boolean defaultusecaches)`
+- `boolean getDoInput()` / `void setDoInput(boolean doinput)` / `boolean getDoOutput()` / `void setDoOutput(boolean dooutput)`
+- `static FileNameMap getFileNameMap()` / `static void setFileNameMap(FileNameMap map)`
+- `long getIfModifiedSince()` / `void setIfModifiedSince(long ifmodifiedsince)` / `long getLastModified()`
+- `InputStream getInputStream()`/ `OutputStream getOutputStream()`
+- `Permission getPermission()`
+- `boolean getUseCaches()` / `void setUseCaches(boolean usecaches)`
+- `static String guessContentTypeFromName(String fname)` / `static String guessContentTypeFromStream(InputStream is)`
+- `static void setContentHandlerFactory(ContentHandlerFactory fac)`
+- `String toString()`
+
+ResponseCache(URLConnection缓存的实现)
+- `ResponseCache()`
+- `abstract CacheResponse get(URI uri, String rqstMethod, Map<String,List<String>> rqstHeaders)` / `abstract CacheRequest put(URI uri, URLConnection conn)`
+- `static ResponseCache getDefault()` / `static void setDefault(ResponseCache responseCache)`
+
+**HttpURLConnection**(单个请求，抽象类，借助URLConnection)
+- `protected int chunkLength` / `protected int fixedContentLength` / `protected long fixedContentLengthLong` / `protected boolean instanceFollowRedirects` / `protected String method` / `protected int responseCode` / `protected String responseMessage`
+- 状态码(很多)：`HTTP_INTERNAL_ERROR`(500) / `HTTP_MOVED_PERM`(301) / `HTTP_MOVED_TEMP`(302) / `HTTP_NOT_FOUND`(404) / `HTTP_OK`(200)
+- `protected HttpURLConnection(URL u)`
+- `abstract void disconnect()`
+- `InputStream getErrorStream()`
+- 重定向：`static boolean getFollowRedirects()` / `static void setFollowRedirects(boolean set)` / `boolean getInstanceFollowRedirects()` / `void setInstanceFollowRedirects(boolean followRedirects)`
+- 头字段：`String getHeaderField(int n)` / `long getHeaderFieldDate(String name, long Default)` / `String getHeaderFieldKey(int n)`
+- `Permission getPermission()`
+- `String getRequestMethod()` / `void setRequestMethod(String method)`
+- `int getResponseCode()` / `String getResponseMessage()`
+- `void setChunkedStreamingMode(int chunklen)`
+- `void setFixedLengthStreamingMode(int contentLength)` / `void setFixedLengthStreamingMode(long contentLength)`
+- `abstract boolean usingProxy()`
+
+JarURLConnection(连接jar，抽象类，借助URLConnection)
+- `protected URLConnection jarFileURLConnection`
+- `protected JarURLConnection(URL url)`
+- `Attributes getAttributes()`
+- `Certificate[] getCertificates()`
+- `String getEntryName()` / `JarEntry getJarEntry()`
+- `abstract JarFile getJarFile()` / `URL getJarFileURL()`
+- `Attributes getMainAttributes()` / `Manifest getManifest()`
+
+
+**InetAddress**(IP地址超类)
+- `boolean equals(Object obj)`
+- 实例：`static InetAddress[] getAllByName(String host)` / `static InetAddress getByAddress(byte[] addr)` / `static InetAddress getByAddress(String host, byte[] addr)` / `static InetAddress getByName(String host)` / `static InetAddress getLocalHost()` / `static InetAddress getLoopbackAddress()`
+- 获取：`byte[] getAddress()` / `String getCanonicalHostName()` / `String getHostAddress()` / `String getHostName()`
+- `int hashCode()`
+- 测试：`boolean isAnyLocalAddress()` / `boolean isLinkLocalAddress()` / `boolean isLoopbackAddress()` / `boolean isSiteLocalAddress()`
+- 多播：`boolean isMCGlobal()` / `boolean isMCLinkLocal()` / `boolean isMCNodeLocal()` / `boolean isMCOrgLocal()` / `boolean isMCSiteLocal()` / `boolean isMulticastAddress()`
+- `boolean isReachable(int timeout)` / `boolean isReachable(NetworkInterface netif, int ttl, int timeout)`
+- `String toString()`
+
+**Inet4Address**
+- `boolean equals(Object obj)`
+- `byte[] getAddress()` / `String getHostAddress()`
+- `int hashCode()`
+- 测试：`boolean isAnyLocalAddress()` / `boolean isLinkLocalAddress()` / `boolean isLoopbackAddress()` / `boolean isSiteLocalAddress()`
+- 多播：`boolean isMCGlobal()` / `boolean isMCLinkLocal()` / `boolean isMCNodeLocal()` / `boolean isMCOrgLocal()` / `boolean isMCSiteLocal()` / `boolean isMulticastAddress()`
+
+**Inet6Address**
+- `boolean equals(Object obj)`
+- `byte[] getAddress()` / `static Inet6Address getByAddress(String host, byte[] addr, int scope_id)` / `static Inet6Address getByAddress(String host, byte[] addr, NetworkInterface nif)` / `String getHostAddress()`
+- `NetworkInterface getScopedInterface()` / `int getScopeId()`
+- `int hashCode()`
+- 测试：`boolean isAnyLocalAddress()` / `boolean isIPv4CompatibleAddress()` / `boolean isLinkLocalAddress()` / `boolean isLoopbackAddress()` / `boolean isSiteLocalAddress()`
+- 多播：`boolean isMCGlobal()` / `boolean isMCLinkLocal()` / `boolean isMCNodeLocal()` / `boolean isMCOrgLocal()` / `boolean isMCSiteLocal()` / `boolean isMulticastAddress()`
+
+
+InetSocketAddress(IP套接字)
+- `InetSocketAddress(InetAddress addr, int port)` / `InetSocketAddress(int port)` / `InetSocketAddress(String hostname, int port)`
+- `static InetSocketAddress createUnresolved(String host, int port)`
+- `boolean equals(Object obj)`
+- `InetAddress getAddress()` / `String getHostName()` / `String getHostString()` / `int getPort()`
+- `boolean isUnresolved()`
+- `int hashCode()`
+- `String toString()`
+
+InterfaceAddress(网络接口地址)
+- `boolean equals(Object obj)`
+- `InetAddress getAddress()` / `InetAddress getBroadcast()` / `short getNetworkPrefixLength()`
+- `int hashCode()`
+- `String toString()`
+
+
+NetPermission(网络权限)
+
+NetworkInterface(网络接口)
+- `boolean equals(Object obj)`
+- 实例：`static NetworkInterface getByIndex(int index)` / `static NetworkInterface getByInetAddress(InetAddress addr)` / `static NetworkInterface getByName(String name)`
+- `String getDisplayName()` / `byte[] getHardwareAddress()` / `Enumeration<InetAddress> getInetAddresses()` / `List<InterfaceAddress> getInterfaceAddresses()` / `int getMTU()` / `String getName()` / `static Enumeration<NetworkInterface> getNetworkInterfaces()` / `NetworkInterface getParent()` / `Enumeration<NetworkInterface> getSubInterfaces()`
+- `int hashCode()`
+- `boolean isLoopback()` / `boolean isPointToPoint()` / `boolean isUp()` / `boolean isVirtual()` / `boolean supportsMulticast()`
+- `String toString()`
+
+
+Proxy(代理设置，通常是http和socks)  
+ProxySelector(代理选择器)
+
+
+**ServerSocket**(服务端套接字)
+- `ServerSocket()` / `ServerSocket(int port)` / `ServerSocket(int port, int backlog)` / `ServerSocket(int port, int backlog, InetAddress bindAddr)`
+- `Socket accept()`
+- `void bind(SocketAddress endpoint)` / `void bind(SocketAddress endpoint, int backlog)` / `boolean isBound()`
+- `void close()` / `boolean isClosed()`
+- `ServerSocketChannel getChannel()`
+- 获取：`InetAddress getInetAddress()` / `int getLocalPort()` / `SocketAddress getLocalSocketAddress()`
+- `int getReceiveBufferSize()` / `void setReceiveBufferSize(int size)`
+- `boolean getReuseAddress()` / `void setReuseAddress(boolean on)`
+- `int getSoTimeout()` / `void setSoTimeout(int timeout)`
+- `protected void implAccept(Socket s)`
+- `void setPerformancePreferences(int connectionTime, int latency, int bandwidth)`
+- `static void setSocketFactory(SocketImplFactory fac)`
+- `String toString()`
+
+**Socket**(客户端套接字)
+- `Socket()` / `Socket(InetAddress address, int port)` / `Socket(InetAddress address, int port, InetAddress localAddr, int localPort)` / `Socket(Proxy proxy)` / `Socket(SocketImpl impl)` / `Socket(String host, int port)` / `Socket(String host, int port, InetAddress localAddr, int localPort)`
+- 绑定：`void bind(SocketAddress bindpoint)` / `boolean isBound()`
+- 开关：`void close()` / `boolean isClosed()` / `void connect(SocketAddress endpoint)` / `void connect(SocketAddress endpoint, int timeout)` / `boolean isConnected()`
+- 通道：`SocketChannel getChannel()`
+- 地址端口：`InetAddress getInetAddress()` / `InetAddress getLocalAddress()` / `int getLocalPort()` / `SocketAddress getLocalSocketAddress()` / `int getPort()` / `SocketAddress getRemoteSocketAddress()`
+- 流：`InputStream getInputStream()` / `OutputStream getOutputStream()`
+- `boolean getKeepAlive()` / `void setKeepAlive(boolean on)`
+- 紧急数据：`boolean getOOBInline()` / `void setOOBInline(boolean on)` / `void sendUrgentData(int data)`
+- 缓冲：`int getReceiveBufferSize()` / `void setReceiveBufferSize(int size)` / `int getSendBufferSize()` / `void setSendBufferSize(int size)`
+- `boolean getReuseAddress()` / `void setReuseAddress(boolean on)`
+- `int getSoLinger()` / `void setSoLinger(boolean on, int linger)`
+- `int getSoTimeout()` / `void setSoTimeout(int timeout)`
+- `boolean getTcpNoDelay()` / `void setTcpNoDelay(boolean on)`
+- `int getTrafficClass()` / `void setTrafficClass(int tc)`
+- `boolean isInputShutdown()` / `boolean isOutputShutdown()` / `void shutdownInput()` / `void shutdownOutput()`
+- `void setPerformancePreferences(int connectionTime, int latency, int bandwidth)`
+- `static void setSocketImplFactory(SocketImplFactory fac)`
+- `String toString()`
+
+SocketAddress(仅代表套接字地址)
+
+SocketImpl(所有套接字的公共超类)
+
+SocketPermission(套接字的网络访问权限)
+
+StandardSocketOptions(套接字标准选项)
+- `static SocketOption<NetworkInterface> IP_MULTICAST_IF` / `static SocketOption<Boolean> IP_MULTICAST_LOOP` / `static SocketOption<Integer> IP_MULTICAST_TTL` / `static SocketOption<Integer> IP_TOS`
+- `static SocketOption<Boolean> SO_BROADCAST` / `static SocketOption<Boolean> SO_KEEPALIVE` / `static SocketOption<Integer> SO_LINGER` / `static SocketOption<Integer> SO_RCVBUF` / `static SocketOption<Boolean> SO_REUSEADDR` / `static SocketOption<Integer> SO_SNDBUF`
+- `static SocketOption<Boolean> TCP_NODELAY`
+
+**URI**(统一资源标识符)
+URI实例有以下九个组件:scheme, scheme-specific-part, authority, user-info, host, port, path, query, fragment.
+- `URI(String str)` / `URI(String scheme, String ssp, String fragment)` / `URI(String scheme, String userInfo, String host, int port, String path, String query, String fragment)` / `URI(String scheme, String host, String path, String fragment)` / `URI(String scheme, String authority, String path, String query, String fragment)`
+- 比较：`int compareTo(URI that)` / `boolean equals(Object ob)`
+- 转换：`static URI create(String str)` / `URL toURL()`
+- 获取9个组件：`String getScheme()` / `String getSchemeSpecificPart()` / `String getAuthority()` / `String getUserInfo()` / `String getHost()` / `int getPort()` / `String getPath()` / `String getQuery()` / `String getFragment()`
+- 原始数据：`String getRawAuthority()` / `String getRawFragment()` / `String getRawPath()` / `String getRawQuery()` / `String getRawSchemeSpecificPart()` / `String getRawUserInfo()`
+- `int hashCode()`
+- `boolean isAbsolute()` / `boolean isOpaque()`
+- `URI normalize()`
+- 解析：`URI parseServerAuthority()`
+- `URI relativize(URI uri)` / `URI resolve(String str)` / `URI resolve(URI uri)`
+- `String toASCIIString()` / `String toString()`
+
+URL
+- `URL(String spec)` / `URL(String protocol, String host, int port, String file)` / `URL(String protocol, String host, int port, String file, URLStreamHandler handler)` / `URL(String protocol, String host, String file)` / `URL(URL context, String spec)` / `URL(URL context, String spec, URLStreamHandler handler)`
+- 比较：`boolean equals(Object obj)` / `boolean sameFile(URL other)`
+- 获取不同组件（略参照URI）：`String getProtocol()` / `String getAuthority()` / `String getUserInfo()` / `String getHost()` / `int getPort()` / `String getPath()` / `String getQuery()` / `String getFile()` / `String getRef()`
+- 内容：`Object getContent()` / `Object getContent(Class[] classes)`
+- `int getDefaultPort()`
+- `int hashCode()`
+- `URLConnection openConnection()` / `URLConnection openConnection(Proxy proxy)`
+- `InputStream openStream()`
+- `static void setURLStreamHandlerFactory(URLStreamHandlerFactory fac)`
+- `String toExternalForm()` / `String toString()`
+- `URI toURI()`
+
+URLClassLoader(ClassLoader的子类，从Jar或URL中加载类)
+
+**URLDecoder**
+- `static String decode(String s, String enc)`
+
+**URLEncoder**
+- `static String encode(String s, String enc)`
+
+URLPermission(URL访问权限)
+
+URLStreamHandler(所有流协议处理程序的通用超类)
 
 
 ## `java.nio`
 
-
-## `java.nio.channels`
-
-
-## `java.nio.channels.spi`
+ByteOrder(类型安全枚举)
 
 
-## `java.nio.charset`
+Buffer(抽象类)
+- `abstract Object array()` / `abstract int arrayOffset()` / `abstract boolean hasArray()`
+- `int capacity()` / `boolean hasRemaining()` / `int remaining()`
+- `Buffer clear()`
+- `Buffer flip()` / `Buffer rewind()`
+- `abstract boolean isDirect()` / `abstract boolean isReadOnly()`
+- `int limit()` / `Buffer limit(int newLimit)`
+- `Buffer mark()` / `Buffer reset()`
+- `int position()` / `Buffer position(int newPosition)`
 
+ByteBuffer(抽象类)
+MappedByteBuffer(ByteBuffer的子类, 抽象类)
 
-## `java.nio.charset.spi`
+CharBuffer
+- 实例：`static CharBuffer allocate(int capacity)` / `static CharBuffer wrap(char[] array)` / `static CharBuffer wrap(char[] array, int offset, int length)` / `static CharBuffer wrap(CharSequence csq)` / `static CharBuffer wrap(CharSequence csq, int start, int end)`
+- `char[] array()` / `int arrayOffset()` / `boolean hasArray()`
+- `abstract CharBuffer asReadOnlyBuffer()`
+- `char charAt(int index)`
+- `IntStream chars()`
+- `abstract CharBuffer compact()`
+- 比较：`int compareTo(CharBuffer that)` / `boolean equals(Object ob)`
+- 存取：
+  - `int read(CharBuffer target)`
+  - `abstract char get()` / `CharBuffer get(char[] dst)` / `CharBuffer get(char[] dst, int offset, int length)` / `abstract char get(int index)`
+  - `CharBuffer put(char[] src)` / `CharBuffer put(char[] src, int offset, int length)` / `CharBuffer put(CharBuffer src)` / `abstract CharBuffer put(int index, char c)` / `CharBuffer put(String src)` / `CharBuffer put(String src, int start, int end)` / `abstract CharBuffer put(char c)`
+  - `CharBuffer append(char c)` / `CharBuffer append(CharSequence csq)` / `CharBuffer append(CharSequence csq, int start, int end)`
+- `int hashCode()`
+- `abstract boolean isDirect()`
+- `int length()`
+- `abstract ByteOrder order()`
+- 操作：`abstract CharBuffer slice()` / `abstract CharBuffer subSequence(int start, int end)` /`abstract CharBuffer duplicate()`
+- `String toString()`
 
+DoubleBuffer
+- 实例：`static DoubleBuffer allocate(int capacity)` / `static DoubleBuffer wrap(double[] array)` / `static DoubleBuffer wrap(double[] array, int offset, int length)`
+- `double[] array()` / `int arrayOffset()` / `boolean hasArray()`
+- `abstract DoubleBuffer asReadOnlyBuffer()`
+- `abstract DoubleBuffer compact()`
+- 比较：`int compareTo(DoubleBuffer that)` / `boolean equals(Object ob)`
+- 存取：
+  - `abstract double get()` / `DoubleBuffer get(double[] dst)` / `DoubleBuffer get(double[] dst, int offset, int length)` / `abstract double get(int index)`
+  - `abstract DoubleBuffer put(double d)` / `DoubleBuffer put(double[] src)` / `DoubleBuffer put(double[] src, int offset, int length)` / `DoubleBuffer put(DoubleBuffer src)` / `abstract DoubleBuffer put(int index, double d)`
+- `int hashCode()`
+- `abstract boolean isDirect()`
+- `abstract ByteOrder order()`
+- 操作：`abstract DoubleBuffer slice()` / `abstract DoubleBuffer duplicate()`
+- `String toString()`
+
+FloatBuffer
+- 实例：`static FloatBuffer allocate(int capacity)` / `static FloatBuffer wrap(float[] array)` / `static FloatBuffer wrap(float[] array, int offset, int length)`
+- `float[] array()` / `int arrayOffset()` / `boolean hasArray()`
+- `abstract FloatBuffer asReadOnlyBuffer()`
+- `abstract FloatBuffer compact()`
+- 比较：`int compareTo(FloatBuffer that)` / `boolean equals(Object ob)`
+- 存取：
+  - `abstract float get()` / `FloatBuffer get(float[] dst)` / `FloatBuffer get(float[] dst, int offset, int length)` / `abstract float get(int index)`
+  - `abstract FloatBuffer put(float f)` / `FloatBuffer put(float[] src)` / `FloatBuffer put(float[] src, int offset, int length)` / `FloatBuffer put(FloatBuffer src)` / `abstract FloatBuffer put(int index, float f)`
+- `int hashCode()`
+- `abstract boolean isDirect()`
+- `abstract ByteOrder order()`
+- 操作：`abstract FloatBuffer slice()` / `abstract FloatBuffer duplicate()`
+- `String toString()`
+
+IntBuffer
+- 实例：`static IntBuffer allocate(int capacity)` / `static IntBuffer wrap(int[] array)` / `static IntBuffer wrap(int[] array, int offset, int length)`
+- `int[] array()` / `int arrayOffset()` / `boolean hasArray()`
+- `abstract IntBuffer asReadOnlyBuffer()`
+- `abstract IntBuffer compact()`
+- 比较：`int compareTo(IntBuffer that)` / `boolean equals(Object ob)`
+- 存取：
+  - `abstract int get()` / `abstract int get(int index)` / `IntBuffer get(int[] dst)` / `IntBuffer get(int[] dst, int offset, int length)`
+  - `abstract IntBuffer put(int i)` / `IntBuffer put(int[] src)` / `IntBuffer put(int[] src, int offset, int length)` / `IntBuffer put(IntBuffer src)` / `abstract IntBuffer put(int index, int i)`
+- `int hashCode()`
+- `abstract boolean isDirect()`
+- `abstract ByteOrder order()`
+- 操作：`abstract IntBuffer slice()` / `abstract IntBuffer duplicate()`
+- `String toString()`
+
+LongBuffer
+- 实例：`static LongBuffer allocate(int capacity)` / `static LongBuffer wrap(long[] array)` / `static LongBuffer wrap(long[] array, int offset, int length)`
+- `long[] array()` / `int arrayOffset()` / `boolean hasArray()`
+- `abstract LongBuffer asReadOnlyBuffer()`
+- `abstract LongBuffer compact()`
+- 比较：`int compareTo(LongBuffer that)` / `boolean equals(Object ob)`
+- 存取：
+  - `abstract long get()` / `abstract long get(int index)` / `LongBuffer get(long[] dst)` / `LongBuffer get(long[] dst, int offset, int length)`
+  - `abstract LongBuffer put(int index, long l)` / `abstract LongBuffer put(long l)` / `LongBuffer put(long[] src)` / `LongBuffer put(long[] src, int offset, int length)` / `LongBuffer put(LongBuffer src)`
+- `int hashCode()`
+- `abstract boolean isDirect()`
+- `abstract ByteOrder order()`
+- 操作：`abstract LongBuffer slice()` / `abstract LongBuffer duplicate()`
+- `String toString()`
+
+ShortBuffer
+- 实例：`static ShortBuffer allocate(int capacity)` / `static ShortBuffer wrap(short[] array)` / `static ShortBuffer wrap(short[] array, int offset, int length)`
+- `short[] array()` / `int arrayOffset()` / `boolean hasArray()`
+- `abstract ShortBuffer asReadOnlyBuffer()`
+- `abstract ShortBuffer compact()`
+- 比较：`int compareTo(ShortBuffer that)` / `boolean equals(Object ob)`
+- 操作：
+  - `abstract short get()` / `abstract short get(int index)` / `ShortBuffer get(short[] dst)` / `ShortBuffer get(short[] dst, int offset, int length)`
+  - `abstract ShortBuffer put(int index, short s)` / `abstract ShortBuffer put(short s)` / `ShortBuffer put(short[] src)` / `ShortBuffer put(short[] src, int offset, int length)` / `ShortBuffer put(ShortBuffer src)`
+- `int hashCode()`
+- `abstract boolean isDirect()`
+- `abstract ByteOrder order()`
+- 操作：`abstract ShortBuffer slice()` / `abstract ShortBuffer duplicate()`
+- `String toString()`
 
 ## `java.nio.file`
 
+**Files**(静态方法集)
+- 文件：
+  - 复制文件：`static long copy(InputStream in, Path target, CopyOption... options)` / `static long copy(Path source, OutputStream out)`
+  - 创建文件：`static Path createFile(Path path, FileAttribute<?>... attrs)` / `static Path createLink(Path link, Path existing)`
+  - 创建临时文件：`static Path createTempFile(Path dir, String prefix, String suffix, FileAttribute<?>... attrs)` / `static Path createTempFile(String prefix, String suffix, FileAttribute<?>... attrs)`
+  - 读取：`static Stream<String> lines(Path path)` / `static Stream<String> lines(Path path, Charset cs)` / `static List<String> readAllLines(Path path)` / `static List<String> readAllLines(Path path, Charset cs)` / `static byte[] readAllBytes(Path path)`
+  - 写入：`static Path write(Path path, byte[] bytes, OpenOption... options)` / `static Path write(Path path, Iterable<? extends CharSequence> lines, Charset cs, OpenOption... options)` / `static Path write(Path path, Iterable<? extends CharSequence> lines, OpenOption... options)`
+  - 链接：`static Path readSymbolicLink(Path link)` / `static Path createSymbolicLink(Path link, Path target, FileAttribute<?>... attrs)`
+  - 大小：`static long size(Path path)`
+- 目录：
+  - 创建目录：`static Path createDirectories(Path dir, FileAttribute<?>... attrs)` / `static Path createDirectory(Path dir, FileAttribute<?>... attrs)`
+  - 创建临时目录：`static Path createTempDirectory(Path dir, String prefix, FileAttribute<?>... attrs)` / `static Path createTempDirectory(String prefix, FileAttribute<?>... attrs)`
+  - 列表：`static Stream<Path> list(Path dir)`
+  - 遍历：
+    - `static Stream<Path> walk(Path start, FileVisitOption... options)` / `static Stream<Path> walk(Path start, int maxDepth, FileVisitOption... options)`
+    - `static Path walkFileTree(Path start, FileVisitor<? super Path> visitor)` / `static Path walkFileTree(Path start, Set<FileVisitOption> options, int maxDepth, FileVisitor<? super Path> visitor)`
+- 通用
+  - 删除：`static void delete(Path path)` / `static boolean deleteIfExists(Path path)`
+  - 存在：`static boolean exists(Path path, LinkOption... options)` / `static boolean notExists(Path path, LinkOption... options)`
+  - 复制：`static Path copy(Path source, Path target, CopyOption... options)`
+  - 移动：`static Path move(Path source, Path target, CopyOption... options)`
+  - 搜索：`static Stream<Path> find(Path start, int maxDepth, BiPredicate<Path,BasicFileAttributes> matcher, FileVisitOption... options)`
+  - 性质：`static boolean isRegularFile(Path path, LinkOption... options)` / `static boolean isSameFile(Path path, Path path2)` / `static boolean isSymbolicLink(Path path)` / `static boolean isDirectory(Path path, LinkOption... options)`
+  - RWX：`static boolean isExecutable(Path path)` / `static boolean isWritable(Path path)` / `static boolean isReadable(Path path)` / `static boolean isHidden(Path path)`
+  - 修改时间：`static FileTime getLastModifiedTime(Path path, LinkOption... options)` / `static Path setLastModifiedTime(Path path, FileTime time)`
+  - 所有者：`static UserPrincipal getOwner(Path path, LinkOption... options)` / `static Path setOwner(Path path, UserPrincipal owner)`
+  - 文件权限：`static Set<PosixFilePermission> getPosixFilePermissions(Path path, LinkOption... options)` / `static Path setPosixFilePermissions(Path path, Set<PosixFilePermission> perms)`
+  - 文件类型：`static String probeContentType(Path path)`
+- 属性：
+  - `static Object getAttribute(Path path, String attribute, LinkOption... options)` / `static Path setAttribute(Path path, String attribute, Object value, LinkOption... options)`
+  - `static <V extends FileAttributeView>V getFileAttributeView(Path path, 类<V> type, LinkOption... options)`
+  - `static <A extends BasicFileAttributes>A readAttributes(Path path, 类<A> type, LinkOption... options)` / `static Map<String,Object> readAttributes(Path path, String attributes, LinkOption... options)`
+- 读写对象：
+  - `static BufferedReader newBufferedReader(Path path)` / `static BufferedReader newBufferedReader(Path path, Charset cs)`
+  - `static BufferedWriter newBufferedWriter(Path path, Charset cs, OpenOption... options)` / `static BufferedWriter newBufferedWriter(Path path, OpenOption... options)`
+  - `static SeekableByteChannel newByteChannel(Path path, OpenOption... options)` / `static SeekableByteChannel newByteChannel(Path path, Set<? extends OpenOption> options, FileAttribute<?>... attrs)`
+  - `static DirectoryStream<Path> newDirectoryStream(Path dir)` / `static DirectoryStream<Path> newDirectoryStream(Path dir, DirectoryStream.Filter<? super Path> filter)` / `static DirectoryStream<Path> newDirectoryStream(Path dir, String glob)`
+  - `static InputStream newInputStream(Path path, OpenOption... options)`
+  - `static OutputStream newOutputStream(Path path, OpenOption... options)`
+- `static FileStore getFileStore(Path path)`
+
+FileStore（文件存储的具体方式，抽象）
+- `protected FileStore()`
+- `abstract Object getAttribute(String attribute)`
+- `abstract <V extends FileStoreAttributeView>V getFileStoreAttributeView(Class<V> type)`
+- `abstract long getTotalSpace()` / `abstract long getUnallocatedSpace()` / `abstract long getUsableSpace()`
+- `abstract boolean isReadOnly()`
+- `abstract String name()` / `abstract String type()`
+- `abstract boolean supportsFileAttributeView(Class<? extends FileAttributeView> type)` / `abstract boolean supportsFileAttributeView(String name)`
+
+**Paths**(转为Path对象)
+- `static Path get(String first, String... more)`
+- `static Path get(URI uri)`
+
+
+FileSystem（文件系统，抽象）
+- `protected FileSystem()`
+- `abstract void close()`
+- `abstract Iterable<FileStore> getFileStores()`
+- `abstract Path getPath(String first, String... more)`
+- `abstract PathMatcher getPathMatcher(String syntaxAndPattern)` / `abstract Iterable<Path> getRootDirectories()`
+- `abstract String getSeparator()`
+- `abstract UserPrincipalLookupService getUserPrincipalLookupService()`
+- `abstract boolean isOpen()` / `abstract boolean isReadOnly()`
+- `abstract WatchService newWatchService()`
+- `abstract FileSystemProvider provider()`
+- `abstract Set<String> supportedFileAttributeViews()`
+
+FileSystems(工厂方法)
+- `static FileSystem getDefault()`
+- `static FileSystem getFileSystem(URI uri)` / `static FileSystem newFileSystem(Path path, ClassLoader loader)` / `static FileSystem newFileSystem(URI uri, Map<String,?> env)` / `static FileSystem newFileSystem(URI uri, Map<String,?> env, ClassLoader loader)`
+
+`SimpleFileVisitor<T>`
+- `protected SimpleFileVisitor()`
+- `FileVisitResult postVisitDirectory(T dir, IOException exc)` / `FileVisitResult preVisitDirectory(T dir, BasicFileAttributes attrs)`
+- `FileVisitResult visitFile(T file, BasicFileAttributes attrs)`
+- `FileVisitResult visitFileFailed(T file, IOException exc)`
+
+StandardWatchEventKinds
+- `static WatchEvent.Kind<Path> ENTRY_CREATE`
+- `static WatchEvent.Kind<Path> ENTRY_DELETE`
+- `static WatchEvent.Kind<Path> ENTRY_MODIFY`
+- `static WatchEvent.Kind<Object> OVERFLOW`
 
 ## `java.nio.file.attribute`
 
