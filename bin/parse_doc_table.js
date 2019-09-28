@@ -49,7 +49,7 @@ function parse_class_methods() {
       method += code[1].replace(/(<.*?>)/g, '') + ' ';
       method = method.replace(/&nbsp;/g, ' ');
       method = method.replace(/&lt;/g, '<');
-      method = method.replace(/&lt;/g, '<');
+      method = method.replace(/&gt;/g, '>');
       method = method.replace(/&amp;/g, '&');
       method = method.replace(/ +/g, ' ');
       method = method.replace(/ +$/, '');
