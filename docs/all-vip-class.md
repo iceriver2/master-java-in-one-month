@@ -10,12 +10,6 @@
   - [`java.net`](#javanet)
   - [`java.nio`](#javanio)
   - [`java.nio.file`](#javaniofile)
-  - [`java.nio.file.attribute`](#javaniofileattribute)
-  - [`java.nio.file.spi`](#javaniofilespi)
-  - [`java.security`](#javasecurity)
-  - [`java.security.cert`](#javasecuritycert)
-  - [`java.security.interfaces`](#javasecurityinterfaces)
-  - [`java.security.spec`](#javasecurityspec)
   - [`java.text`](#javatext)
   - [`java.text.spi`](#javatextspi)
   - [`java.time`](#javatime)
@@ -1239,26 +1233,176 @@ StandardWatchEventKinds
 - `static WatchEvent.Kind<Path> ENTRY_MODIFY`
 - `static WatchEvent.Kind<Object> OVERFLOW`
 
-## `java.nio.file.attribute`
-
-
-## `java.nio.file.spi`
-
-
-## `java.security`
-
-
-## `java.security.cert`
-
-
-## `java.security.interfaces`
-
-
-## `java.security.spec`
-
-
 ## `java.text`
 
+BreakIterator(文本中的边界)
+- `static int DONE`
+- `protected BreakIterator()`
+- `Object clone()`
+- 元素：`abstract int current()` / `abstract int first()` / `abstract int last()` / `abstract int previous()` / `abstract int next()` / `abstract int next(int n)` / `abstract int following(int offset)` / `int preceding(int offset)`
+- `abstract CharacterIterator getText()`
+- `static Locale[] getAvailableLocales()`
+- `static BreakIterator getCharacterInstance()` / `static BreakIterator getCharacterInstance(Locale locale)`
+- `static BreakIterator getLineInstance()` / `static BreakIterator getLineInstance(Locale locale)`
+- `static BreakIterator getSentenceInstance()` / `static BreakIterator getSentenceInstance(Locale locale)`
+- `static BreakIterator getWordInstance()` / `static BreakIterator getWordInstance(Locale locale)`
+- `boolean isBoundary(int offset)`
+- `abstract void setText(CharacterIterator newText)` / `void setText(String newText)`
+
+**NumberFormat**(抽象)
+- `NumberFormat.Field`
+- `static int FRACTION_FIELD` / `static int INTEGER_FIELD`
+- `protected NumberFormat()`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- 格式化：`String format(double number)` / `abstract StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos)` / `String format(long number)` / `abstract StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos)` / `StringBuffer format(Object number, StringBuffer toAppendTo, FieldPosition pos)`
+- `static Locale[] getAvailableLocales()`
+- 货币：`void setCurrency(Currency currency)` / `Currency getCurrency()`
+- 最大最小位数：`int getMaximumFractionDigits()` / `int getMaximumIntegerDigits()` / `int getMinimumFractionDigits()` / `int getMinimumIntegerDigits()` / `void setMaximumFractionDigits(int newValue)` / `void setMaximumIntegerDigits(int newValue)` / `void setMinimumFractionDigits(int newValue)` / `void setMinimumIntegerDigits(int newValue)`
+- 实例：
+  - `static NumberFormat getNumberInstance()` / `static NumberFormat getNumberInstance(Locale inLocale)`
+  - `static NumberFormat getPercentInstance()` / `static NumberFormat getPercentInstance(Locale inLocale)`
+  - `static NumberFormat getCurrencyInstance()` / `static NumberFormat getCurrencyInstance(Locale inLocale)`
+  - `static NumberFormat getInstance()` / `static NumberFormat getInstance(Locale inLocale)`
+  - `static NumberFormat getIntegerInstance()` / `static NumberFormat getIntegerInstance(Locale inLocale)`
+- `RoundingMode getRoundingMode()` / `void setRoundingMode(RoundingMode roundingMode)`
+- `int hashCode()`
+- `boolean isGroupingUsed()` / `void setGroupingUsed(boolean newValue)`
+- `boolean isParseIntegerOnly()` / `void setParseIntegerOnly(boolean value)`
+- 解析：`Number parse(String source)` / `abstract Number parse(String source, ParsePosition parsePosition)`
+- `Object parseObject(String source, ParsePosition pos)`
+
+
+**ChoiceFormat**(NumberFormat子类，追加格式到一组数字)
+- `ChoiceFormat(double[] limits, String[] formats)` / `ChoiceFormat(String newPattern)`
+- 应用模式：`void applyPattern(String newPattern)`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- 格式化与解析：`StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition status)` / `StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition status)` / `Number parse(String text, ParsePosition status)`
+- `Object[] getFormats()` / `double[] getLimits()`
+- `int hashCode()`
+- `static double nextDouble(double d)` / `static double nextDouble(double d, boolean positive)` / `static double previousDouble(double d)`
+- `void setChoices(double[] limits, String[] formats)`
+- `String toPattern()`
+
+**DecimalFormat**(NumberFormat子类，数字的格式化)
+格式化的符号（如#表示数字或补零）
+- `DecimalFormat()` / `DecimalFormat(String pattern)` / `DecimalFormat(String pattern, DecimalFormatSymbols symbols)`
+- 应用模式：`void applyLocalizedPattern(String pattern)` / `void applyPattern(String pattern)`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- 格式化与解析：`StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition)` / `StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition)` / `StringBuffer format(Object number, StringBuffer toAppendTo, FieldPosition pos)` / `Number parse(String text, ParsePosition pos)`
+- 最大最小位数：`int getMaximumFractionDigits()` / `int getMaximumIntegerDigits()` / `int getMinimumFractionDigits()` / `int getMinimumIntegerDigits()` / `void setMaximumFractionDigits(int newValue)` / `void setMaximumIntegerDigits(int newValue)` / `void setMinimumFractionDigits(int newValue)` / `void setMinimumIntegerDigits(int newValue)`
+- 前缀后缀：`String getNegativePrefix()` / `String getNegativeSuffix()` / `String getPositivePrefix()` / `String getPositiveSuffix()` / `void setNegativePrefix(String newValue)` / `void setNegativeSuffix(String newValue)` / `void setPositivePrefix(String newValue)` / `void setPositiveSuffix(String newValue)`
+-  成对属性：
+  - `int getMultiplier()` / `void setMultiplier(int newValue)`
+  - `RoundingMode getRoundingMode()` / `void setRoundingMode(RoundingMode roundingMode)`
+  - `AttributedCharacterIterator formatToCharacterIterator(Object obj)`
+  - `Currency getCurrency()` / `void setCurrency(Currency currency)`
+  - `DecimalFormatSymbols getDecimalFormatSymbols()` / `void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols)`
+  - `int getGroupingSize()` / `void setGroupingSize(int newValue)`
+  - `boolean isDecimalSeparatorAlwaysShown()` / `void setDecimalSeparatorAlwaysShown(boolean newValue)`
+  - `boolean isParseBigDecimal()` / `void setParseBigDecimal(boolean newValue)`
+- `void setGroupingUsed(boolean newValue)`
+- `String toLocalizedPattern()` / `String toPattern()`
+- `int hashCode()`
+
+**DecimalFormatSymbols**（DecimalFormat的符号集，如小数分隔符）
+- `DecimalFormatSymbols()` / `DecimalFormatSymbols(Locale locale)`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- `static Locale[] getAvailableLocales()`
+- 属性：
+  - `Currency getCurrency()` / `void setCurrency(Currency currency)`
+  - `String getCurrencySymbol()` / `void setCurrencySymbol(String currency)`
+  - `char getDecimalSeparator()` / `void setDecimalSeparator(char decimalSeparator)`
+  - `char getDigit()` / `void setDigit(char digit)`
+  - `String getExponentSeparator()` / `void setExponentSeparator(String exp)`
+  - `char getGroupingSeparator()` / `void setGroupingSeparator(char groupingSeparator)`
+  - `String getInfinity()` / `void setInfinity(String infinity)`
+  - `String getInternationalCurrencySymbol()` / `void setInternationalCurrencySymbol(String currencyCode)`
+  - `char getMinusSign()` / `void setMinusSign(char minusSign)`
+  - `char getMonetaryDecimalSeparator()` / `void setMonetaryDecimalSeparator(char sep)`
+  - `String getNaN()` / `void setNaN(String NaN)`
+  - `char getPatternSeparator()` / `void setPatternSeparator(char patternSeparator)`
+  - `char getPercent()` / `void setPercent(char percent)`
+  - `char getPerMill()` / `void setPerMill(char perMill)`
+  - `char getZeroDigit()` / `void setZeroDigit(char zeroDigit)`
+- 实例：`static DecimalFormatSymbols getInstance()` / `static DecimalFormatSymbols getInstance(Locale locale)`
+- `int hashCode()`
+
+**DateFormat**（日期格式化，抽象）
+- `static class DateFormat.Field`
+- 常量：
+  - `static int ERA_FIELD` / `static int AM_PM_FIELD` / `static int MILLISECOND_FIELD` / `static int DATE_FIELD` / `static int MINUTE_FIELD` / `static int MONTH_FIELD` / `static int SECOND_FIELD` / `static int TIMEZONE_FIELD` / `static int YEAR_FIELD`
+  - `static int DAY_OF_WEEK_FIELD` / `static int DAY_OF_WEEK_IN_MONTH_FIELD` / `static int DAY_OF_YEAR_FIELD`
+  - `static int DEFAULT` / `static int FULL` / `static int LONG` / `static int MEDIUM` / `static int SHORT`
+  - `static int HOUR_OF_DAY0_FIELD` / `static int HOUR_OF_DAY1_FIELD` / `static int HOUR0_FIELD` / `static int HOUR1_FIELD`
+  - `static int WEEK_OF_MONTH_FIELD` / `static int WEEK_OF_YEAR_FIELD`
+- `protected DateFormat()`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- 格式化：`String format(Date date)` / `abstract StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition)` / `StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition fieldPosition)`
+- `static Locale[] getAvailableLocales()`
+- 相关对象：
+  - `Calendar getCalendar()` / `void setCalendar(Calendar newCalendar)`
+  - `void setTimeZone(TimeZone zone)` / `TimeZone getTimeZone()`
+  - `void setNumberFormat(NumberFormat newNumberFormat)` / `NumberFormat getNumberFormat()`
+- 实例：
+  - `static DateFormat getInstance()`
+  - `static DateFormat getDateInstance()` / `static DateFormat getDateInstance(int style)` / `static DateFormat getDateInstance(int style, Locale aLocale)`
+  - `static DateFormat getDateTimeInstance()` / `static DateFormat getDateTimeInstance(int dateStyle, int timeStyle)` / `static DateFormat getDateTimeInstance(int dateStyle, int timeStyle, Locale aLocale)`
+  - `static DateFormat getTimeInstance()` / `static DateFormat getTimeInstance(int style)` / `static DateFormat getTimeInstance(int style, Locale aLocale)`
+- `int hashCode()`
+- `void setLenient(boolean lenient)` / `boolean isLenient()`
+- 解析：`Date parse(String source)` / `abstract Date parse(String source, ParsePosition pos)` / `Object parseObject(String source, ParsePosition pos)`
+
+**DateFormatSymbols**（DateFormat的符号集，本地化时间格式，抽象）
+- `DateFormatSymbols()` / `DateFormatSymbols(Locale locale)`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- 属性：
+  - `String[] getAmPmStrings()` / `void setAmPmStrings(String[] newAmpms)`
+  - `String[] getEras()` / `void setEras(String[] newEras)`
+  - `String getLocalPatternChars()` / `void setLocalPatternChars(String newLocalPatternChars)`
+  - `String[] getMonths()` / `void setMonths(String[] newMonths)`
+  - `String[] getShortMonths()` / `void setShortMonths(String[] newShortMonths)`
+  - `String[] getShortWeekdays()` / `void setShortWeekdays(String[] newShortWeekdays)`
+  - `String[] getWeekdays()` / `void setWeekdays(String[] newWeekdays)`
+  - `String[][] getZoneStrings()` / `void setZoneStrings(String[][] newZoneStrings)`
+- `static Locale[] getAvailableLocales()`
+- 实例：`static DateFormatSymbols getInstance()` / `static DateFormatSymbols getInstance(Locale locale)`
+- `int hashCode()`
+
+**SimpleDateFormat**（DateFormat的子类，具体）
+格式代表的字母（如Y代表年，M代表月）
+- `SimpleDateFormat()` / `SimpleDateFormat(String pattern)` / `SimpleDateFormat(String pattern, DateFormatSymbols formatSymbols)` / `SimpleDateFormat(String pattern, Locale locale)`
+- 应用模式：`void applyLocalizedPattern(String pattern)` / `void applyPattern(String pattern)`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- 格式化与解析：`StringBuffer format(Date date, StringBuffer toAppendTo, FieldPosition pos)` / `Date parse(String text, ParsePosition pos)`
+- `AttributedCharacterIterator formatToCharacterIterator(Object obj)`
+- `Date get2DigitYearStart()` / `void set2DigitYearStart(Date startDate)`
+- 符号集：`DateFormatSymbols getDateFormatSymbols()` / `void setDateFormatSymbols(DateFormatSymbols newFormatSymbols)`
+- `String toLocalizedPattern()` / `String toPattern()`
+- `int hashCode()`
+
+
+**Format**(格式化的抽象基类，子类包括：DateFormat ， MessageFormat ， NumberFormat)
+
+**MessageFormat**(消息格式化)
+- `static class MessageFormat.Field`
+- `MessageFormat(String pattern)` / `MessageFormat(String pattern, Locale locale)`
+- 应用模式：`void applyPattern(String pattern)`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- 格式化：`StringBuffer format(Object[] arguments, StringBuffer result, FieldPosition pos)` / `StringBuffer format(Object arguments, StringBuffer result, FieldPosition pos)` / `static String format(String pattern, Object... arguments)`
+- `AttributedCharacterIterator formatToCharacterIterator(Object arguments)`
+- 设置格式：`Format[] getFormats()` / `void setFormats(Format[] newFormats)` / `Format[] getFormatsByArgumentIndex()` / `void setFormatsByArgumentIndex(Format[] newFormats)` / `void setFormatByArgumentIndex(int argumentIndex, Format newFormat)` / `void setFormat(int formatElementIndex, Format newFormat)`
+- 解析：`Object[] parse(String source)` / `Object[] parse(String source, ParsePosition pos)` / `Object parseObject(String source, ParsePosition pos)`
+- `Locale getLocale()` / `void setLocale(Locale locale)`
+- `int hashCode()`
+- `String toPattern()`
 
 ## `java.text.spi`
 
