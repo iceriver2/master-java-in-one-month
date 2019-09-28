@@ -1405,6 +1405,9 @@ BreakIterator(文本中的边界)
 
 ## `java.time`
 
+注意三种DateTime：LocalDateTime、OffsetDateTime、ZonedDateTime 。
+示例为：LocalDateTime（2007-12-03T10:15:30）、OffsetDateTime（2007-12-03T10:15:30+01:00）、ZonedDateTime（2007-12-03T10:15:30+01:00 Europe/Paris）。
+
 **Duration**(时间段)
 - 实例：`static Duration between(Temporal startInclusive, Temporal endExclusive)` / `static Duration of(long amount, TemporalUnit unit)` / `static Duration ofDays(long days)` / `static Duration ofHours(long hours)` / `static Duration ofMillis(long millis)` / `static Duration ofMinutes(long minutes)` / `static Duration ofNanos(long nanos)` / `static Duration ofSeconds(long seconds)` / `static Duration ofSeconds(long seconds, long nanoAdjustment)` / `static Duration parse(CharSequence text)` / `static Duration from(TemporalAmount amount)`
 - 比较：`boolean equals(Object otherDuration)` / `int compareTo(Duration otherDuration)`
