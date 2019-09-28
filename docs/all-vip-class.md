@@ -2,6 +2,10 @@
 
 > 2019-09-26 抄书一天半下来，发现：抄录全部方法，有一些效果，但效果的是在归类方法时发生的。整体来说，效率还是偏慢。后面打算采取的策略是：先过一遍类，对于重要的类再抄录方法，不重要的类只保留名称。有些包可能整体被忽略，如 java.nio.channels, java.nio.charset 。
 
+> 2019-09-28 整理方法列表还是有点太慢了。需要快速阅读类的主要介绍，以此判定重要类，毕竟，重要的类没有那么多。
+
+> 2019-09-28 使用上面说的方法，快速过一边包，发现：Compact2/Compact3的包，在初期能用到的确实不错，类似 management 之类和高级语言特性，应该是比较高级的场景才能实用到。也就说，掌握 compact1 的主要类，就差不多可以完成日常任务了。
+
 - [profile](#profile)
 - [Compact1](#compact1)
   - [`java.io`](#javaio)
@@ -12,36 +16,10 @@
   - [`java.nio.file`](#javaniofile)
   - [`java.text`](#javatext)
   - [`java.time`](#javatime)
-  - [`java.time.chrono`](#javatimechrono)
   - [`java.time.format`](#javatimeformat)
-  - [`java.time.temporal`](#javatimetemporal)
-  - [`java.time.zone`](#javatimezone)
   - [`java.util`](#javautil)
-  - [`java.util.concurrent`](#javautilconcurrent)
-  - [`java.util.concurrent.atomic`](#javautilconcurrentatomic)
-  - [`java.util.concurrent.locks`](#javautilconcurrentlocks)
-  - [`java.util.function`](#javautilfunction)
-  - [`java.util.jar`](#javautiljar)
   - [`java.util.logging`](#javautillogging)
   - [`java.util.regex`](#javautilregex)
-  - [`java.util.spi`](#javautilspi)
-  - [`java.util.stream`](#javautilstream)
-  - [`java.util.zip`](#javautilzip)
-  - [`javax.crypto`](#javaxcrypto)
-  - [`javax.crypto.interfaces`](#javaxcryptointerfaces)
-  - [`javax.crypto.spec`](#javaxcryptospec)
-  - [`javax.net`](#javaxnet)
-  - [`javax.net.ssl`](#javaxnetssl)
-  - [`javax.script`](#javaxscript)
-  - [`javax.security.auth`](#javaxsecurityauth)
-  - [`javax.security.auth.callback`](#javaxsecurityauthcallback)
-  - [`javax.security.auth.login`](#javaxsecurityauthlogin)
-  - [`javax.security.auth.spi`](#javaxsecurityauthspi)
-  - [`javax.security.auth.x500`](#javaxsecurityauthx500)
-  - [`javax.security.cert`](#javaxsecuritycert)
-- [Compact2](#compact2)
-- [Compact3](#compact3)
-- [Full](#full)
 
 # profile
 
@@ -1547,351 +1525,321 @@ ZoneOffset(ZoneId的子类，相对UTC的偏移)
 - `ValueRange range(TemporalField field)`
 - `String toString()`
 
-## `java.time.chrono`
-
-
 ## `java.time.format`
 
-
-## `java.time.temporal`
-
-
-## `java.time.zone`
-
+**DateTimeFormatter**
+- 预定义的格式：`DateTimeFormatter.ofLocalizedDate(dateStyle)`（'2011-12-03'）、`DateTimeFormatter.ofLocalizedTime(timeStyle)`（'10:15:30'）、`DateTimeFormatter.ISO_LOCAL_DATE`（'2011-12-03'）、`DateTimeFormatter.ISO_LOCAL_TIME`（'10:15:30'）、`DateTimeFormatter.ISO_LOCAL_DATE_TIME`（'2011-12-03T10:15:30'）、`DateTimeFormatter.ISO_INSTANT`（'2011-12-03T10:15:30Z'）
+- 匹配模式参见 SimpleDateFormat
+- 实例：`String format(TemporalAccessor temporal)` / `static DateTimeFormatter ofLocalizedDate(FormatStyle dateStyle)` / `static DateTimeFormatter ofLocalizedDateTime(FormatStyle dateTimeStyle)` / `static DateTimeFormatter ofLocalizedDateTime(FormatStyle dateStyle, FormatStyle timeStyle)` / `static DateTimeFormatter ofLocalizedTime(FormatStyle timeStyle)` / `static DateTimeFormatter ofPattern(String pattern)` / `static DateTimeFormatter ofPattern(String pattern, Locale locale)`
+- 字段：`Chronology getChronology()` / `DecimalStyle getDecimalStyle()` / `Locale getLocale()` / `Set<TemporalField> getResolverFields()` / `ResolverStyle getResolverStyle()` / `ZoneId getZone()`
+- 解析：`TemporalAccessor parse(CharSequence text)` / `TemporalAccessor parse(CharSequence text, ParsePosition position)` / `<T> T parse(CharSequence text, TemporalQuery<T> query)` / `TemporalAccessor parseBest(CharSequence text, TemporalQuery<?>... queries)` / `static TemporalQuery<Period> parsedExcessDays()` / `static TemporalQuery<Boolean> parsedLeapSecond()` / `TemporalAccessor parseUnresolved(CharSequence text, ParsePosition position)`
+- `void formatTo(TemporalAccessor temporal, Appendable appendable)`
+- `Format toFormat()` / `Format toFormat(TemporalQuery<?> parseQuery)`
+- `String toString()`
+- 副本：`DateTimeFormatter withChronology(Chronology chrono)` / `DateTimeFormatter withDecimalStyle(DecimalStyle decimalStyle)` / `DateTimeFormatter withLocale(Locale locale)` / `DateTimeFormatter withResolverFields(Set<TemporalField> resolverFields)` / `DateTimeFormatter withResolverFields(TemporalField... resolverFields)` / `DateTimeFormatter withResolverStyle(ResolverStyle resolverStyle)` / `DateTimeFormatter withZone(ZoneId zone)`
 
 ## `java.util`
 
+抽象类：`AbstractCollection<E>`， `AbstractList<E>`， `AbstractMap<K,V>`， `AbstractMap.SimpleEntry<K,V>`， `AbstractMap.SimpleImmutableEntry<K,V>`， `AbstractQueue<E>`， `AbstractSequentialList<E>`， `AbstractSet<E>` 。
 
-## `java.util.concurrent`
+`ArrayDeque<E>`
+- 操作：
+  - `boolean add(E e)` / `void addFirst(E e)` / `void addLast(E e)`
+  - `boolean offer(E e)` / `boolean offerFirst(E e)` / `boolean offerLast(E e)`
+  - `E poll()` / `E pollFirst()` / `E pollLast()`
+  - `E remove()` / `boolean remove(Object o)` / `E removeFirst()` / `boolean removeFirstOccurrence(Object o)` / `E removeLast()` / `boolean removeLastOccurrence(Object o)`
+  - `E pop()` / `void push(E e)`
+  - `void clear()`
+- `ArrayDeque<E> clone()`
+- 元素：
+  - `boolean contains(Object o)`
+  - `E element()` / `E getFirst()` / `E getLast()`
+  - `E peek()` / `E peekFirst()` / `E peekLast()`
+- `Iterator<E> descendingIterator()`
+- 判定：`boolean isEmpty()`
+- `Iterator<E> iterator()` / `Spliterator<E> spliterator()`
+- `int size()`
+- 转换：`Object[] toArray()` / `<T> T[] toArray(T[] a)`
+
+**`ArrayList<E>`**
+- `ArrayList()` / `ArrayList(Collection<? extends E> c)` / `ArrayList(int initialCapacity)`
+- 操作：
+  - `boolean add(E e)` / `void add(int index, E element)`
+  - `boolean addAll(Collection<? extends E> c)` / `boolean addAll(int index, Collection<? extends E> c)`
+  - `E remove(int index)` / `boolean remove(Object o)`
+  - `boolean removeAll(Collection<?> c)` / `boolean removeIf(Predicate<? super E> filter)` / `protected void removeRange(int fromIndex, int toIndex)`
+  - `void replaceAll(UnaryOperator<E> operator)`
+  - `boolean retainAll(Collection<?> c)`
+  - `void clear()`
+  - `void sort(Comparator<? super E> c)`
+- `Spliterator<E> spliterator()`
+- `Object clone()`
+- 元素：
+  - `boolean contains(Object o)`
+  - `E get(int index)` / `E set(int index, E element)`
+  - `int indexOf(Object o)` / `int lastIndexOf(Object o)`
+  - `boolean isEmpty()`
+  - `List<E> subList(int fromIndex, int toIndex)`
+- 容量：`void ensureCapacity(int minCapacity)` / `int size()` / `void trimToSize()`
+- 遍历：
+  - `void forEach(Consumer<? super E> action)`
+  - `Iterator<E> iterator()` / `ListIterator<E> listIterator()` / `ListIterator<E> listIterator(int index)`
+- 转换：`Object[] toArray()` / `<T> T[] toArray(T[] a)`
+
+**Collections**（静态方法,List/Map/Set）
+- `static List	EMPTY_LIST` / `static Map	EMPTY_MAP` / `static Set	EMPTY_SET`
+- 搜索：`static <T> int binarySearch(List<? extends Comparable<? super T>> list, T key)` / `static <T> int binarySearch(List<? extends T> list, T key, Comparator<? super T> c)`
+- Checked：`static <E> Collection<E> checkedCollection(Collection<E> c, Class<E> type)` / `static <E> List<E> checkedList(List<E> list, Class<E> type)` / `static <K,V> Map<K,V> checkedMap(Map<K,V> m, Class<K> keyType, Class<V> valueType)` / `static <E> Queue<E> checkedQueue(Queue<E> queue, Class<E> type)` / `static <E> Set<E> checkedSet(Set<E> s, Class<E> type)` / `static <K,V> SortedMap<K,V> checkedSortedMap(SortedMap<K,V> m, Class<K> keyType, Class<V> valueType)` / `static <E> SortedSet<E> checkedSortedSet(SortedSet<E> s, Class<E> type)`
+- synchronized: `static <T> Collection<T> synchronizedCollection(Collection<T> c)` / `static <T> List<T> synchronizedList(List<T> list)` / `static <K,V> Map<K,V> synchronizedMap(Map<K,V> m)` / `static <T> Set<T> synchronizedSet(Set<T> s)` / `static <K,V> SortedMap<K,V> synchronizedSortedMap(SortedMap<K,V> m)` / `static <T> SortedSet<T> synchronizedSortedSet(SortedSet<T> s)`
+- unmodifiable： `static <T> Collection<T> unmodifiableCollection(Collection<? extends T> c)` / `static <T> List<T> unmodifiableList(List<? extends T> list)` / `static <K,V> Map<K,V> unmodifiableMap(Map<? extends K,? extends V> m)` / `static <T> Set<T> unmodifiableSet(Set<? extends T> s)` / `static <K,V> SortedMap<K,V> unmodifiableSortedMap(SortedMap<K,? extends V> m)` / `static <T> SortedSet<T> unmodifiableSortedSet(SortedSet<T> s)`
+- singleton： `static <T> Set<T> singleton(T o)` / `static <T> List<T> singletonList(T o)` / `static <K,V> Map<K,V> singletonMap(K key, V value)`
+- 空：`static <T> Enumeration<T> emptyEnumeration()` / `static <T> Iterator<T> emptyIterator()` / `static <T> List<T> emptyList()` / `static <T> ListIterator<T> emptyListIterator()` / `static <K,V> Map<K,V> emptyMap()` / `static <T> Set<T> emptySet()` / `static <K,V> SortedMap<K,V> emptySortedMap()` / `static <E> SortedSet<E> emptySortedSet()`
+- 操作：
+  - 复制：`static <T> void copy(List<? super T> dest, List<? extends T> src)` / `static <T> boolean addAll(Collection<? super T> c, T... elements)` / `static <T> List<T> nCopies(int n, T o)`
+  - 填充：`static <T> void fill(List<? super T> list, T obj)`
+  - 替换：`static <T> boolean replaceAll(List<T> list, T oldVal, T newVal)`
+  - 反转：`static void reverse(List<?> list)`
+  - 翻转：`static void rotate(List<?> list, int distance)`
+  - 乱序：`static void shuffle(List<?> list)` / `static void shuffle(List<?> list, Random rnd)`
+  - 排序：`static <T extends Comparable<? super T>>void sort(List<T> list)` / `static <T> void sort(List<T> list, Comparator<? super T> c)`
+  - 判定：`static boolean disjoint(Collection<?> c1, Collection<?> c2)`
+- 转换：`static <T> Enumeration<T> enumeration(Collection<T> c)` / `static <T> Queue<T> asLifoQueue(Deque<T> deque)` / `static <T> ArrayList<T> list(Enumeration<T> e)` / `static <E> Set<E> newSetFromMap(Map<E,Boolean> map)`
+- 元素：
+  - 子序列：`static int indexOfSubList(List<?> source, List<?> target)` / `static int lastIndexOfSubList(List<?> source, List<?> target)`
+  - 统计：`static int frequency(Collection<?> c, Object o)`
+  - 大小：`static <T extends Object & Comparable<? super T>>T max(Collection<? extends T> coll)` / `static <T> T max(Collection<? extends T> coll, Comparator<? super T> comp)` / `static <T extends Object & Comparable<? super T>>T min(Collection<? extends T> coll)` / `static <T> T min(Collection<? extends T> coll, Comparator<? super T> comp)`
+  - `static <T> Comparator<T> reverseOrder()` / `static <T> Comparator<T> reverseOrder(Comparator<T> cmp)`
+  - 交换：`static void swap(List<?> list, int i, int j)`
+
+**Arrays**（静态方法，很多重载方法）
+- `static <T> List<T>	asList(T... a)`
+- binarySearch()
+- copyOf(), copyOfRange()
+- deepEquals(), equals()
+- fill()
+- parallelPrefix(), parallelSetAll(), parallelSort()
+- setAll()
+- sort()
+- stream()
+- toString()
+
+base64编解码：Base64， Base64.Decoder， Base64.Encoder
+
+Currency（货币）
+- 实例：`static Set<Currency> getAvailableCurrencies()` / `static Currency getInstance(Locale locale)` / `static Currency getInstance(String currencyCode)`
+- `String getCurrencyCode()` / `String getDisplayName()` / `String getDisplayName(Locale locale)` / `int getDefaultFractionDigits()` / `int getNumericCode()`
+- `String getSymbol()` / `String getSymbol(Locale locale)`
+- `String toString()`
+
+DoubleSummaryStatistics(统计)
+- `DoubleSummaryStatistics()`
+- `void accept(double value)`
+- `void combine(DoubleSummaryStatistics other)`
+- 结果：`double getAverage()` / `long getCount()` / `double getMax()` / `double getMin()` / `double getSum()`
+- `String toString()`
+
+IntSummaryStatistics(统计)
+- `IntSummaryStatistics()`
+- `void accept(int value)`
+- `void combine(IntSummaryStatistics other)`
+- 结果：`double getAverage()` / `long getCount()` / `int getMax()` / `int getMin()` / `long getSum()`
+- `String toString()`
+
+Formatter（用于printf的格式化）
+
+`EnumMap<K extends Enum<K>,V>`
+- `EnumMap(Class<K> keyType)` / `EnumMap(EnumMap<K,? extends V> m)` / `EnumMap(Map<K,? extends V> m)`
+- `void clear()`
+- `EnumMap<K,V> clone()`
+- 元素：
+  - `boolean containsKey(Object key)` / `boolean containsValue(Object value)`
+  - `V get(Object key)` / `V put(K key, V value)`
+  - `Set<Map.Entry<K,V>> entrySet()`
+  - `void putAll(Map<? extends K,? extends V> m)`
+  - `V remove(Object key)`
+- `boolean equals(Object o)`
+- `Set<K> keySet()` / `Collection<V> values()`
+- `int size()`
+
+`EnumSet<E extends Enum<E>>`
+- `EnumSet<E> clone()`
+- `static <E extends Enum<E>>EnumSet<E> allOf(Class<E> elementType)` / `static <E extends Enum<E>>EnumSet<E> complementOf(EnumSet<E> s)` / `static <E extends Enum<E>>EnumSet<E> copyOf(Collection<E> c)` / `static <E extends Enum<E>>EnumSet<E> copyOf(EnumSet<E> s)` / `static <E extends Enum<E>>EnumSet<E> noneOf(Class<E> elementType)`
+- `static <E extends Enum<E>>EnumSet<E> of(E e)` / `static <E extends Enum<E>>EnumSet<E> of(E first, E... rest)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2, E e3)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2, E e3, E e4)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2, E e3, E e4, E e5)`
+- `static <E extends Enum<E>>EnumSet<E> range(E from, E to)`
+
+`HashMap<K,V>`
+- `HashMap()` / `HashMap(int initialCapacity)` / `HashMap(int initialCapacity, float loadFactor)` / `HashMap(Map<? extends K,? extends V> m)`
+- `void clear()`
+- `Object clone()`
+- `V compute(K key, BiFunction<? super K,? super V,? extends V> remappingFunction)` / `V computeIfAbsent(K key, Function<? super K,? extends V> mappingFunction)` / `V computeIfPresent(K key, BiFunction<? super K,? super V,? extends V> remappingFunction)`
+- `Set<Map.Entry<K,V>> entrySet()` / `Set<K> keySet()` / `Collection<V> values()`
+- `void forEach(BiConsumer<? super K,? super V> action)`
+- `boolean isEmpty()`
+- 元素
+  - `boolean containsKey(Object key)` / `boolean containsValue(Object value)`
+  - `V put(K key, V value)` / `V putIfAbsent(K key, V value)`
+  - `V get(Object key)` / `V getOrDefault(Object key, V defaultValue)`
+  - `void putAll(Map<? extends K,? extends V> m)`
+  - `V remove(Object key)`
+  - `boolean remove(Object key, Object value)`
+  - `V replace(K key, V value)` / `boolean replace(K key, V oldValue, V newValue)`
+  - `void replaceAll(BiFunction<? super K,? super V,? extends V> function)`
+  - `V merge(K key, V value, BiFunction<? super V,? super V,? extends V> remappingFunction)`
+- `int size()`
+
+`HashSet<E>`
+- `HashSet()` / `HashSet(Collection<? extends E> c)` / `HashSet(int initialCapacity)` / `HashSet(int initialCapacity, float loadFactor)`
+- 元素：
+  - `boolean add(E e)` / `boolean remove(Object o)`
+  - `boolean contains(Object o)`
+- `void clear()`
+- `Object clone()`
+- `boolean isEmpty()`
+- `Iterator<E> iterator()`
+- `int size()`
+
+`LinkedHashMap<K,V>`(有序的HashMap)
+- `LinkedHashMap()` / `LinkedHashMap(int initialCapacity)` / `LinkedHashMap(int initialCapacity, float loadFactor)` / `LinkedHashMap(int initialCapacity, float loadFactor, boolean accessOrder)` / `LinkedHashMap(Map<? extends K,? extends V> m)`
+- `void clear()`
+- `boolean containsValue(Object value)`
+- `Set<Map.Entry<K,V>> entrySet()` / `Set<K> keySet()` / `Collection<V> values()`
+- `void forEach(BiConsumer<? super K,? super V> action)`
+- `V get(Object key)` / `V getOrDefault(Object key, V defaultValue)`
+- `protected boolean removeEldestEntry(Map.Entry<K,V> eldest)`
+- `void replaceAll(BiFunction<? super K,? super V,? extends V> function)`
+
+`LinkedHashSet<E>`(有序的HashSet)
 
 
-## `java.util.concurrent.atomic`
+`LinkedList<E>`
+
+`TreeMap<K,V>`
+
+`TreeSet<E>`
+
+`Vector<E>`
+
+`WeakHashMap<K,V>`
+
+`Stack<E>`
+
+ListResourceBundle
+Locale
+Locale.Builder
+Locale.LanguageRange
+LongSummaryStatistics
+Objects
+Observable
+`Optional<T>`
+OptionalDouble
+OptionalInt
+OptionalLong
+`PriorityQueue<E>`
+Properties
+PropertyPermission
+PropertyResourceBundle
+
+Random
+
+ResourceBundle
+ResourceBundle.Control
+
+Scanner(文本扫描器)
+- `Scanner(File source)` / `Scanner(File source, String charsetName)` / `Scanner(InputStream source)` / `Scanner(InputStream source, String charsetName)` / `Scanner(Path source)` / `Scanner(Path source, String charsetName)` / `Scanner(Readable source)` / `Scanner(ReadableByteChannel source)` / `Scanner(ReadableByteChannel source, String charsetName)` / `Scanner(String source)`
+- `void close()`
+- 分隔符：`Pattern delimiter()` / `Scanner useDelimiter(Pattern pattern)` / `Scanner useDelimiter(String pattern)`
+- `String findInLine(Pattern pattern)` / `String findInLine(String pattern)`
+- `String findWithinHorizon(Pattern pattern, int horizon)` / `String findWithinHorizon(String pattern, int horizon)`
+- 是否有下一个：`boolean hasNext()` / `boolean hasNext(Pattern pattern)` / `boolean hasNext(String pattern)` / `boolean hasNextBigDecimal()` / `boolean hasNextBigInteger()` / `boolean hasNextBigInteger(int radix)` / `boolean hasNextBoolean()` / `boolean hasNextByte()` / `boolean hasNextByte(int radix)` / `boolean hasNextDouble()` / `boolean hasNextFloat()` / `boolean hasNextInt()` / `boolean hasNextInt(int radix)` / `boolean hasNextLine()` / `boolean hasNextLong()` / `boolean hasNextLong(int radix)` / `boolean hasNextShort()` / `boolean hasNextShort(int radix)`
+- `IOException ioException()`
+- `Locale locale()` / `Scanner useLocale(Locale locale)`
+- `MatchResult match()`
+- 下一个：`String next()` / `String next(Pattern pattern)` / `String next(String pattern)` / `BigDecimal nextBigDecimal()` / `BigInteger nextBigInteger()` / `BigInteger nextBigInteger(int radix)` / `boolean nextBoolean()` / `byte nextByte()` / `byte nextByte(int radix)` / `double nextDouble()` / `float nextFloat()` / `int nextInt()` / `int nextInt(int radix)` / `String nextLine()` / `long nextLong()` / `long nextLong(int radix)` / `short nextShort()` / `short nextShort(int radix)`
+- 基数：`int radix()` / `Scanner useRadix(int radix)`
+- `void remove()`
+- `Scanner reset()`
+- `Scanner skip(Pattern pattern)` / `Scanner skip(String pattern)`
+- `String toString()`
 
 
-## `java.util.concurrent.locks`
+**StringJoiner**
+- `StringJoiner(CharSequence delimiter)` / `StringJoiner(CharSequence delimiter, CharSequence prefix, CharSequence suffix)`
+- `StringJoiner setEmptyValue(CharSequence emptyValue)`
+- `StringJoiner add(CharSequence newElement)` / `StringJoiner merge(StringJoiner other)`
+- `int length()`
+- `String toString()`
+
+**StringTokenizer**
+- `StringTokenizer(String str)` / `StringTokenizer(String str, String delim)` / `StringTokenizer(String str, String delim, boolean returnDelims)`
+- `int countTokens()`
+- `boolean hasMoreElements()` / `Object nextElement()`
+- `boolean hasMoreTokens()` / `String nextToken()` / `String nextToken(String delim)`
 
 
-## `java.util.function`
+TimeZone
+SimpleTimeZone
 
+Timer
 
-## `java.util.jar`
+TimerTask（计划任务）
+
+UUID
+- `UUID(long mostSigBits, long leastSigBits)`
+- `int clockSequence()` / `long node()` / `long timestamp()` / `int variant()` / `int version()`
+- `int compareTo(UUID val)` / `boolean equals(Object obj)`
+- `long getLeastSignificantBits()` / `long getMostSignificantBits()`
+- 实例：`static UUID nameUUIDFromBytes(byte[] name)` / `static UUID randomUUID()`
+- `static UUID fromString(String name)` / `String toString()`
 
 
 ## `java.util.logging`
 
+Handler
+ConsoleHandler
+ErrorManager
+FileHandler
+MemoryHandler
+SocketHandler
+StreamHandler
+XMLFormatter
+
+
+Formatter
+Level
+Logger
+LoggingPermission
+LogManager
+LogRecord
+SimpleFormatter
 
 ## `java.util.regex`
 
-
-## `java.util.spi`
-
-
-## `java.util.stream`
-
-
-## `java.util.zip`
-
-
-## `javax.crypto`
-
-
-## `javax.crypto.interfaces`
-
-
-## `javax.crypto.spec`
-
-
-## `javax.net`
-
-
-## `javax.net.ssl`
-
-
-## `javax.script`
-
-
-## `javax.security.auth`
-
-
-## `javax.security.auth.callback`
-
-
-## `javax.security.auth.login`
-
-
-## `javax.security.auth.spi`
-
-
-## `javax.security.auth.x500`
-
-
-## `javax.security.cert`
-
-
-
-
-# Compact2
-
-`java.io`
-
-
-`java.lang`
-
-
-`java.lang.annotation`
-
-
-`java.lang.invoke`
-
-
-`java.lang.ref`
-
-
-`java.lang.reflect`
-
-
-`java.math`
-
-
-`java.net`
-
-
-`java.nio`
-
-
-`java.nio.channels`
-
-
-`java.nio.channels.spi`
-
-
-`java.nio.charset`
-
-
-`java.nio.charset.spi`
-
-
-`java.nio.file`
-
-
-`java.nio.file.attribute`
-
-
-`java.nio.file.spi`
-
-
-`java.security`
-
-
-`java.security.cert`
-
-
-`java.security.interfaces`
-
-
-`java.security.spec`
-
-
-`java.text`
-
-
-`java.text.spi`
-
-
-`java.time`
-
-
-`java.time.chrono`
-
-
-`java.time.format`
-
-
-`java.time.temporal`
-
-
-`java.time.zone`
-
-
-`java.util`
-
-
-`java.util.concurrent`
-
-
-`java.util.concurrent.atomic`
-
-
-`java.util.concurrent.locks`
-
-
-`java.util.function`
-
-
-`java.util.jar`
-
-
-`java.util.logging`
-
-
-`java.util.regex`
-
-
-`java.util.spi`
-
-
-`java.util.stream`
-
-
-`java.util.zip`
-
-
-`javax.crypto`
-
-
-`javax.crypto.interfaces`
-
-
-`javax.crypto.spec`
-
-
-`javax.net`
-
-
-`javax.net.ssl`
-
-
-`javax.script`
-
-
-`javax.security.auth`
-
-
-`javax.security.auth.callback`
-
-
-`javax.security.auth.login`
-
-
-`javax.security.auth.spi`
-
-
-`javax.security.auth.x500`
-
-
-`javax.security.cert`
-
-
-
-# Compact3
-
-`java.lang.instrument`
-
-
-`java.lang.management`
-
-
-`java.security.acl`
-
-
-`java.util.prefs`
-
-
-`javax.annotation.processing`
-
-
-`javax.lang.model`
-
-
-`javax.lang.model.element`
-
-
-`javax.lang.model.type`
-
-
-`javax.lang.model.util`
-
-
-`javax.management`
-
-
-`javax.management.loading`
-
-
-`javax.management.modelmbean`
-
-
-`javax.management.monitor`
-
-
-`javax.management.openmbean`
-
-
-`javax.management.relation`
-
-
-`javax.management.remote`
-
-
-`javax.management.remote.rmi`
-
-
-`javax.management.timer`
-
-
-`javax.naming`
-
-
-`javax.naming.directory`
-
-
-`javax.naming.event`
-
-
-`javax.naming.ldap`
-
-
-`javax.naming.spi`
-
-
-`javax.security.auth.kerberos`
-
-
-`javax.security.sasl`
-
-
-`javax.sql.rowset`
-
-
-`javax.sql.rowset.serial`
-
-
-`javax.sql.rowset.spi`
-
-
-`javax.tools`
-
-
-`javax.xml.crypto`
-
-
-`javax.xml.crypto.dom`
-
-
-`javax.xml.crypto.dsig`
-
-
-`javax.xml.crypto.dsig.dom`
-
-
-`javax.xml.crypto.dsig.keyinfo`
-
-
-`javax.xml.crypto.dsig.spec`
-
-
-`org.ietf.jgss`
-
-
-
-# Full
+**Matcher**
+- `Matcher appendReplacement(StringBuffer sb, String replacement)` / `StringBuffer appendTail(StringBuffer sb)`
+- 偏移量：`int end()` / `int end(int group)` / `int end(String name)`
+- 搜索：`boolean find()` / `boolean find(int start)`
+- 替换：`String replaceAll(String replacement)` / `String replaceFirst(String replacement)`
+- 子序列：`String group()` / `String group(int group)` / `String group(String name)` / `int groupCount()`
+- 边界：`boolean hasAnchoringBounds()` / `boolean hasTransparentBounds()` / `Matcher useAnchoringBounds(boolean b)` / `Matcher useTransparentBounds(boolean b)`
+- `boolean hitEnd()`
+- 匹配：`boolean lookingAt()` / `boolean matches()`
+- `Pattern pattern()` / `Matcher usePattern(Pattern newPattern)`
+- `static String quoteReplacement(String s)`
+- 区域限制：`Matcher region(int start, int end)` / `int regionEnd()` / `int regionStart()`
+- `boolean requireEnd()`
+- 重置：`Matcher reset()` / `Matcher reset(CharSequence input)`
+- 索引：`int start()` / `int start(int group)` / `int start(String name)`
+- `MatchResult toMatchResult()`
+- `String toString()`
+
+**Pattern**
+- `Predicate<String> asPredicate()`
+- `static Pattern compile(String regex)` / `static Pattern compile(String regex, int flags)`
+- `int flags()`
+- `Matcher matcher(CharSequence input)`
+- `static boolean matches(String regex, CharSequence input)`
+- `String pattern()`
+- `static String quote(String s)`
+- `String[] split(CharSequence input)` / `String[] split(CharSequence input, int limit)`
+- `Stream<String> splitAsStream(CharSequence input)`
+- `String toString()`
