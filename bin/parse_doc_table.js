@@ -49,7 +49,8 @@ function parse_class_methods() {
       method += code[1].replace(/(<.*?>)/g, '') + ' ';
       method = method.replace(/&nbsp;/g, ' ');
       method = method.replace(/&lt;/g, '<');
-      method = method.replace(/&gt;/g, '>');
+      method = method.replace(/&lt;/g, '<');
+      method = method.replace(/&amp;/g, '&');
       method = method.replace(/ +/g, ' ');
       method = method.replace(/ +$/, '');
       output += `\`${method}\`\n`;
@@ -90,6 +91,7 @@ function parse_classes() {
       cls = cls.replace(/&nbsp;/g, ' ');
       cls = cls.replace(/&lt;/g, '<');
       cls = cls.replace(/&gt;/g, '>');
+      cls = cls.replace(/&amp;/g, '&');
       cls = cls.replace(/ +/g, ' ');
       cls = cls.replace(/ +$/, '');
       output += `${cls}\n`;
