@@ -1645,6 +1645,15 @@ IntSummaryStatistics(统计)
 - 结果：`double getAverage()` / `long getCount()` / `int getMax()` / `int getMin()` / `long getSum()`
 - `String toString()`
 
+LongSummaryStatistics(统计)
+- `LongSummaryStatistics()`
+- `void accept(int value)`
+- `void accept(long value)`
+- `void combine(LongSummaryStatistics other)`
+- 结果：`double getAverage()` / `long getCount()` / `long getMax()` / `long getMin()` / `long getSum()`
+- `String toString()`
+
+
 Formatter（用于printf的格式化）
 
 `EnumMap<K extends Enum<K>,V>`
@@ -1667,7 +1676,7 @@ Formatter（用于printf的格式化）
 - `static <E extends Enum<E>>EnumSet<E> of(E e)` / `static <E extends Enum<E>>EnumSet<E> of(E first, E... rest)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2, E e3)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2, E e3, E e4)` / `static <E extends Enum<E>>EnumSet<E> of(E e1, E e2, E e3, E e4, E e5)`
 - `static <E extends Enum<E>>EnumSet<E> range(E from, E to)`
 
-`HashMap<K,V>`
+**`HashMap<K,V>`**
 - `HashMap()` / `HashMap(int initialCapacity)` / `HashMap(int initialCapacity, float loadFactor)` / `HashMap(Map<? extends K,? extends V> m)`
 - `void clear()`
 - `Object clone()`
@@ -1687,7 +1696,7 @@ Formatter（用于printf的格式化）
   - `V merge(K key, V value, BiFunction<? super V,? super V,? extends V> remappingFunction)`
 - `int size()`
 
-`HashSet<E>`
+**`HashSet<E>`** / `LinkedHashSet<E>`(有序的HashSet)
 - `HashSet()` / `HashSet(Collection<? extends E> c)` / `HashSet(int initialCapacity)` / `HashSet(int initialCapacity, float loadFactor)`
 - 元素：
   - `boolean add(E e)` / `boolean remove(Object o)`
@@ -1708,41 +1717,273 @@ Formatter（用于printf的格式化）
 - `protected boolean removeEldestEntry(Map.Entry<K,V> eldest)`
 - `void replaceAll(BiFunction<? super K,? super V,? extends V> function)`
 
-`LinkedHashSet<E>`(有序的HashSet)
+`LinkedList<E>`(双链表)
+- `LinkedList()` / `LinkedList(Collection<? extends E> c)`
+- 元素：
+  - `boolean add(E e)` / `void add(int index, E element)`
+  - `boolean addAll(Collection<? extends E> c)` / `boolean addAll(int index, Collection<? extends E> c)`
+  - `void addFirst(E e)` / `void addLast(E e)`
+  - `void clear()`
+  - `boolean contains(Object o)`
+  - `E get(int index)` / `E getFirst()` / `E getLast()`
+  - `E element()`
+  - `int indexOf(Object o)` / `int lastIndexOf(Object o)`
+  - `boolean offer(E e)` / `boolean offerFirst(E e)` / `boolean offerLast(E e)`
+  - `E peek()` / `E peekFirst()` / `E peekLast()`
+  - `E poll()` / `E pollFirst()` / `E pollLast()`
+   - `E pop()` / `void push(E e)`
+   - `E remove()` / `E remove(int index)` / `boolean remove(Object o)`
+   - `E removeFirst()` / `boolean removeFirstOccurrence(Object o)`
+   - `E removeLast()` / `boolean removeLastOccurrence(Object o)`
+   - `E set(int index, E element)`
+- `Object clone()`
+- `Iterator<E> descendingIterator()` / `ListIterator<E> listIterator(int index)`
+- `int size()`
+- `Object[] toArray()` / `<T> T[] toArray(T[] a)`
+
+`TreeMap<K,V>`(红黑树)
+- `TreeMap()` / `TreeMap(Comparator<? super K> comparator)` / `TreeMap(Map<? extends K,? extends V> m)` / `TreeMap(SortedMap<K,? extends V> m)`
+- 元素：
+  - `V get(Object key)` / `V put(K key, V value)`
+  - `void putAll(Map<? extends K,? extends V> map)`
+  - `V remove(Object key)`
+  - `V replace(K key, V value)` / `boolean replace(K key, V oldValue, V newValue)`
+- 键值：
+  - `Map.Entry<K,V> ceilingEntry(K key)` / `K ceilingKey(K key)` / `Map.Entry<K,V> floorEntry(K key)` / `K floorKey(K key)`
+  - `Map.Entry<K,V> firstEntry()` / `K firstKey()` / `Map.Entry<K,V> lastEntry()` / `K lastKey()`
+  - `boolean containsKey(Object key)` / `boolean containsValue(Object value)`
+  - `Map.Entry<K,V> higherEntry(K key)` / `K higherKey(K key)` / `Map.Entry<K,V> lowerEntry(K key)` / `K lowerKey(K key)`
+  - `Map.Entry<K,V> pollFirstEntry()` / `Map.Entry<K,V> pollLastEntry()`
+  - `NavigableSet<K> navigableKeySet()`
+- 子树：
+  - `SortedMap<K,V> headMap(K toKey)` / `NavigableMap<K,V> headMap(K toKey, boolean inclusive)` / `SortedMap<K,V> tailMap(K fromKey)` / `NavigableMap<K,V> tailMap(K fromKey, boolean inclusive)`
+  - `NavigableSet<K> descendingKeySet()` / `NavigableMap<K,V> descendingMap()`
+  - `NavigableMap<K,V> subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive)` / `SortedMap<K,V> subMap(K fromKey, K toKey)`
+- `void forEach(BiConsumer<? super K,? super V> action)` / `void replaceAll(BiFunction<? super K,? super V,? extends V> function)`
+- `Collection<V> values()` / `Set<K> keySet()` / `Set<Map.Entry<K,V>> entrySet()`
+- `void clear()`
+- `Object clone()`
+- `Comparator<? super K> comparator()`
+- `int size()`
+
+`TreeSet<E>`(基于TreeMap)
+- `TreeSet()` / `TreeSet(Collection<? extends E> c)` / `TreeSet(Comparator<? super E> comparator)` / `TreeSet(SortedSet<E> s)`
+- `boolean addAll(Collection<? extends E> c)`
+- 元素：
+  - `boolean add(E e)` / `boolean remove(Object o)`
+  - `boolean contains(Object o)`
+  - `E first()` / `E last()`
+  - `E ceiling(E e)` / `E floor(E e)`
+  - `E higher(E e)` / `E lower(E e)`
+  - `E pollFirst()` / `E pollLast()`
+- 子集：
+  - `NavigableSet<E> descendingSet()`
+  - `SortedSet<E> headSet(E toElement)` / `NavigableSet<E> headSet(E toElement, boolean inclusive)`
+  - `SortedSet<E> tailSet(E fromElement)` / `NavigableSet<E> tailSet(E fromElement, boolean inclusive)`
+  - `NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive)` / `SortedSet<E> subSet(E fromElement, E toElement)`
+- `void clear()`
+- `Object clone()`
+- `Comparator<? super E> comparator()`
+- `boolean isEmpty()`
+- `Iterator<E> descendingIterator()` / `Iterator<E> iterator()` / `Spliterator<E> spliterator()`
+- `int size()`
+
+`Vector<E>`(可扩展数组)
+- `protected int	capacityIncrement` / `protected int	elementCount` / `protected Object[]	elementData`
+- `Vector()` / `Vector(Collection<? extends E> c)` / `Vector(int initialCapacity)` / `Vector(int initialCapacity, int capacityIncrement)`
+- 元素：
+  - `boolean add(E e)` / `void add(int index, E element)`
+  - `void addElement(E obj)` / `boolean removeElement(Object obj)`
+  - `E elementAt(int index)`
+  - `boolean contains(Object o)`
+  - `Enumeration<E> elements()`
+  - `E firstElement()` / `E lastElement()`
+  - `int indexOf(Object o)` / `int indexOf(Object o, int index)` / `int lastIndexOf(Object o)` / `int lastIndexOf(Object o, int index)`
+  - `E get(int index)`
+  - `E remove(int index)` / `boolean remove(Object o)`
+  - `void insertElementAt(E obj, int index)` / `void removeElementAt(int index)`
+  - `boolean removeIf(Predicate<? super E> filter)`
+  - `void setElementAt(E obj, int index)`
+  - `E set(int index, E element)`
+- 数组：
+  - `boolean addAll(Collection<? extends E> c)` / `boolean addAll(int index, Collection<? extends E> c)`
+  - `boolean removeAll(Collection<?> c)`
+  - `void removeAllElements()`
+  - `boolean containsAll(Collection<?> c)`
+  - `void copyInto(Object[] anArray)`
+  - `boolean isEmpty()`
+  - `void clear()`
+  - `protected void removeRange(int fromIndex, int toIndex)`
+  - `Object clone()`
+  - `void replaceAll(UnaryOperator<E> operator)`
+  - `boolean retainAll(Collection<?> c)`
+  - `void sort(Comparator<? super E> c)`
+  - `List<E> subList(int fromIndex, int toIndex)`
+- 容量：`int capacity()` / `void ensureCapacity(int minCapacity)` / `void setSize(int newSize)` / `int size()` / `void trimToSize()`
+- `boolean equals(Object o)`
+- 遍历：`Iterator<E> iterator()` / `ListIterator<E> listIterator()` / `ListIterator<E> listIterator(int index)` / `void forEach(Consumer<? super E> action)`
+- `Object[] toArray()` / `<T> T[] toArray(T[] a)`
+- `String toString()`
+
+`Stack<E>`(栈)
+- `Stack()`
+- `boolean empty()`
+- `E peek()` / `E pop()` / `E push(E item)`
+- `int search(Object o)`
+
+ListResourceBundle(抽象类，ResourceBundle管理器)
+- `ListResourceBundle()`
+- `protected abstract Object[][]	getContents()` / `Enumeration<String>	getKeys()`
+- `Object	handleGetObject(String key)`
+- `protected Set<String>	handleKeySet()`
+
+ResourceBundle（应该是用于国际化）
+- `static class ResourceBundle.Control`
+- `protected ResourceBundle parent`
+- `ResourceBundle()`
+- 实例：`static ResourceBundle getBundle(String baseName)` / `static ResourceBundle getBundle(String baseName, Locale locale)` / `static ResourceBundle getBundle(String baseName, Locale locale, ClassLoader loader)` / `static ResourceBundle getBundle(String baseName, Locale targetLocale, ClassLoader loader, ResourceBundle.Control control)` / `static ResourceBundle getBundle(String baseName, Locale targetLocale, ResourceBundle.Control control)` / `static ResourceBundle getBundle(String baseName, ResourceBundle.Control control)`
+- `String getBaseBundleName()`
+- `Locale getLocale()`
+- 元素：
+  - `boolean containsKey(String key)`
+  - `abstract Enumeration<String> getKeys()`
+  - `Object getObject(String key)` / `protected abstract Object handleGetObject(String key)`
+  - `String getString(String key)`
+- `static void clearCache()` / `static void clearCache(ClassLoader loader)`
+- `Set<String> keySet()` / `protected Set<String> handleKeySet()`
+- `String[] getStringArray(String key)`
+- `protected void setParent(ResourceBundle parent)`
+
+ResourceBundle.Control（ResourceBundle.getBundle工厂方法调用的一系列回调方法）
+- `static List<String>	FORMAT_CLASS` / `static List<String>	FORMAT_DEFAULT` / `static List<String>	FORMAT_PROPERTIES` / `static long	TTL_DONT_CACHE` / `static long	TTL_NO_EXPIRATION_CONTROL`
+- `protected	Control()`
+- 实例：`static ResourceBundle.Control getControl(List<String> formats)` / `static ResourceBundle.Control getNoFallbackControl(List<String> formats)`
+- `List<Locale> getCandidateLocales(String baseName, Locale locale)`
+- `Locale getFallbackLocale(String baseName, Locale locale)`
+- `List<String> getFormats(String baseName)`
+- `long getTimeToLive(String baseName, Locale locale)`
+- `boolean needsReload(String baseName, Locale locale, String format, ClassLoader loader, ResourceBundle bundle, long loadTime)`
+- `ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload)`
+- `String toBundleName(String baseName, Locale locale)`
+- `String toResourceName(String bundleName, String suffix)`
+
+Locale(地理区域)
+- `static class 	Locale.Builder` / `static class 	Locale.Category`(地区)) / `static class 	Locale.FilteringMode` / `static class 	Locale.LanguageRange`(语言)
+- 很多常量：`static Locale	CHINA` / `static Locale	CHINESE` / `static Locale	PRC` / `static Locale	SIMPLIFIED_CHINESE` / `static Locale	TRADITIONAL_CHINESE` / `static Locale	ENGLISH` / `static Locale	UK` / `static Locale	US` / `static char	PRIVATE_USE_EXTENSION`(私人扩展)
+- `Locale(String language)` / `Locale(String language, String country)` / `Locale(String language, String country, String variant)`
+- 实例：
+  - `static Locale forLanguageTag(String languageTag)`
+  - `static Locale[] getAvailableLocales()`
+  - `static Locale getDefault()` / `static Locale getDefault(Locale.Category category)`
+  - `static Locale lookup(List<Locale.LanguageRange> priorityList, Collection<Locale> locales)`
+  - `static void setDefault(Locale.Category category, Locale newLocale)`
+  - `static void setDefault(Locale newLocale)`
+- `Object clone()`
+- `boolean equals(Object obj)`
+- `static List<Locale> filter(List<Locale.LanguageRange> priorityList, Collection<Locale> locales)` / `static List<Locale> filter(List<Locale.LanguageRange> priorityList, Collection<Locale> locales, Locale.FilteringMode mode)`
+- `static List<String> filterTags(List<Locale.LanguageRange> priorityList, Collection<String> tags)` / `static List<String> filterTags(List<Locale.LanguageRange> priorityList, Collection<String> tags, Locale.FilteringMode mode)`
+- 显示：
+  - `String getCountry()`
+  - `String getLanguage()`
+  - `String getScript()`
+  - `String getVariant()`
+  - `String getDisplayCountry()` / `String getDisplayCountry(Locale inLocale)`
+  - `String getDisplayLanguage()` / `String getDisplayLanguage(Locale inLocale)`
+  - `String getDisplayName()` / `String getDisplayName(Locale inLocale)`
+  - `String getDisplayScript()` / `String getDisplayScript(Locale inLocale)`
+  - `String getDisplayVariant()` / `String getDisplayVariant(Locale inLocale)`
+- `boolean hasExtensions()` / `String getExtension(char key)` / `Set<Character> getExtensionKeys()`
+- `String getISO3Country()`
+- `String getISO3Language()`
+- `static String[] getISOCountries()`
+- `static String[] getISOLanguages()`
+- `Set<String> getUnicodeLocaleAttributes()` / `Set<String> getUnicodeLocaleKeys()` / `String getUnicodeLocaleType(String key)`
+- `static String lookupTag(List<Locale.LanguageRange> priorityList, Collection<String> tags)`
+- `Locale stripExtensions()`
+- `String toLanguageTag()`
+- `String toString()`
+
+Locale.Builder（构建Locale）
+- `Builder()`
+- `Locale build()`构建
+- `Locale.Builder addUnicodeLocaleAttribute(String attribute)`
+- 设置
+  - `Locale.Builder setExtension(char key, String value)` / `Locale.Builder clearExtensions()`
+  - `Locale.Builder setLanguage(String language)`
+  - `Locale.Builder setLanguageTag(String languageTag)`
+  - `Locale.Builder setLocale(Locale locale)`
+  - `Locale.Builder setRegion(String region)`
+  - `Locale.Builder setScript(String script)`
+  - `Locale.Builder setUnicodeLocaleKeyword(String key, String type)` / `Locale.Builder removeUnicodeLocaleAttribute(String attribute)`
+  - `Locale.Builder setVariant(String variant)`
+  - `Locale.Builder clear()`
+
+Locale.LanguageRange（语言范围）
+- `LanguageRange(String range)` / `LanguageRange(String range, double weight)`
+- `boolean equals(Object obj)`
+- `String getRange()` / `double getWeight()`
+- `static List<Locale.LanguageRange> mapEquivalents(List<Locale.LanguageRange> priorityList, Map<String,List<String>> map)`
+- `static List<Locale.LanguageRange> parse(String ranges)` / `static List<Locale.LanguageRange> parse(String ranges, Map<String,List<String>> map)`
 
 
-`LinkedList<E>`
+**Objects**(对象静态方法)
+- `static <T> int compare(T a, T b, Comparator<? super T> c)`
+- `static boolean deepEquals(Object a, Object b)` / `static boolean equals(Object a, Object b)`
+- `static int hash(Object... values)`
+- `static int hashCode(Object o)`
+- `static boolean isNull(Object obj)` / `static boolean nonNull(Object obj)`
+- `static <T> T requireNonNull(T obj)` / `static <T> T requireNonNull(T obj, String message)` / `static <T> T requireNonNull(T obj, Supplier<String> messageSupplier)`
+- `static String toString(Object o)` / `static String toString(Object o, String nullDefault)`
 
-`TreeMap<K,V>`
+Observable(观察者，这是直接实现设计模式了吗？)
+- `Observable()`
+- `void addObserver(Observer o)` / `void deleteObserver(Observer o)` / `void deleteObservers()` / `int countObservers()`
+- `boolean hasChanged()` / `protected void setChanged()` / `protected void clearChanged()`
+- `void notifyObservers()` / `void notifyObservers(Object arg)`
 
-`TreeSet<E>`
 
-`Vector<E>`
+`Optional<T>`(可能或不含有null的容器)  
+OptionalDouble(可能或不含有double的容器)  
+OptionalInt(可能或不含有int的容器)  
+OptionalLong(可能或不含有long的容器)
 
-`WeakHashMap<K,V>`
-
-`Stack<E>`
-
-ListResourceBundle
-Locale
-Locale.Builder
-Locale.LanguageRange
-LongSummaryStatistics
-Objects
-Observable
-`Optional<T>`
-OptionalDouble
-OptionalInt
-OptionalLong
 `PriorityQueue<E>`
-Properties
-PropertyPermission
-PropertyResourceBundle
+- `PriorityQueue()` / `PriorityQueue(Collection<? extends E> c)` / `PriorityQueue(Comparator<? super E> comparator)` / `PriorityQueue(int initialCapacity)` / `PriorityQueue(int initialCapacity, Comparator<? super E> comparator)` / `PriorityQueue(PriorityQueue<? extends E> c)` / `PriorityQueue(SortedSet<? extends E> c)`
+- 元素：
+  - `boolean add(E e)` / `boolean remove(Object o)`
+  - `void clear()`
+  - `boolean contains(Object o)`
+  - `boolean offer(E e)`
+  - `E peek()` / `E poll()`
+- `Comparator<? super E> comparator()` / `Iterator<E> iterator()`
+- `int size()`
+- `Object[] toArray()` / `<T> T[] toArray(T[] a)`
+
+Properties(字符串键值对)
+- `protected Properties	default`
+- `Properties()` / `Properties(Properties defaults)`
+- `String getProperty(String key)` / `String getProperty(String key, String defaultValue)` / `Object setProperty(String key, String value)`
+- `void list(PrintStream out)` / `void list(PrintWriter out)`
+- `void load(InputStream inStream)` / `void load(Reader reader)`
+- `void loadFromXML(InputStream in)` / `void storeToXML(OutputStream os, String comment)` / `void storeToXML(OutputStream os, String comment, String encoding)`
+- `Enumeration<?> propertyNames()`
+- `void save(OutputStream out, String comments)`
+- `void store(OutputStream out, String comments)`
+- `void store(Writer writer, String comments)`
+- `Set<String> stringPropertyNames()`
+
+PropertyResourceBundle(用于ResourceBundle的属性，只需指定资源文件)
+- `PropertyResourceBundle(InputStream stream)` / `PropertyResourceBundle(Reader reader)`
+- `Enumeration<String>	getKeys()` / `Object	handleGetObject(String key)` / `protected Set<String>	handleKeySet()`
 
 Random
+- `Random()` / `Random(long seed)`
+- `DoubleStream doubles()` / `DoubleStream doubles(double randomNumberOrigin, double randomNumberBound)` / `DoubleStream doubles(long streamSize)` / `DoubleStream doubles(long streamSize, double randomNumberOrigin, double randomNumberBound)`
+- `IntStream ints()` / `IntStream ints(int randomNumberOrigin, int randomNumberBound)` / `IntStream ints(long streamSize)` / `IntStream ints(long streamSize, int randomNumberOrigin, int randomNumberBound)`
+- `LongStream longs()` / `LongStream longs(long streamSize)` / `LongStream longs(long randomNumberOrigin, long randomNumberBound)` / `LongStream longs(long streamSize, long randomNumberOrigin, long randomNumberBound)`
+- `protected int next(int bits)` / `boolean nextBoolean()` / `void nextBytes(byte[] bytes)` / `double nextDouble()` / `float nextFloat()` / `double nextGaussian()` / `int nextInt()` / `int nextInt(int bound)` / `long nextLong()`
+- `void setSeed(long seed)`
 
-ResourceBundle
-ResourceBundle.Control
 
 Scanner(文本扫描器)
 - `Scanner(File source)` / `Scanner(File source, String charsetName)` / `Scanner(InputStream source)` / `Scanner(InputStream source, String charsetName)` / `Scanner(Path source)` / `Scanner(Path source, String charsetName)` / `Scanner(Readable source)` / `Scanner(ReadableByteChannel source)` / `Scanner(ReadableByteChannel source, String charsetName)` / `Scanner(String source)`
@@ -1777,11 +2018,30 @@ Scanner(文本扫描器)
 
 
 TimeZone
-SimpleTimeZone
+- `TimeZone()`
+- `Object clone()`
+- 实例：`static TimeZone getDefault()` / `static TimeZone getTimeZone(String ID)` / `static TimeZone getTimeZone(ZoneId zoneId)` / `static void setDefault(TimeZone zone)`
+- `static String[] getAvailableIDs()` / `static String[] getAvailableIDs(int rawOffset)`
+- `String getDisplayName()` / `String getDisplayName(boolean daylight, int style)` / `String getDisplayName(boolean daylight, int style, Locale locale)` / `String getDisplayName(Locale locale)`
+- `int getDSTSavings()`
+- `String getID()` / `void setID(String ID)`
+- `abstract int getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds)` / `int getOffset(long date)`
+- `abstract int getRawOffset()` / `abstract void setRawOffset(int offsetMillis)`
+- `boolean hasSameRules(TimeZone other)`
+- `abstract boolean inDaylightTime(Date date)` / `boolean observesDaylightTime()` / `abstract boolean useDaylightTime()`
+- `ZoneId toZoneId()`
 
-Timer
+Timer(线程调度，执行TimerTask)
+- `Timer()` / `Timer(boolean isDaemon)` / `Timer(String name)` / `Timer(String name, boolean isDaemon)`
+- `void cancel()`
+- `int purge()`
+- `void schedule(TimerTask task, Date time)` / `void schedule(TimerTask task, Date firstTime, long period)` / `void schedule(TimerTask task, long delay)` / `void schedule(TimerTask task, long delay, long period)` / `void scheduleAtFixedRate(TimerTask task, Date firstTime, long period)` / `void scheduleAtFixedRate(TimerTask task, long delay, long period)`
 
-TimerTask（计划任务）
+TimerTask（计划任务，抽象类）
+- `protected	TimerTask()`
+- `boolean cancel()`
+- `abstract void run()`
+- `long scheduledExecutionTime()`
 
 UUID
 - `UUID(long mostSigBits, long leastSigBits)`
@@ -1790,7 +2050,6 @@ UUID
 - `long getLeastSignificantBits()` / `long getMostSignificantBits()`
 - 实例：`static UUID nameUUIDFromBytes(byte[] name)` / `static UUID randomUUID()`
 - `static UUID fromString(String name)` / `String toString()`
-
 
 ## `java.util.logging`
 
