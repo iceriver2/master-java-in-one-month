@@ -6,6 +6,18 @@
 
 > 2019-09-28 使用上面说的方法，快速过一边包，发现：Compact2/Compact3的包，在初期能用到的确实不错，类似 management 之类和高级语言特性，应该是比较高级的场景才能实用到。也就说，掌握 compact1 的主要类，就差不多可以完成日常任务了。
 
+> 2019-09-29 初步整理完成。由于一些内容散落在不同的包中，但使用时却必须全部都用，因此，需要以特性为中心，重新整理一下到 Overview 中。例如：Collection，在 jang.lang 和 java.util 中都存在。
+
+- [Overview](#overview)
+  - [重要类](#%e9%87%8d%e8%a6%81%e7%b1%bb)
+    - [数据类型与结构](#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%8e%e7%bb%93%e6%9e%84)
+    - [国际化](#%e5%9b%bd%e9%99%85%e5%8c%96)
+    - [辅助工具](#%e8%be%85%e5%8a%a9%e5%b7%a5%e5%85%b7)
+    - [输入输出](#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba)
+    - [日志](#%e6%97%a5%e5%bf%97)
+    - [网络](#%e7%bd%91%e7%bb%9c)
+    - [数据库](#%e6%95%b0%e6%8d%ae%e5%ba%93)
+  - [特殊形式](#%e7%89%b9%e6%ae%8a%e5%bd%a2%e5%bc%8f)
 - [profile](#profile)
 - [Compact1](#compact1)
   - [`java.io`](#javaio)
@@ -20,6 +32,183 @@
   - [`java.util`](#javautil)
   - [`java.util.logging`](#javautillogging)
   - [`java.util.regex`](#javautilregex)
+- [Compact2](#compact2)
+  - [java.sql](#javasql)
+
+# Overview
+
+> 包和类都很多，因此，Overview 只梳理关系和要点，不记录详细，使用方法参见 vipclass-example 。
+
+## 重要类
+
+> 有点小尴尬，数组这么重要，居然不是一个Class，但数组实例是Object。一般总是以 [] 出现。可能是已经作为语言的一部分了吧。
+
+### 数据类型与结构
+
+Character
+String
+StringBuilder
+
+Boolean
+Byte
+Double
+Float
+Integer
+Long
+Short
+
+Enum
+EnumMap
+EnumSet
+
+HashMap
+HashSet
+ArrayList
+TreeMap
+Stack
+Vector
+
+Scanner
+
+StringJoiner
+StringTokenizer
+
+Collections
+Arrays
+
+
+Matcher
+Pattern
+
+
+NumberFormat
+DecimalFormat/DecimalFormatSymbols
+
+MessageFormat
+
+### 国际化
+
+Currency
+
+
+DateFormat/DateFormatSymbols
+SimpleDateFormat
+
+DateTimeFormatter
+
+Duration
+Instant
+
+LocalDate
+LocalDateTime
+LocalTime
+
+ZoneId
+
+TimeZone
+
+ListResourceBundle
+ResourceBundle
+
+Properties
+PropertyResourceBundle
+
+Locale
+
+### 辅助工具
+
+Math
+System
+
+Random
+UUID
+
+Throwable
+Exception
+
+Formatter
+
+Objects
+
+Base64
+Base64.Decoder
+Base64.Encoder
+
+DoubleSummaryStatistics
+IntSummaryStatistics
+LongSummaryStatistics
+
+
+### 输入输出
+
+BufferedReader, BufferedWriter
+BufferedInputStream, BufferedOutputStream
+FileInputStream, FileOutputStream
+FileReader, FileWriter
+PrintStream, PrintWriter
+RandomAccessFile
+
+File
+
+Files
+
+Paths, Path
+
+### 日志
+
+Handler
+ConsoleHandler
+FileHandler
+MemoryHandler
+SocketHandler
+StreamHandler
+
+Level
+
+LogRecord
+
+Formatter
+SimpleFormatter
+XMLFormatter
+Logger
+LogManager
+
+### 网络
+
+HttpCookie
+
+URLConnection
+HttpURLConnection
+InetAddress/Inet4Address/Inet6Address
+
+ServerSocket/Socket
+
+URI
+URL
+
+URLDecoder
+URLEncoder
+
+### 数据库
+
+
+
+## 特殊形式
+
+回调（异步）
+
+注解
+
+泛型
+
+嵌套类（静态成员，非静态成员，局部类，匿名类）
+
+流式表达
+
+lambda表达式
+
+设计模式
+
 
 # profile
 
@@ -985,7 +1174,7 @@ URI实例有以下九个组件:scheme, scheme-specific-part, authority, user-inf
 - `URI relativize(URI uri)` / `URI resolve(String str)` / `URI resolve(URI uri)`
 - `String toASCIIString()` / `String toString()`
 
-URL
+**URL**
 - `URL(String spec)` / `URL(String protocol, String host, int port, String file)` / `URL(String protocol, String host, int port, String file, URLStreamHandler handler)` / `URL(String protocol, String host, String file)` / `URL(URL context, String spec)` / `URL(URL context, String spec, URLStreamHandler handler)`
 - 比较：`boolean equals(Object obj)` / `boolean sameFile(URL other)`
 - 获取不同组件（略参照URI）：`String getProtocol()` / `String getAuthority()` / `String getUserInfo()` / `String getHost()` / `int getPort()` / `String getPath()` / `String getQuery()` / `String getFile()` / `String getRef()`
@@ -2220,3 +2409,45 @@ LogManager(维护日志记录器的共享状态)
 - `String[] split(CharSequence input)` / `String[] split(CharSequence input, int limit)`
 - `Stream<String> splitAsStream(CharSequence input)`
 - `String toString()`
+
+# Compact2
+
+## java.sql
+
+Date(用于SQL的Date值)
+- `Date(long date)`
+- `void	setTime(long date)`
+- 实例：`static Date	valueOf(LocalDate date)` / `static Date	valueOf(String s)`
+- `Instant	toInstant()` / `LocalDate	toLocalDate()`
+- `String	toString()`
+
+Time(用于SQL的TIME值)
+- `Time(long time)`
+- `Instant	toInstant()` / `LocalTime	toLocalTime()`
+- `static Time	valueOf(LocalTime time)` / `static Time	valueOf(String s)`
+- `String	toString()`
+
+Timestamp（用于SQL的TIMESTAMP值）
+- `Timestamp(long time)`
+- 实例：`static Timestamp from(Instant instant)` / `static Timestamp valueOf(LocalDateTime dateTime)` / `static Timestamp valueOf(String s)`
+- 比较：`int compareTo(Date o)` / `int compareTo(Timestamp ts)` / `boolean equals(Object ts)` / `boolean equals(Timestamp ts)`
+- `boolean after(Timestamp ts)` / `boolean before(Timestamp ts)`
+- `int getNanos()` / `void setNanos(int n)`
+- `long getTime()` / `void setTime(long time)`
+- `Instant toInstant()` / `LocalDateTime toLocalDateTime()`
+- `String toString()`
+
+
+DriverManager（驱动管理，JDBC2.0提供另一种更好方法：DataSource）
+- `static void registerDriver(Driver driver)` / `static void registerDriver(Driver driver, DriverAction da)` / `static void deregisterDriver(Driver driver)`
+- `static Connection getConnection(String url)` / `static Connection getConnection(String url, Properties info)` / `static Connection getConnection(String url, String user, String password)`
+- `static Driver getDriver(String url)` / `static Enumeration<Driver> getDrivers()`
+- `static int getLoginTimeout()` / `static void setLoginTimeout(int seconds)`
+- `static PrintWriter getLogWriter()` / `static void setLogWriter(PrintWriter out)`
+- `static void println(String message)`
+
+DriverPropertyInfo（驱动程序属性）
+- `String[]	choices` / `String	description` / `String	name` / `boolean required` / `String value`
+- `DriverPropertyInfo(String name, String value)`
+
+Types(JDBC类型)
