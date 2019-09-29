@@ -11,12 +11,20 @@
 - [Overview](#overview)
   - [重要类](#%e9%87%8d%e8%a6%81%e7%b1%bb)
     - [数据类型与结构](#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%8e%e7%bb%93%e6%9e%84)
+      - [数值](#%e6%95%b0%e5%80%bc)
+      - [字符与字符串](#%e5%ad%97%e7%ac%a6%e4%b8%8e%e5%ad%97%e7%ac%a6%e4%b8%b2)
+      - [数据结构](#%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84)
     - [国际化](#%e5%9b%bd%e9%99%85%e5%8c%96)
+    - [格式化](#%e6%a0%bc%e5%bc%8f%e5%8c%96)
+      - [时间日期](#%e6%97%b6%e9%97%b4%e6%97%a5%e6%9c%9f)
+      - [语言资源](#%e8%af%ad%e8%a8%80%e8%b5%84%e6%ba%90)
     - [辅助工具](#%e8%be%85%e5%8a%a9%e5%b7%a5%e5%85%b7)
     - [输入输出](#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba)
+      - [文件操作](#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c)
+      - [内容操作](#%e5%86%85%e5%ae%b9%e6%93%8d%e4%bd%9c)
     - [日志](#%e6%97%a5%e5%bf%97)
     - [网络](#%e7%bd%91%e7%bb%9c)
-    - [数据库](#%e6%95%b0%e6%8d%ae%e5%ba%93)
+    - [数据库TODO](#%e6%95%b0%e6%8d%ae%e5%ba%93todo)
   - [特殊形式](#%e7%89%b9%e6%ae%8a%e5%bd%a2%e5%bc%8f)
 - [profile](#profile)
 - [Compact1](#compact1)
@@ -41,21 +49,55 @@
 
 ## 重要类
 
-> 有点小尴尬，数组这么重要，居然不是一个Class，但数组实例是Object。一般总是以 [] 出现。可能是已经作为语言的一部分了吧。
+> 有点小尴尬，数组这么重要，居然不是一个Class，但数组实例是Object。一般总是以 `[]` 出现。可能是已经作为语言的一部分了吧。
 
 ### 数据类型与结构
+
+#### 数值
+
+Boolean
+- 类变量：FALSE / TRUE / TYPE
+- 类方法：
+  - 解析与转换：**parseBoolean()** / toString() / **valueOf()**
+  - 运算：logicalAnd() / logicalOr() / logicalXor()
+
+Number(抽象类)，子类包括：Byte，Double，Float，Integer，Long，Short。各个数值和对象之间，可以互转。
+- 类变量：
+  - 共有：BYTES / SIZE, **MAX_VALUE** / **MIN_VALUE**, TYPE
+  - 浮点共有：MAX_EXPONENT / MIN_EXPONENT, NEGATIVE_INFINITY / POSITIVE_INFINITY, **NaN**
+- 类方法（共有）： **valueOf()**, **parseXXX()**
+- 对象方法（共有）：XXXValue()
+- Byte / Short / Integer / Long 都有 **decode()** 类方法解析非十进制。
+- Double / Float
+  - 类方法：isFinite(), isInfinite(), isNaN(), max(), min(), sum()
+  - 对象方法： isInfinite(), isNaN()
+- Integer / Long / Short
+  - 类方法（非Short）：signum(), toBinaryString(), toHexString(), toOctalString(), getXXX()
+  - 类方法：max(), min(), sum()
+
+
+
+#### 字符与字符串
 
 Character
 String
 StringBuilder
 
-Boolean
-Byte
-Double
-Float
-Integer
-Long
-Short
+
+StringJoiner
+StringTokenizer
+
+Scanner
+
+
+Matcher
+Pattern
+
+MessageFormat
+
+
+
+#### 数据结构
 
 Enum
 EnumMap
@@ -68,28 +110,52 @@ TreeMap
 Stack
 Vector
 
-Scanner
-
-StringJoiner
-StringTokenizer
-
 Collections
 Arrays
 
-
-Matcher
-Pattern
-
-
-NumberFormat
-DecimalFormat/DecimalFormatSymbols
-
-MessageFormat
-
 ### 国际化
 
-Currency
+Locale
+- 实例枚举：CHINA / CHINESE / PRC / SIMPLIFIED_CHINESE， ENGLISH / UK / US
+- 类方法
+  - 默认实例：getDefault() 可以指定 Locale 或默认， setDefault() 设置默认。
+  - getAvailableLocales() 所有可用区域。
+- 对象方法
+  - 实例：Locale()
+  - 属性：getCountry() / getDisplayCountry(), getLanguage() / getDisplayLanguage(), getDisplayName(), toLanguageTag()
 
+Currency
+- 类方法：
+  - 实例：getInstance() 必须指定 Locale 
+  - getAvailableCurrencies() 所有可用货币。
+- 对象方法
+  - 属性：getCurrencyCode(), getDisplayName(), getSymbol()
+
+### 格式化
+
+NumberFormat(抽象类)
+- 类方法：
+  - 获得系统实例：getInstance() / getNumberInstance() / getPercentInstance() / getCurrencyInstance() / getIntegerInstance() ，可以指定 Locale 或默认。
+  - getAvailableLocales() 所有可用区域。
+- 对象方法：
+  - format() / parse() 互转。
+
+DecimalFormatSymbols
+- 类方法：
+  - 实例：getInstance() 可以指定 Locale 或默认。
+  - getAvailableLocales() 所有可用区域。
+- 对象方法：
+  - 实例：DecimalFormatSymbols() 可以指定 Locale 。
+  - format() / parse() 互转。
+  - 属性：getCurrency(), getCurrencySymbol(), getDecimalSeparator(), getDigit(), getGroupingSeparator(), getMonetaryDecimalSeparator() 也可以设置。还有其他属性。
+
+DecimalFormat
+- 一般不直接构建 DecimalFormat ，借助 NumberFormat.getInstance() 获取实例、转换并定制。
+- 对象方法：
+  - format() / parse() 互转。
+  - 属性：getCurrency(), getDecimalFormatSymbols(), getGroupingSize() ，也可以设置。或通过 applyPattern() 设置，例如常见模式是 "#,##0.###"。
+
+#### 时间日期
 
 DateFormat/DateFormatSymbols
 SimpleDateFormat
@@ -107,13 +173,13 @@ ZoneId
 
 TimeZone
 
+#### 语言资源
+
 ListResourceBundle
 ResourceBundle
 
 Properties
 PropertyResourceBundle
-
-Locale
 
 ### 辅助工具
 
@@ -138,8 +204,17 @@ DoubleSummaryStatistics
 IntSummaryStatistics
 LongSummaryStatistics
 
-
 ### 输入输出
+
+#### 文件操作
+
+File
+
+Files
+
+Paths, Path
+
+#### 内容操作
 
 BufferedReader, BufferedWriter
 BufferedInputStream, BufferedOutputStream
@@ -147,12 +222,6 @@ FileInputStream, FileOutputStream
 FileReader, FileWriter
 PrintStream, PrintWriter
 RandomAccessFile
-
-File
-
-Files
-
-Paths, Path
 
 ### 日志
 
@@ -189,8 +258,7 @@ URL
 URLDecoder
 URLEncoder
 
-### 数据库
-
+### 数据库TODO
 
 
 ## 特殊形式
@@ -758,7 +826,8 @@ Integer
 - `Integer(int value)` / `Integer(String s)`
 - 数值互转：`byte byteValue()` / `double doubleValue()` / `float floatValue()` / `int intValue()` / `long longValue()` / `short shortValue()`
 - 比较：`static int compare(int x, int y)` / `int compareTo(Integer anotherInteger)` / `static int compareUnsigned(int x, int y)` / `boolean equals(Object obj)`
-- 转为对象：`static Integer decode(String nm)` / `static Integer getInteger(String nm)` / `static Integer getInteger(String nm, int val)` / `static Integer getInteger(String nm, Integer val)`
+- 转为对象：`static Integer decode(String nm)` 
+- 解析属性值：`static Integer getInteger(String nm)` / `static Integer getInteger(String nm, int val)` / `static Integer getInteger(String nm, Integer val)`
 - 计算：`static int divideUnsigned(int dividend, int divisor)` / `static int remainderUnsigned(int dividend, int divisor)` / `static int signum(int i)` / `static int sum(int a, int b)`
 - `int hashCode()` / `static int hashCode(int value)`
 - 最大最小：`static int max(int a, int b)` / `static int min(int a, int b)`
@@ -2056,9 +2125,9 @@ ResourceBundle.Control（ResourceBundle.getBundle工厂方法调用的一系列�
 - `String toBundleName(String baseName, Locale locale)`
 - `String toResourceName(String bundleName, String suffix)`
 
-Locale(地理区域)
+**Locale**(地理区域)
 - `static class 	Locale.Builder` / `static class 	Locale.Category`(地区)) / `static class 	Locale.FilteringMode` / `static class 	Locale.LanguageRange`(语言)
-- 很多常量：`static Locale	CHINA` / `static Locale	CHINESE` / `static Locale	PRC` / `static Locale	SIMPLIFIED_CHINESE` / `static Locale	TRADITIONAL_CHINESE` / `static Locale	ENGLISH` / `static Locale	UK` / `static Locale	US` / `static char	PRIVATE_USE_EXTENSION`(私人扩展)
+- 很多枚举：`static Locale	CHINA` / `static Locale	CHINESE` / `static Locale	PRC` / `static Locale	SIMPLIFIED_CHINESE` / `static Locale	TRADITIONAL_CHINESE` / `static Locale	ENGLISH` / `static Locale	UK` / `static Locale	US` / `static char	PRIVATE_USE_EXTENSION`(私人扩展)
 - `Locale(String language)` / `Locale(String language, String country)` / `Locale(String language, String country, String variant)`
 - 实例：
   - `static Locale forLanguageTag(String languageTag)`
