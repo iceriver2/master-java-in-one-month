@@ -2053,23 +2053,141 @@ UUID
 
 ## `java.util.logging`
 
-Handler
-ConsoleHandler
+Handler(抽象类)
+- `protected	Handler()`
+- `abstract void close()`
+- `abstract void flush()`
+- `String getEncoding()` / `void setEncoding(String encoding)`
+- `ErrorManager getErrorManager()` / `void setErrorManager(ErrorManager em)`
+- `Filter getFilter()` / `void setFilter(Filter newFilter)`
+- `Formatter getFormatter()` / `void setFormatter(Formatter newFormatter)`
+- `Level getLevel()` / `void setLevel(Level newLevel)`
+- `boolean isLoggable(LogRecord record)`
+- `abstract void publish(LogRecord record)`
+- `protected void reportError(String msg, Exception ex, int code)`
+
+ConsoleHandler(日志发布到system.err)
+- `ConsoleHandler()`
+- `void	close()`
+- `void	publish(LogRecord record)`
+
+FileHandler(文件记录日志，默认使用XMLFormatter)
+- `FileHandler()` / `FileHandler(String pattern)` / `FileHandler(String pattern, boolean append)` / `FileHandler(String pattern, int limit, int count)` / `FileHandler(String pattern, int limit, int count, boolean append)`
+- `void	close()`
+- `void	publish(LogRecord record)`
+
+MemoryHandler(内存记录日志)
+- `MemoryHandler()` / `MemoryHandler(Handler target, int size, Level pushLevel)`
+- `void close()`
+- `void flush()`
+- `Level getPushLevel()` / `void setPushLevel(Level newLevel)`
+- `boolean isLoggable(LogRecord record)`
+- `void publish(LogRecord record)`
+- `void push()`
+
+SocketHandler（套接字记录日志,StreamHandler子类）
+- `SocketHandler()` / `SocketHandler(String host, int port)`
+- `void	close()`
+- `void	publish(LogRecord record)`
+
+StreamHandler（流记录日志）
+- `StreamHandler()` / `StreamHandler(OutputStream out, Formatter formatter)`
+- `void close()`
+- `void flush()`
+- `boolean isLoggable(LogRecord record)`
+- `void publish(LogRecord record)`
+- `void setEncoding(String encoding)`
+- `protected void setOutputStream(OutputStream out)`
+
+
 ErrorManager
-FileHandler
-MemoryHandler
-SocketHandler
-StreamHandler
-XMLFormatter
+- 静态成员：`CLOSE_FAILURE` / `FLUSH_FAILURE` / `FORMAT_FAILURE` / `GENERIC_FAILURE` / `OPEN_FAILURE` / `WRITE_FAILURE`
+- `ErrorManager()`
+- `void	error(String msg, Exception ex, int code)`
 
+Level(日志级别)
+- 静态变量：SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST,ALL/OFF
+- `protected	Level(String name, int value)` / `protected	Level(String name, int value, String resourceBundleName)`
+- `boolean equals(Object ox)`
+- `String getLocalizedName()` / `String getName()` / `String getResourceBundleName()`
+- `int intValue()`
+- `static Level parse(String name)`
+- `String toString()`
 
-Formatter
-Level
-Logger
-LoggingPermission
-LogManager
-LogRecord
+LogRecord(日志记录)
+- `LogRecord(Level level, String msg)`
+- `Level getLevel()` / `void setLevel(Level level)`
+- `String getLoggerName()` / `void setLoggerName(String name)`
+- `String getMessage()` / `void setMessage(String message)`
+- `long getMillis()` / `void setMillis(long millis)`
+- `Object[] getParameters()` / `void setParameters(Object[] parameters)`
+- `ResourceBundle getResourceBundle()` / `void setResourceBundle(ResourceBundle bundle)`
+- `String getResourceBundleName()` / `void setResourceBundleName(String name)`
+- `long getSequenceNumber()` / `void setSequenceNumber(long seq)`
+- `String getSourceClassName()` / `void setSourceClassName(String sourceClassName)`
+- `String getSourceMethodName()` / `void setSourceMethodName(String sourceMethodName)`
+- `int getThreadID()` / `void setThreadID(int threadID)`
+- `Throwable getThrown()` / `void setThrown(Throwable thrown)`
+
+Formatter(格式化抽象类)
+- `protected	Formatter()`
+- `abstract String format(LogRecord record)`
+- `String formatMessage(LogRecord record)`
+- `String getHead(Handler h)`
+- `String getTail(Handler h)`
+
 SimpleFormatter
+- `SimpleFormatter()`
+- `String	format(LogRecord record)`
+
+XMLFormatter
+- `XMLFormatter()`
+- `String format(LogRecord record)`
+- `String getHead(Handler h)`
+- `String getTail(Handler h)`
+
+
+**Logger**
+- `protected	Logger(String name, String resourceBundleName)`
+- 实例：
+  - `static Logger getAnonymousLogger()` / `static Logger getAnonymousLogger(String resourceBundleName)`
+  - `static Logger getGlobal()`
+  - `static Logger getLogger(String name)` / `static Logger getLogger(String name, String resourceBundleName)`
+- 不同级别：
+  - `boolean isLoggable(Level level)`
+  - `void config(String msg)` / `void config(Supplier<String> msgSupplier)`
+  - `void fine(String msg)` / `void fine(Supplier<String> msgSupplier)`
+  - `void finer(String msg)` / `void finer(Supplier<String> msgSupplier)`
+  - `void finest(String msg)` / `void finest(Supplier<String> msgSupplier)`
+  - `void info(String msg)` / `void info(Supplier<String> msgSupplier)`
+  - `void severe(String msg)` / `void severe(Supplier<String> msgSupplier)`
+  - `void warning(String msg)` / `void warning(Supplier<String> msgSupplier)`
+- 进入退出环境：
+  - `void entering(String sourceClass, String sourceMethod)` / `void entering(String sourceClass, String sourceMethod, Object param1)` / `void entering(String sourceClass, String sourceMethod, Object[] params)`
+  - `void exiting(String sourceClass, String sourceMethod)` / `void exiting(String sourceClass, String sourceMethod, Object result)`
+- 有参调用
+  - `void log(Level level, String msg)` / `void log(Level level, String msg, Object param1)` / `void log(Level level, String msg, Object[] params)` / `void log(Level level, String msg, Throwable thrown)` / `void log(Level level, Supplier<String> msgSupplier)` / `void log(Level level, Throwable thrown, Supplier<String> msgSupplier)` / `void log(LogRecord record)`
+  - `void logp(Level level, String sourceClass, String sourceMethod, String msg)` / `void logp(Level level, String sourceClass, String sourceMethod, String msg, Object param1)` / `void logp(Level level, String sourceClass, String sourceMethod, String msg, Object[] params)` / `void logp(Level level, String sourceClass, String sourceMethod, String msg, Throwable thrown)` / `void logp(Level level, String sourceClass, String sourceMethod, Supplier<String> msgSupplier)` / `void logp(Level level, String sourceClass, String sourceMethod, Throwable thrown, Supplier<String> msgSupplier)`
+- 属性：
+  - `void addHandler(Handler handler)` / `Handler[] getHandlers()` / `void removeHandler(Handler handler)`
+  - `Filter getFilter()` / `void setFilter(Filter newFilter)`
+  - `Level getLevel()` / `void setLevel(Level newLevel)`
+  - `String getName()`
+  - `Logger getParent()` / `void setParent(Logger parent)`
+  - `ResourceBundle getResourceBundle()` / `void setResourceBundle(ResourceBundle bundle)` / `String getResourceBundleName()`
+  - `boolean getUseParentHandlers()` / `void setUseParentHandlers(boolean useParentHandlers)`
+- `void throwing(String sourceClass, String sourceMethod, Throwable thrown)`
+
+LogManager(维护日志记录器的共享状态)
+- `protected	LogManager()`
+- 实例：`static LogManager getLogManager()`
+- `boolean addLogger(Logger logger)` / `Logger getLogger(String name)`
+- `void checkAccess()`
+- `Enumeration<String> getLoggerNames()`
+- `static LoggingMXBean getLoggingMXBean()`
+- `String getProperty(String name)`
+- `void readConfiguration()` / `void readConfiguration(InputStream ins)`
+- `void reset()`
 
 ## `java.util.regex`
 
