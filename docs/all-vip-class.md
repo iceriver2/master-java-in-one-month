@@ -12,7 +12,7 @@
   - [重要类](#%e9%87%8d%e8%a6%81%e7%b1%bb)
     - [数据类型与结构](#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%8e%e7%bb%93%e6%9e%84)
       - [数值](#%e6%95%b0%e5%80%bc)
-      - [字符与字符串](#%e5%ad%97%e7%ac%a6%e4%b8%8e%e5%ad%97%e7%ac%a6%e4%b8%b2)
+      - [字符串](#%e5%ad%97%e7%ac%a6%e4%b8%b2)
       - [数据结构](#%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84)
     - [国际化](#%e5%9b%bd%e9%99%85%e5%8c%96)
     - [格式化](#%e6%a0%bc%e5%bc%8f%e5%8c%96)
@@ -75,14 +75,31 @@ Number(抽象类)，子类包括：Byte，Double，Float，Integer，Long，Shor
   - 类方法（非Short）：signum(), toBinaryString(), toHexString(), toOctalString(), getXXX()
   - 类方法：max(), min(), sum()
 
-
-
-#### 字符与字符串
-
 Character
-String
-StringBuilder
+- 类变量：BYTES, SIZE, TYPE, MAX_VALUE / MIN_VALUE
+- 类方法：
+  - 实例：**valueOf()**
+  - 判定：**isXXX()**，如数字、字母、大小写，空白等
+  - 转大小写：toLowerCase(), toUpperCase()
 
+#### 字符串
+
+String
+- 字符串的主要特性：1）类似字符数组，可与字符数组互转；2）任何对象都有toString()方法。
+- 类方法：
+  - 实例：**valueOf()**, copyValueOf(), format()
+  - 组装：join()
+- 对象方法
+  - 实例： String()
+  - 视为数组： toCharArray(), charAt(), subSequence()
+  - 视为字符串：indexOf() / lastIndexOf(), substring(), concat(), split(), replace() / replaceFirst() / replaceAll(), contains(), startsWith() / endsWith(), isEmpty(), toLowerCase() / toUpperCase(), matches() / regionMatches()
+
+StringBuilder
+- 对象方法
+  - 实例：StringBuilder()
+  - 视为数组：charAt(), deleteCharAt(), insert() / delete() / append(), subSequence(), **reverse()**
+  - 视为字符串：substring(), indexOf() / lastIndexOf(), replace()
+  - 容量：capacity(), ensureCapacity(), length(), setLength()
 
 StringJoiner
 StringTokenizer
