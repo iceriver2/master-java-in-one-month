@@ -26,6 +26,13 @@
     - [网络](#%e7%bd%91%e7%bb%9c)
     - [数据库TODO](#%e6%95%b0%e6%8d%ae%e5%ba%93todo)
   - [特殊形式](#%e7%89%b9%e6%ae%8a%e5%bd%a2%e5%bc%8f)
+    - [回调（异步）](#%e5%9b%9e%e8%b0%83%e5%bc%82%e6%ad%a5)
+    - [注解](#%e6%b3%a8%e8%a7%a3)
+    - [泛型](#%e6%b3%9b%e5%9e%8b)
+    - [嵌套类](#%e5%b5%8c%e5%a5%97%e7%b1%bb)
+    - [流式表达](#%e6%b5%81%e5%bc%8f%e8%a1%a8%e8%be%be)
+    - [lambda表达式](#lambda%e8%a1%a8%e8%be%be%e5%bc%8f)
+    - [设计模式](#%e8%ae%be%e8%ae%a1%e6%a8%a1%e5%bc%8f)
 - [profile](#profile)
 - [Compact1](#compact1)
   - [`java.io`](#javaio)
@@ -46,6 +53,8 @@
 # Overview
 
 > 包和类都很多，因此，Overview 只梳理关系和要点，不记录详细，使用方法参见 vipclass-example 。
+
+> 很多包和类，涉及到线程安全，使用时需要注意相关说明。这部分在初步学习时被忽略了。
 
 ## 重要类
 
@@ -154,19 +163,95 @@ MessageFormat
 
 #### 数据结构
 
-Enum
-EnumMap
-EnumSet
+Enum(抽象类)，所有枚举类型的基类。类方法是 valueOf()，对象方法包括 name(), ordinal() 。
+（奇怪的是，并没有说明其子类有那些，EnumMap的超类是 AbstractMap，EnumSet 的超类是 AbstractSet/AbstractCollection 。）
+
+集合分为：Map、Collection(Queue/List/Set)。主要区别在于：重复/唯一，有序/无序，顺序/倒序。
 
 HashMap
+- Map的最佳实现。
+- 对象方法
+  - 实例：HashMap()，需要指定KV类型
+  - 键值：entrySet(), keySet(), values()。特别注意： entrySet() 是 Map.Entry 类型，主要方法：getKey(), getValue() 。
+  - 操作： put() / putIfAbsent(), get() / getOrDefault(), remove(), replace(), clear() 。增删改都可以有条件。
+  - 判定：containsKey(), containsValue(), isEmpty(), size()
+  - 迭代：forEach(), replaceAll(), merge()
+
 HashSet
+- Set的最佳实现。
+- 对象方法
+  - 实例：HashSet()，需要指定类型。
+  - 操作：add(), remove(), clear()
+  - 判定：contains(), isEmpty(), size()
+  - 迭代：iterator()
+
 ArrayList
+- List的最佳实现。
+- 对象方法
+  - 实例：ArrayList(), 需要指定类型。
+  - 操作：get() / set(), add() / remove(), addAll() / removeAll() / replaceAll() / retainAll(),  removeRange(), clear(), sort() 
+  - 判定：contains(), indexOf(), lastIndexOf(), isEmpty(), size()
+  - 迭代：forEach(), iterator(), listIterator(), removeIf(),
+  - 转换：subList(), toArray()
+
 TreeMap
+- 红黑树。自动排序。自然顺序，或指定的Comparator。
+- 对象方法
+  - 实例：TreeMap()，需要指定KV类型
+  - 键值：entrySet(), keySet(), values()
+  - 大于或小于某键值的键或值，这是TreeMap特有的：ceilingEntry() / floorEntry(),  ceilingKey() / floorKey(), firstEntry() / lastEntry(), firstKey() / lastKey(), higherEntry(), lowerEntry(), higherKey() / lowerKey(), pollFirstEntry() / pollLastEntry()
+  - 操作：get() / put() / remove() / replace(), putAll(), clear()
+  - 判定：containsKey(), containsValue(), size()
+  - 迭代：forEach(), replaceAll()
+
 Stack
+- 栈。ArrayList的兄弟。
+- 对象方法
+  - 实例：Stack()
+  - 操作：peek(), pop(), push(), search()
+  - 判定：empty()
+
 Vector
+- 矢量数组。ArrayList的兄弟。
+- 对象方法
+  - 实例：Vector() 。有一个构造函数规定了起始容量和步进容量。
+  - 操作：get() / set(), add() / remove(), addElement() / removeElement() / insertElementAt() / removeElementAt() / setElementAt(), addAll() / removeAll() / retainAll(), removeAllElements(), copyInto(), clear(), sort(), setSize()
+  - 值：elements() / firstElement() / lastElement()
+  - 判定：elementAt(), contains(), indexOf(), lastIndexOf(), containsAll(), isEmpty(), capacity(), size()
+  - 迭代：removeIf(), iterator(), listIterator(), forEach()
+  - 转换：subList(), toArray()
 
 Collections
+- 全部是静态方法。涉及 List/Map/Set，List方法居多。
+- **数组与列表，超类于子类，兄弟类型之间的转换和互操作，问题极多。**
+- 有专用的线程安全的集合，包括 checkedXXX(), synchronizedXXX()， unmodifiableXXX() 。
+- 通用
+  - addAll()
+  - disjoint()
+  - frequency()
+  - max() / min()
+  - reverseOrder()
+- List方法
+  - EMPTY_LIST, emptyList()
+  - binarySearch()
+  - singletonList()
+  - copy(), nCopies(), fill(), replaceAll(), reverse(), rotate(), shuffle(), sort(), swap()
+  - indexOfSubList(), lastIndexOfSubList()
+- Map方法
+  - EMPTY_MAP, emptyMap()
+  - singletonMap()
+- Set方法
+  - EMPTY_SET, emptySet()
+  - singleton()
+
 Arrays
+- 全部是静态方法。
+- 判定：deepEquals(), equals(), binarySearch()
+- 操作：fill(), copyOf(), copyOfRange()
+- 迭代：parallelSetAll(), setAll() 使用lambda表达式。并行效率大过串行
+- sort(), parallelSort() 并行效率大过串行
+- stream() 转流式操作，参见[流式表达](#%e6%b5%81%e5%bc%8f%e8%a1%a8%e8%be%be)。
+- toString()
 
 ### 国际化
 
@@ -318,19 +403,21 @@ URLEncoder
 
 ## 特殊形式
 
-回调（异步）
+### 回调（异步）
 
-注解
+### 注解
 
-泛型
+### 泛型
 
-嵌套类（静态成员，非静态成员，局部类，匿名类）
+### 嵌套类
 
-流式表达
+（静态成员，非静态成员，局部类，匿名类）
 
-lambda表达式
+### 流式表达
 
-设计模式
+### lambda表达式
+
+### 设计模式
 
 
 # profile
@@ -2002,8 +2089,7 @@ Formatter（用于printf的格式化）
   - `V put(K key, V value)` / `V putIfAbsent(K key, V value)`
   - `V get(Object key)` / `V getOrDefault(Object key, V defaultValue)`
   - `void putAll(Map<? extends K,? extends V> m)`
-  - `V remove(Object key)`
-  - `boolean remove(Object key, Object value)`
+  - `V remove(Object key)` / `boolean remove(Object key, Object value)`
   - `V replace(K key, V value)` / `boolean replace(K key, V oldValue, V newValue)`
   - `void replaceAll(BiFunction<? super K,? super V,? extends V> function)`
   - `V merge(K key, V value, BiFunction<? super V,? super V,? extends V> remappingFunction)`
