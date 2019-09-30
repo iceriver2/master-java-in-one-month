@@ -85,7 +85,7 @@ Character
 #### 字符串
 
 String
-- 字符串的主要特性：1）类似字符数组，可与字符数组互转；2）任何对象都有toString()方法。
+- 字符串的主要特性：1）类似字符数组，可与字符数组互转；2）任何对象都有toString()方法；3）正则。
 - 类方法：
   - 实例：**valueOf()**, copyValueOf(), format()
   - 组装：join()
@@ -101,18 +101,56 @@ StringBuilder
   - 视为字符串：substring(), indexOf() / lastIndexOf(), replace()
   - 容量：capacity(), ensureCapacity(), length(), setLength()
 
-StringJoiner
 StringTokenizer
+- 对象方法：
+  - 实例：StringTokenizer()
+  - 遍历：hasMoreElements() / nextElement(), hasMoreTokens() / nextToken(), countTokens()
+
+StringJoiner
+- 对象方法
+  - 实例：StringJoiner()
+  - 操作：add(), length(), toString()
 
 Scanner
+- 支持 File, Path, InputStream, Channel 。支持正则。支持只读某种类型。
+- 对象方法
+  - 实例： Scanner()
+  - 设置：useDelimiter() / delimiter(), useLocale() / locale(), useRadix() / radix()。
+  - 遍历： hasNext() / next(), hasNextXXX(), nextXXX()
+  - 搜索：findInLine(), findWithinHorizon()
+  - 关闭： close()
 
+Pattern
+- 配合 Matcher 使用
+- 类方法
+  - 实例：compile()
+  - 判定：matches()
+- 对象方法
+  - 匹配：matcher()
+  - 分割：split(), splitAsStream()
+  - 属性：pattern(), flags()
 
 Matcher
-Pattern
+- 配合 Pattern 使用，没有构造方法
+- 对象方法
+  - 设置：pattern() / usePattern()
+  - 区域：region() / regionStart(), regionEnd()
+  - 遍历：find() / hitEnd(), start() / end() / group() / groupCount() 是接口MatchResult的方法
+  - 迭代替换： appendReplacement(), appendTail()
+  - 直接替换：replaceAll(), replaceFirst()
+  - 判定：lookingAt() 部分匹配, matches() 整体匹配
+  - 重置： reset()
+
 
 MessageFormat
-
-
+- MessageFormat 是 Format 的子类，兄弟类包括 DateFormat, NumberFormat 。区别：无静态方法获取实例；存在模板变量替换。
+- 注意其 pattern 格式，如 `"{0,number,#.##}"`表示：第0个元素是数字，格式为"#.##"。pattern中，使用单引号表示字符串，如`"'{0}'"`表示字符串`{0}`；单引号自身使用2个单引号表示，如`"'{''}'"`表示字符串`{'}`。
+- 类方法
+  - 格式化：format() 供一次性使用，重复用实例。
+- 对象方法
+  - 实例：MessageFormat()，可以指定 Locale，或通过 getLocale() / setLocale() 指定
+  - 模式：可以构造时指定，也可以 applyPattern()
+  - 格式化与解析：format() / parse()
 
 #### 数据结构
 
