@@ -19,9 +19,9 @@
       - [时间日期](#%e6%97%b6%e9%97%b4%e6%97%a5%e6%9c%9f)
       - [语言资源TODO](#%e8%af%ad%e8%a8%80%e8%b5%84%e6%ba%90todo)
     - [辅助工具](#%e8%be%85%e5%8a%a9%e5%b7%a5%e5%85%b7)
-    - [输入输出TODO](#%e8%be%93%e5%85%a5%e8%be%93%e5%87%batodo)
+    - [输入输出](#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba)
       - [文件操作](#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c)
-      - [内容操作TODO](#%e5%86%85%e5%ae%b9%e6%93%8d%e4%bd%9ctodo)
+      - [内容操作](#%e5%86%85%e5%ae%b9%e6%93%8d%e4%bd%9c)
     - [日志TODO](#%e6%97%a5%e5%bf%97todo)
     - [网络TODO](#%e7%bd%91%e7%bb%9ctodo)
     - [数据库TODO](#%e6%95%b0%e6%8d%ae%e5%ba%93todo)
@@ -61,6 +61,8 @@
 > 有点小尴尬，数组这么重要，居然不是一个Class，但数组实例是Object。一般总是以 `[]` 出现。可能是已经作为语言的一部分了吧。
 
 > 与时间日期相关的类，很少需要新建实例。多数时候，要处理的时间要么已经存在，要么基于已经存在的时间。
+
+> 类是继承的，有的类自身并没有自定义方法，但是，从超类和接口继承了很多方法。
 
 ## 重要类
 
@@ -488,7 +490,7 @@ DoubleSummaryStatistics / IntSummaryStatistics / LongSummaryStatistics
   - 计数：accept(), combine()
   - 结果：getAverage(), getCount(), getMax(), getMin(), getSum()
 
-### 输入输出TODO
+### 输入输出
 
 #### 文件操作
 
@@ -525,14 +527,67 @@ Path
   - 判定：startsWith() / endsWith(), 	isAbsolute()
   - 属性：getFileName(), getName() / getNameCount() / subpath() 是路径段, getFileSystem()， getParent() / getRoot(), normalize(), relativize(), resolve() / resolveSibling(), toAbsolutePath() / toRealPath(), toUri() / toFile()
 
-#### 内容操作TODO
+#### 内容操作
 
-BufferedReader, BufferedWriter
-BufferedInputStream, BufferedOutputStream
-FileInputStream, FileOutputStream
-FileReader, FileWriter
-PrintStream, PrintWriter
+FileInputStream / BufferedInputStream
+- 字节流，带不带缓冲
+- 对象方法
+  - 实例：FileInputStream() / BufferedInputStream()
+  - 操作：close(), read(), skip()
+  - 属性：available()
+
+FileOutputStream / BufferedOutputStream
+- 字节流，带不带缓冲
+- 对象方法
+  - 实例：FileOutputStream() / 实例：BufferedOutputStream()
+  - 操作：close(), write(), flush()
+
+
+FileReader
+- 字符流，除了构造方法外，没有任何自定义方法，有继承的方法。
+- 可能仅仅是用于为BufferedReader提供参数。
+- 对象方
+  - 实例：FileReader()
+
+FileWriter
+- 字符流，除了构造方法外，没有任何自定义方法，有继承的方法。
+- 可能仅仅是用于为BufferedWriter提供参数。
+- 对象方法
+  - 实例：FileWriter()
+
+BufferedReader
+- 推荐的读取文件方式。
+- 对象方法
+  - 实例：BufferedReader()
+  - 操作：lines()， read(), readLine(), skip(), close()
+  - 属性：ready()
+
+BufferedWriter
+- 推荐的写入文件方式。
+- 对象方法
+  - 实例：BufferedWriter()
+  - 操作：newLine(), write(), flush(), close()
+
+
+PrintStream
+- 对象方法
+  - 实例：PrintStream()
+  - 操作：close(), flush(), print(), println(), write()
+  - 格式化：format(), printf()
+
+PrintWriter
+- 对象方法
+  - 实例：PrintWriter()
+  - 操作：append(), write(), close(), flush(), print(), println()
+  - 格式化：format(), printf()
+
 RandomAccessFile
+- 随机读写。
+- 对象方法
+  - 实例：RandomAccessFile()
+  - 读写：getFilePointer() / seek() / skipBytes() 借助文件指针顺次读取, read() / readXXX(), write() / writeXXX(), readLine() / readFully()
+  - 属性：length() / setLength()
+  - 操作：close()
 
 ### 日志TODO
 
