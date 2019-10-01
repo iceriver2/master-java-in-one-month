@@ -23,7 +23,7 @@
       - [文件操作](#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c)
       - [内容操作](#%e5%86%85%e5%ae%b9%e6%93%8d%e4%bd%9c)
     - [日志TODO](#%e6%97%a5%e5%bf%97todo)
-    - [网络TODO](#%e7%bd%91%e7%bb%9ctodo)
+    - [网络](#%e7%bd%91%e7%bb%9c)
     - [数据库TODO](#%e6%95%b0%e6%8d%ae%e5%ba%93todo)
   - [特殊形式](#%e7%89%b9%e6%ae%8a%e5%bd%a2%e5%bc%8f)
     - [回调（异步）](#%e5%9b%9e%e8%b0%83%e5%bc%82%e6%ad%a5)
@@ -592,23 +592,90 @@ RandomAccessFile
 ### 日志TODO
 
 Handler
-ConsoleHandler
-FileHandler
+- 抽象类，子类包括 MemoryHandler, StreamHandler 。而 StreamHandler 的子类包括 ConsoleHandler, FileHandler, SocketHandler 。
+- 对象方法，主要就是：publish(), close()
+
 MemoryHandler
-SocketHandler
+- 内存中的日志，某些情况下可以将缓冲内容push到其他Handler。
+- 对象方法
+  - 实例：MemoryHandler()
+  - 操作：close(), flush(), publish(), push()
+  - 属性：getPushLevel() / setPushLevel()
+  - 判定：isLoggable()
+
 StreamHandler
+- 对象方法
+  - 实例：StreamHandler()
+  - 操作：close(), flush(), publish()
+  - 属性：setEncoding()
+  - 判定：isLoggable()
+
+ConsoleHandler
+- 日志发送到system.err
+- 对象方法
+  - 实例：ConsoleHandler()
+  - 操作：close(), publish()
+
+FileHandler
+- 日志发送到文件。
+- 对象方法
+  - 实例：FileHandler()
+  - 操作：close(), publish()
+
+SocketHandler
+- 日志发送到套接字。
+- 对象方法
+  - 实例：SocketHandler()
+  - 操作：close(), publish()
+
 
 Level
+- 日志级别。注意与 ResourceBundle 的关联。
+- 类方法
+  - 级别：SEVERE,WARNING,INFO,CONFIG,FINE,FINER,FINEST,ALL/OFF
+  - 实例：parse()
+- 对象方法
+  - 属性：getLocalizedName(), getName(), getResourceBundleName(), intValue()
 
 LogRecord
+- 日志记录
+- 对象方法
+  - 实例：LogRecord()
+  - 属性：getLevel() / setLevel(), getLoggerName() / setLoggerName(), getMessage() / setMessage(), getMillis() / setMillis(), getParameters() / setParameters(), getResourceBundle() / setResourceBundle(), getResourceBundleName() / setResourceBundleName(), getSequenceNumber() / setSequenceNumber(), getSourceClassName() / setSourceClassName(), getSourceMethodName() / setSourceMethodName(), getThreadID() / setThreadID(), getThrown() / setThrown() 。有一些属性取决于调用者，如 xxxSourcexxx 。
 
 Formatter
-SimpleFormatter
-XMLFormatter
-Logger
-LogManager
+- SimpleFormatter 和 XMLFormatter 的超类。
 
-### 网络TODO
+SimpleFormatter
+- 对象方法
+  - 实例：SimpleFormatter
+  - 操作：format()
+
+XMLFormatter
+- 对象方法
+  - 实例：XMLFormatter()
+  - 操作：format()
+  - 属性：getHead() / getTail()
+
+Logger
+- 日志记录器
+- 类方法
+  - 实例：getAnonymousLogger(), getGlobal(), getLogger()
+- 对象方法
+  - 记录：severe() / warning() / info() / config() / fine() / finer() / finest(), log() / logp()
+  - 操作：entering() / exiting()
+  - 属性：addHandler() / removeHandler() / getHandlers(), getFilter() / setFilter(), getLevel() / setLevel(), getName(), getParent() / setParent(), getResourceBundle() / setResourceBundle() / getResourceBundleName(), getUseParentHandlers() / setUseParentHandlers(), throwing()
+  - 判定：isLoggable()
+
+
+LogManager
+- 类方法
+  - 实例：getLogManager()
+- 对象方法
+  - 操作：reset()
+  - 属性：addLogger() / getLogger(), getLoggerNames(), getProperty(), readConfiguration()
+
+### 网络
 
 HttpCookie
 - 类方法
