@@ -104,6 +104,7 @@ String
   - 实例： String()
   - 视为数组： toCharArray(), charAt(), subSequence()
   - 视为字符串：indexOf() / lastIndexOf(), substring(), concat(), split(), replace() / replaceFirst() / replaceAll(), contains(), startsWith() / endsWith(), isEmpty(), toLowerCase() / toUpperCase(), matches() / regionMatches()
+  - 转基本类型：getBytes(), getChars()。开始以为没用，发现Base64用到getBytes。
 
 StringBuilder
 - 对象方法
@@ -400,7 +401,6 @@ Instant
   - 属性：getNano(), get() / getLong(), getEpochSecond() / toEpochMilli()
   - 判定：isAfter(), isBefore()
 
-
 #### 语言资源
 
 ListResourceBundle
@@ -412,25 +412,78 @@ PropertyResourceBundle
 ### 辅助工具
 
 Math
+- Math都是静态方法。还有一个 StrictMath 。
+- 三角函数
+- 绝对值：abs()， signum()
+- 四舍五入：ceil() / floor() / round() / rint()
+- 比大小：min() / max()
+- 随机：random()
+- 立方开方：hypot(), pow(), sqrt()
+- 临界：addExact() / decrementExact(), incrementExact() , multiplyExact(), negateExact(), subtractExact(), toIntExact()
+- 无限相关的：nextDown() / nextUp()
+
 System
+- System都是静态方法。
+- 系统流：err / in / out, setErr() / setIn() / setOut()
+- 系统操作：gc(), exit(), load() / loadLibrary(), mapLibraryName(), runFinalization()
+- 系统属性：setProperty() / getProperty(), setProperties() / getProperties(), clearProperty()
+- 其他：arraycopy(), currentTimeMillis(), nanoTime()
 
 Random
-UUID
+- 对象方法
+  - 实例：Random()
+  - 设置：setSeed()
+  - 生成流：doubles(), ints(), longs(), nextBytes()（这个不是流）
+  - 生成单个：nextBoolean(), nextDouble(), nextFloat(), nextGaussian(), nextInt(), nextLong()
 
-Throwable
-Exception
+UUID
+- 最有用的就是类方法 randomUUID()
+- 类方法
+  - 实例：randomUUID(), nameUUIDFromBytes(), fromString()
+- 对象方法
+  - 实例：UUID()
+  - 属性：不是基于时间的UUID，部分方法无效。clockSequence(), node(), timestamp(), variant(), version()
+
+Throwable / Exception
+- Throwable是Error和Exception的父类，具体类。
+- Exception未定义除构造方法外的其他方法。
+- 对象方法
+  - 实例：Throwable()，构造方法可以保护 message/cause 等属性
+  - 设置：addSuppressed() / getSuppressed()
+  - 属性：fillInStackTrace() / printStackTrace(), setStackTrace() / getStackTrace(), initCause() / getCause(), getLocalizedMessage() / getMessage()
+
 
 Formatter
+- Formatter有多个同名类，本类是 java.util.Formatter 。可以用来格式化到 File, OutputStream, PrintStream 。
+- 格式有点多，需要研究文档。
+- 对象方法
+  - 实例：Formatter()，多种。
+  - 操作：format(), close(), flush()
+  - 属性：ioException(), locale(), out()
 
 Objects
+- Objects都是静态方法。
+- deepEquals() / equals()
+- isNull() / nonNull() / requireNonNull()
+- toString()
 
 Base64
-Base64.Decoder
-Base64.Encoder
+- 静态方法：getDecoder() / getEncoder(), getMimeDecoder() / getMimeEncoder(), getMimeEncoder(), getUrlDecoder() / getUrlEncoder(), 返回静态内部类：Base64.Decoder，Base64.Encoder 。
+- Base64.Decoder
+  - 对象方法：
+    - 解码：decode()，可以处理byte[] 或 String
+    - 转换：wrap()
+- Base64.Encoder
+  - 对象方法：
+    - 编码：encode(), encodeToString()，只能处理byte[]
+    - 转换：wrap()
 
-DoubleSummaryStatistics
-IntSummaryStatistics
-LongSummaryStatistics
+DoubleSummaryStatistics / IntSummaryStatistics / LongSummaryStatistics
+- 统计用，方法很统一
+- 对象方法
+  - 实例：DoubleSummaryStatistics() / IntSummaryStatistics() / LongSummaryStatistics()
+  - 计数：accept(), combine()
+  - 结果：getAverage(), getCount(), getMax(), getMin(), getSum()
 
 ### 输入输出
 
