@@ -17,13 +17,13 @@
     - [国际化](#%e5%9b%bd%e9%99%85%e5%8c%96)
     - [格式化](#%e6%a0%bc%e5%bc%8f%e5%8c%96)
       - [时间日期](#%e6%97%b6%e9%97%b4%e6%97%a5%e6%9c%9f)
-      - [语言资源](#%e8%af%ad%e8%a8%80%e8%b5%84%e6%ba%90)
+      - [语言资源TODO](#%e8%af%ad%e8%a8%80%e8%b5%84%e6%ba%90todo)
     - [辅助工具](#%e8%be%85%e5%8a%a9%e5%b7%a5%e5%85%b7)
-    - [输入输出](#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba)
+    - [输入输出TODO](#%e8%be%93%e5%85%a5%e8%be%93%e5%87%batodo)
       - [文件操作](#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c)
-      - [内容操作](#%e5%86%85%e5%ae%b9%e6%93%8d%e4%bd%9c)
-    - [日志](#%e6%97%a5%e5%bf%97)
-    - [网络](#%e7%bd%91%e7%bb%9c)
+      - [内容操作TODO](#%e5%86%85%e5%ae%b9%e6%93%8d%e4%bd%9ctodo)
+    - [日志TODO](#%e6%97%a5%e5%bf%97todo)
+    - [网络TODO](#%e7%bd%91%e7%bb%9ctodo)
     - [数据库TODO](#%e6%95%b0%e6%8d%ae%e5%ba%93todo)
   - [特殊形式](#%e7%89%b9%e6%ae%8a%e5%bd%a2%e5%bc%8f)
     - [回调（异步）](#%e5%9b%9e%e8%b0%83%e5%bc%82%e6%ad%a5)
@@ -58,9 +58,11 @@
 
 > 理解时，注意“合理性”。如 Duration（时间段），可以以任何单位进行加减，同时，两个Duration的加减也是可以的，这就是“合理性”。
 
-## 重要类
-
 > 有点小尴尬，数组这么重要，居然不是一个Class，但数组实例是Object。一般总是以 `[]` 出现。可能是已经作为语言的一部分了吧。
+
+> 与时间日期相关的类，很少需要新建实例。多数时候，要处理的时间要么已经存在，要么基于已经存在的时间。
+
+## 重要类
 
 ### 数据类型与结构
 
@@ -300,6 +302,7 @@ DecimalFormat
 
 #### 时间日期
 
+
 ZoneId(时区，抽象)
 - 时区ID，是字符串表示，如"Asia/Shanghai"
 - 类方法
@@ -401,7 +404,7 @@ Instant
   - 属性：getNano(), get() / getLong(), getEpochSecond() / toEpochMilli()
   - 判定：isAfter(), isBefore()
 
-#### 语言资源
+#### 语言资源TODO
 
 ListResourceBundle
 ResourceBundle
@@ -485,17 +488,44 @@ DoubleSummaryStatistics / IntSummaryStatistics / LongSummaryStatistics
   - 计数：accept(), combine()
   - 结果：getAverage(), getCount(), getMax(), getMin(), getSum()
 
-### 输入输出
+### 输入输出TODO
 
 #### 文件操作
 
 File
+- File是旧的文件操作方式，新的方式使用Files。
+- 类方法
+  - 常量：pathSeparator / pathSeparatorChar, separator / separatorChar 。注意两者的区别，pathSeparator是多路径分隔符`:`，separator是单路径分隔符`/`。
+- 对象方法
+  - 实例：File()
+  - 转换：toPath(), toURI()
+  - 路径：isAbsolute(), getAbsoluteFile() / getAbsolutePath(), getCanonicalFile() / getCanonicalPath(), getParentFile() / getParent(), getName() / getPath()
+  - 文件：createTempFile(), createNewFile(), renameTo(), delete(), deleteOnExit()
+  - 目录：mkdir() / mkdirs(), listRoots() / list() / listFiles()
+  - 属性： canExecute() / setExecutable(), canRead() / setReadable(), setReadOnly(), canWrite() / setWritable(), exists(), isDirectory() / isFile(), isHidden(), lastModified() / setLastModified()
+  - 空间：getFreeSpace() / getTotalSpace() / getUsableSpace(), length()
 
 Files
+- Files使用静态方法。除了File的功能外，还包括了输入输出流的内容。
+- 文件：copy(), createFile() / createLink() / createTempFile() / createSymbolicLink(), delete(), deleteIfExists(), move(), find()
+- 内容：lines() / readAllLines() / readAllBytes(), write(), readSymbolicLink()
+- 目录：createDirectories() / createDirectory(), createTempDirectory(), list(), walk() / walkFileTree()
+- 属性：exists() / notExists(), isRegularFile(), isSameFile(), isSymbolicLink(), isDirectory(), isExecutable(), isWritable(), isReadable(), isHidden(), getLastModifiedTime() / setLastModifiedTime(), getOwner() / setOwner(), getPosixFilePermissions() / setPosixFilePermissions(), probeContentType(), getAttribute() / setAttribute(), getFileAttributeView(), readAttributes()
+- 空间：size()
+- 流：newBufferedReader() / newBufferedWriter(), newByteChannel(), newDirectoryStream(), newInputStream() / newOutputStream(), getFileStore()
 
-Paths, Path
+Paths
+- Paths使用静态方法。
+- get() 转为Path 。
 
-#### 内容操作
+Path
+- 只在 java.nio.file 的接口中看到，不确定是不是。
+- Path 表示文件的路径。
+- 对象方法
+  - 判定：startsWith() / endsWith(), 	isAbsolute()
+  - 属性：getFileName(), getName() / getNameCount() / subpath() 是路径段, getFileSystem()， getParent() / getRoot(), normalize(), relativize(), resolve() / resolveSibling(), toAbsolutePath() / toRealPath(), toUri() / toFile()
+
+#### 内容操作TODO
 
 BufferedReader, BufferedWriter
 BufferedInputStream, BufferedOutputStream
@@ -504,7 +534,7 @@ FileReader, FileWriter
 PrintStream, PrintWriter
 RandomAccessFile
 
-### 日志
+### 日志TODO
 
 Handler
 ConsoleHandler
@@ -523,7 +553,7 @@ XMLFormatter
 Logger
 LogManager
 
-### 网络
+### 网络TODO
 
 HttpCookie
 
@@ -1697,7 +1727,7 @@ ShortBuffer
   - 文件类型：`static String probeContentType(Path path)`
 - 属性：
   - `static Object getAttribute(Path path, String attribute, LinkOption... options)` / `static Path setAttribute(Path path, String attribute, Object value, LinkOption... options)`
-  - `static <V extends FileAttributeView>V getFileAttributeView(Path path, 类<V> type, LinkOption... options)`
+  - `static <V extends FileAttributeView>V getFileAttributeView(Path path, Class<V> type, LinkOption... options)`
   - `static <A extends BasicFileAttributes>A readAttributes(Path path, 类<A> type, LinkOption... options)` / `static Map<String,Object> readAttributes(Path path, String attributes, LinkOption... options)`
 - 读写对象：
   - `static BufferedReader newBufferedReader(Path path)` / `static BufferedReader newBufferedReader(Path path, Charset cs)`
