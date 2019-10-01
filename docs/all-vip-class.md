@@ -56,6 +56,8 @@
 
 > 很多包和类，涉及到线程安全，使用时需要注意相关说明。这部分在初步学习时被忽略了。
 
+> 理解时，注意“合理性”。如 Duration（时间段），可以以任何单位进行加减，同时，两个Duration的加减也是可以的，这就是“合理性”。
+
 ## 重要类
 
 > 有点小尴尬，数组这么重要，居然不是一个Class，但数组实例是Object。一般总是以 `[]` 出现。可能是已经作为语言的一部分了吧。
@@ -275,7 +277,7 @@ Currency
 
 NumberFormat(抽象类)
 - 类方法：
-  - 获得系统实例：getInstance() / getNumberInstance() / getPercentInstance() / getCurrencyInstance() / getIntegerInstance() ，可以指定 Locale 或默认。
+  - 获得系统实例：getInstance() / getNumberInstance() / getPercentInstance() / getCurrencyInstance() / getIntegerInstance() ，可以指定 Locale 或默认。注意：实例中有getCurrencyInstance()
   - getAvailableLocales() 所有可用区域。
 - 对象方法：
   - format() / parse() 互转。
@@ -297,21 +299,107 @@ DecimalFormat
 
 #### 时间日期
 
-DateFormat/DateFormatSymbols
-SimpleDateFormat
-
-DateTimeFormatter
-
-Duration
-Instant
-
-LocalDate
-LocalDateTime
-LocalTime
-
-ZoneId
+ZoneId(时区，抽象)
+- 时区ID，是字符串表示，如"Asia/Shanghai"
+- 类方法
+  - 实例：from()， of(), ofOffset(), systemDefault()
+  - getAvailableZoneIds() 所有可用时区
+- 对象方法
+  - 转换：normalized(), toString()
 
 TimeZone
+- 时区。
+- 类方法
+  - 实例：getDefault() / setDefault(), getTimeZone()
+  - getAvailableIDs() 所有可用时区。
+- 对象方法
+  - 实例：TimeZone()
+  - 属性：getDisplayName(), getID() / setID(), getOffset()
+  - 转换：toZoneId()
+
+DateFormatSymbols
+- 类方法
+  - 实例：DateFormatSymbols()
+  - getAvailableLocales() 获得所有可用区域。
+- 对象方法
+  - 实例：DateFormatSymbols()
+  - 属性：成对出现，getXXX 和 setXXX，包括：AmPmStrings, Eras, Months/ShortMonths, Weekdays/ShortWeekdays, ZoneStrings
+  - 模式：getLocalPatternChars() / setLocalPatternChars()
+
+DateFormat
+- 类方法
+  - 实例：getInstance(), getDateInstance(), getDateTimeInstance(), getTimeInstance()
+  - getAvailableLocales() 所有可用区域。
+- 对象方法
+  - 格式化与解析：format() / parse() 处理Date。
+  - 属性：getCalendar() / setCalendar(), setTimeZone() / getTimeZone(), setNumberFormat() / getNumberFormat()
+
+SimpleDateFormat
+- DateFormat的子类。用于格式化日期。
+- 对象方法
+  - 实例：SimpleDateFormat() 必须指定 pattern，可以指定Locale。
+  - 格式化与解析： format(), parse()
+  - 符号集：getDateFormatSymbols(), setDateFormatSymbols()
+  - 模式：applyLocalizedPattern() / toLocalizedPattern(), applyPattern() / toPattern()
+
+DateTimeFormatter
+- 用于格式化时间日期。
+- 类方法
+  - 实例：ofLocalizedDate(), ofLocalizedTime(), ofLocalizedDateTime(), ofPattern(), ISO_LOCAL_DATE / ISO_LOCAL_TIME / ISO_LOCAL_DATE_TIME / ISO_INSTANT
+
+
+LocalDate
+- 类方法
+  - 实例：from(), of(), now(), ofEpochDay(), parse()
+- 对象方法
+  - 转换：atStartOfDay() / atTime() 转为 LocalDateTime 。
+  - 属性：getChronology(), getDayOfMonth() / getDayOfYear(), getDayOfWeek(), getEra(), getYear() / getMonth(), getMonthValue(), lengthOfMonth() / lengthOfYear()
+  - 判定：isAfter() / isBefore() / isEqual(), isLeapYear(), toEpochDay()
+  - 运算：minus() / plus(), 也可指定时间单位 minusXXX() / plusXXX()，包括：Days,Months, Weeks, Years 。 withXXX()， 包括：DayOfMonth, withDayOfYear, Month, Year 。adjustInto()
+  - 格式化：format()
+
+LocalTime
+- 类方法
+  - 实例：MIDNIGHT / NOON, now(), from(), of(), ofNanoOfDay(), ofSecondOfDay(), parse()
+- 对象方法
+  - 转换：atDate()
+  - 属性：getHour(), getMinute(), getSecond(), getNano()
+  - 判定：isAfter(), isBefore(), toSecondOfDay(), toNanoOfDay()
+  - 运算：minus() / plus(), 也可指定单位 minusXXX() / plusXXX()，包括：Hours, Minutes, Seconds, Nanos 。withXXX(), 包括：Hour, Minute, Second, Nano 。adjustInto()
+  - 格式化：format()
+
+LocalDateTime
+- 差不多LocalDate和LocalTime的合体。
+- 还有另外两种DateTime： OffsetDateTime、ZonedDateTime 。
+- 类方法
+  - 实例：now(), of(), from(), ofEpochSecond(), ofInstant(), parse()
+- 对象方法
+  - 转换：atZone(), atOffset(), toLocalDate(), toLocalTime()
+  - 属性：getDayOfMonth()， getDayOfWeek()， getDayOfYear()， getHour()， getMinute()， getMonth()， getMonthValue()， getNano()， getSecond()， getYear()
+  - 判定：isAfter()， isBefore(), isEqual()
+  - 运算：minus() / plus(), 也可指定单位 minusXXX() / plusXXX()，包括：Days， Hours， Minutes， Months， Nanos, Seconds, Weeks, Years 。 withXXX()，包括：DayOfMonth, DayOfYear, Hour, Minute, Month, Nano, Second, Year 。
+  - 格式化：format()
+
+
+Duration
+- 时间段。
+- 类方法
+  - 实例：between(), of(), from(), ofDays(), ofHours(), ofMillis(), ofMinutes(), ofNanos(), ofSeconds(), parse()
+- 对象方法
+  - 运算：minus() / plus(), 也可以指定单位 minusXXX() / plusXXX(), 包括：Days(), Hours(), Millis(), Minutes(), Nanos(), Seconds() 。 addTo() / subtractFrom() / multipliedBy() / dividedBy() 。 withNanos() / withSeconds(), abs() / negated() 。
+  - 属性：getNano(), getSeconds(), get() 注意与 toXXX 的区别：get是自身值，to是转换值。
+  - 判定：toDays(), toHours(), toMillis(), toMinutes(), toNanos() 。 isNegative(), isZero()
+
+Instant
+- 时间点。
+- 类方法
+  - 实例：EPOCH, MAX / MIN 。from(), now(), ofEpochMilli(), ofEpochSecond(), parse()
+- 对象方法
+  - 转换：atOffset(), atZone()
+  - 计算：minus() / plus(), 也可以指定单位 minusXXX() / plusXXX(), 包括：Millis， Nanos，Seconds。 adjustInto() 。 withXXX。
+  - 属性：getNano(), get() / getLong(), getEpochSecond() / toEpochMilli()
+  - 判定：isAfter(), isBefore()
+
 
 #### 语言资源
 
