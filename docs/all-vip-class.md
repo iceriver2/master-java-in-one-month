@@ -611,18 +611,89 @@ LogManager
 ### 网络TODO
 
 HttpCookie
+- 类方法
+  - domainMatches(), parse()
+- 对象方法
+  - 实例：HttpCookie()
+  - 属性：getName(), getValue() / setValue(), getComment() / setComment(), getCommentURL() / setCommentURL(), getDiscard() / setDiscard(), isHttpOnly() / setHttpOnly(), getDomain() / setDomain(), getMaxAge() / setMaxAge(), getPath() / setPath(), getPortlist() / setPortlist(), getSecure() / setSecure(), getVersion() / setVersion()
+  - 判定：hasExpired()
 
 URLConnection
-HttpURLConnection
-InetAddress/Inet4Address/Inet6Address
+- 不通过构造方法创建，而是通过 URL.openConnection 获得实例。
+- 对象方法
+  - 属性很多，不少都不明所以。
+  - 属性：getURL(), addRequestProperty() / setRequestProperty() / getRequestProperty() / getRequestProperties(), getConnectTimeout() / setConnectTimeout(), setReadTimeout() / getReadTimeout(), getAllowUserInteraction() / setAllowUserInteraction(), getHeaderField() / getHeaderFieldDate() / getHeaderFieldInt() / getHeaderFieldLong() / getHeaderFieldKey() / getHeaderFields(), getContent() / getContentEncoding() / getContentLength() / getContentLengthLong() / getContentType(), getDate(), getExpiration(), getDefaultUseCaches() / setDefaultUseCaches() / getUseCaches() / setUseCaches(), getDoInput() / setDoInput() / getDoOutput() / setDoOutput(), getIfModifiedSince() / setIfModifiedSince() / getLastModified(), getInputStream() / getOutputStream()
+  - 操作：connect()
 
-ServerSocket/Socket
+HttpURLConnection
+- URLConnection的子类。针对单个请求，不通过构造方法创建 。
+- 类方法
+  - 状态码：HTTP_INTERNAL_ERROR(500) / HTTP_MOVED_PERM(301) / HTTP_MOVED_TEMP(302) / HTTP_NOT_FOUND(404) / HTTP_OK(200)
+- 对象方法
+  - 属性：getErrorStream(), getFollowRedirects() / setFollowRedirects() / getInstanceFollowRedirects() / setInstanceFollowRedirects(), getHeaderField() / getHeaderFieldDate() / getHeaderFieldKey(), getRequestMethod() / setRequestMethod(), getResponseCode() / getResponseMessage(), setFixedLengthStreamingMode() / setFixedLengthStreamingMode()
+  - 操作：disconnect()
+
+
+InetAddress
+- IP地址超类。
+- 类方法
+  - 实例：getAllByName(), getByAddress(), getByName(), getLocalHost(), getLoopbackAddress()
+- 对象方法
+  - 属性：getAddress(), getCanonicalHostName(), getHostAddress(), getHostName()
+  - 判定：isAnyLocalAddress(), isLinkLocalAddress(), isLoopbackAddress(), isSiteLocalAddress(), isReachable()
+
+Inet4Address
+- Inet4Address 可以与 InetAddress 互转。
+- 对象方法
+  - 属性：getAddress(), getHostAddress()
+  - 判定：isAnyLocalAddress(), isLinkLocalAddress(), isLoopbackAddress(), isSiteLocalAddress()
+
+Inet6Address
+- Inet6Address 有专用的类方法，不可以与 Inet4Address 转换。
+- 类方法：
+  - 实例：getByAddress()
+- 对象方法
+  - 属性：getAddress(), getHostAddress(), getScopedInterface(), getScopeId()
+  - 判定：isAnyLocalAddress(), isIPv4CompatibleAddress(), isLinkLocalAddress(), isLoopbackAddress(), isSiteLocalAddress()
+
+
+ServerSocket
+- 对象方法
+  - 实例：ServerSocket()
+  - 操作：accept(), bind(), close(), getChannel(), getInetAddress(), getLocalPort(), getLocalSocketAddress()
+  - 属性：getReceiveBufferSize() / setReceiveBufferSize(), getReuseAddress() / setReuseAddress(), getSoTimeout() / setSoTimeout(), setPerformancePreferences()
+  - 判定：isBound(), isClosed()
+
+Socket
+- 对象方法
+  - 实例：Socket()
+  - 操作：bind(), close(), connect(), shutdownInput(), shutdownOutput()
+  - 属性：getChannel(), getInetAddress(), getLocalAddress(), getLocalPort(), getLocalSocketAddress(), getPort(), getRemoteSocketAddress(), getInputStream(), getOutputStream(), getKeepAlive() / setKeepAlive(), getReceiveBufferSize() / setReceiveBufferSize(), getSendBufferSize() / setSendBufferSize(), getReuseAddress() / setReuseAddress(), getSoLinger() / setSoLinger(), getSoTimeout() / setSoTimeout(), getTcpNoDelay() / setTcpNoDelay(), getTrafficClass() / setTrafficClass(), setPerformancePreferences()
+  - 判定：isBound(), isClosed(), isInputShutdown(), isOutputShutdown(), 
 
 URI
-URL
+- URI有九个组件:scheme, scheme-specific-part, authority, user-info, host, port, path, query, fragment.
+- 类方法
+  - 实例：create()
+- 对象方法
+  - 实例：URI()
+  - 属性：
+    - 操作：toURL(), normalize(), parseServerAuthority(), relativize(), resolve()
+    - 九大组件：getScheme() / getSchemeSpecificPart() / getAuthority() / getUserInfo() / getHost() / getPort() / getPath() / getQuery() / getFragment()
+    - 原始数据：getRawAuthority(), getRawFragment(), getRawPath(), getRawQuery(), getRawSchemeSpecificPart(), getRawUserInfo()
+    - 判定：isAbsolute(), isOpaque() 
 
-URLDecoder
-URLEncoder
+URL
+- 对象方法
+  - 实例：URL()
+  - 属性：getProtocol() / getAuthority() / getUserInfo() / getHost() / getPort() / getPath() / getQuery() / getFile() / getRef(), getDefaultPort(), getContent(), toExternalForm(), toURI()
+  - 操作：openConnection(), openStream()
+  - 判定：sameFile()
+
+URLDecoder / URLEncoder
+- 静态方法：
+  - URLDecoder.decode()
+  - URLEncoder.encode()
 
 ### 数据库TODO
 
