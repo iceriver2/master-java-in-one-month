@@ -17,12 +17,12 @@
     - [国际化](#%e5%9b%bd%e9%99%85%e5%8c%96)
     - [格式化](#%e6%a0%bc%e5%bc%8f%e5%8c%96)
       - [时间日期](#%e6%97%b6%e9%97%b4%e6%97%a5%e6%9c%9f)
-      - [语言资源TODO](#%e8%af%ad%e8%a8%80%e8%b5%84%e6%ba%90todo)
+      - [语言资源](#%e8%af%ad%e8%a8%80%e8%b5%84%e6%ba%90)
     - [辅助工具](#%e8%be%85%e5%8a%a9%e5%b7%a5%e5%85%b7)
     - [输入输出](#%e8%be%93%e5%85%a5%e8%be%93%e5%87%ba)
       - [文件操作](#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c)
       - [内容操作](#%e5%86%85%e5%ae%b9%e6%93%8d%e4%bd%9c)
-    - [日志TODO](#%e6%97%a5%e5%bf%97todo)
+    - [日志](#%e6%97%a5%e5%bf%97)
     - [网络](#%e7%bd%91%e7%bb%9c)
     - [数据库TODO](#%e6%95%b0%e6%8d%ae%e5%ba%93todo)
   - [特殊形式](#%e7%89%b9%e6%ae%8a%e5%bd%a2%e5%bc%8f)
@@ -228,6 +228,15 @@ Vector
   - 迭代：removeIf(), iterator(), listIterator(), forEach()
   - 转换：subList(), toArray()
 
+Properties
+- 字符串键值对。
+- 原本放在资源类那边了，猜测是这样。但其本身也是一种数据结构，超类是 hashTable 。
+- 对象方法
+  - 实例：Properties()
+  - 属性：getProperty() / setProperty(), stringPropertyNames() / propertyNames()
+  - 操作：list(), load() / store(), save(), loadFromXML() / storeToXML()
+
+
 Collections
 - 全部是静态方法。涉及 List/Map/Set，List方法居多。
 - **数组与列表，超类于子类，兄弟类型之间的转换和互操作，问题极多。**
@@ -406,13 +415,33 @@ Instant
   - 属性：getNano(), get() / getLong(), getEpochSecond() / toEpochMilli()
   - 判定：isAfter(), isBefore()
 
-#### 语言资源TODO
+#### 语言资源
+
+ResourceBundle
+- 抽象类，资源包。子类包括：ListResourceBundle ， PropertyResourceBundle 
+- 使用时，通过 ResourceBundle.getBundle() 接受一个“ListResourceBundle子类实例”或“PropertyResourceBundle实例”，返回一个 ResourceBundle 实例，然后，通过 getString() 获取。
+- 类方法
+  - 实例：getBundle()
+  - 操作：clearCache()
+- 对象方法
+  - 待覆盖：getKeys(), handleGetObject()
+  - 属性：getBaseBundleName(), getLocale(), keySet(), getStringArray()， getObject(), getString()
+  - 判定：containsKey()
 
 ListResourceBundle
-ResourceBundle
+- 抽象类。使用键值对管理资源。
+- 对象方法
+  - 待覆盖：getContents() 返回资源的 Object[][]
+  - 属性：handleGetObject(), getKeys()
+  - 继承自 ResourceBundle 的方法，如 getString()
 
-Properties
 PropertyResourceBundle
+- 具体类。管理基于字符串的资源文件。
+- 对象方法
+  - 实例：PropertyResourceBundle() 从 InputStream 或 Reader 读取
+  - 属性：getKeys(), handleGetObject()
+  - 继承自 ResourceBundle 的方法，如 getString()
+
 
 ### 辅助工具
 
@@ -589,7 +618,7 @@ RandomAccessFile
   - 属性：length() / setLength()
   - 操作：close()
 
-### 日志TODO
+### 日志
 
 Handler
 - 抽象类，子类包括 MemoryHandler, StreamHandler 。而 StreamHandler 的子类包括 ConsoleHandler, FileHandler, SocketHandler 。
@@ -2596,7 +2625,7 @@ Formatter（用于printf的格式化）
 
 ListResourceBundle(抽象类，ResourceBundle管理器)
 - `ListResourceBundle()`
-- `protected abstract Object[][]	getContents()` / `Enumeration<String>	getKeys()`
+- `protected abstract Object[][] getContents()` / `Enumeration<String> getKeys()`
 - `Object	handleGetObject(String key)`
 - `protected Set<String>	handleKeySet()`
 
