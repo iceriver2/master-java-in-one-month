@@ -795,3 +795,7 @@ Spring就像一个生产组件对象的工厂，可以源源不断地输出组�
 - Spring管理Struts的控制器，也就是说，Action交由Sring来管理，利用Ioc的特性为Action注入业务逻辑组件
 - Spring管理业务逻辑组件，需要时即注入。
 
+
+
+Struts的优点在于实现了MVC模式，将Web系统各组件进行了良好的分工合作；Spring的特性在于 IoC机制；Hibernate的长处在于数据持久化。
+组合的策略有很多种，可以将 Hibernate 的 sessionFactory、数据操作组件交给 Spring 容器来管理，必要时进行注入处理；可以将 Struts 的 Action 交给 Spring 容器来处理，而不必再在Action中声明业务逻辑操作的组件了。
