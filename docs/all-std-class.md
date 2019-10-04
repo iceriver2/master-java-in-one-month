@@ -8,6 +8,8 @@
 
 > 2019-09-29 初步整理完成。由于一些内容散落在不同的包中，但使用时却必须全部都用，因此，需要以特性为中心，重新整理一下到 Overview 中。例如：Collection，在 jang.lang 和 java.util 中都存在。
 
+> 2019-10-02 开始接触JSP，目前的认知是 JEE 的 javax.servlet.* 都是与JSP相关的包。不过，一旦开始使用框架，那基本也不太用的上了。
+
 - [Overview](#overview)
   - [重要类](#%e9%87%8d%e8%a6%81%e7%b1%bb)
     - [数据类型与结构](#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%8e%e7%bb%93%e6%9e%84)
@@ -49,6 +51,12 @@
   - [`java.util.regex`](#javautilregex)
 - [Compact2](#compact2)
   - [java.sql](#javasql)
+- [Servlet](#servlet)
+  - [`javax.servlet`](#javaxservlet)
+  - [`javax.servlet.http`](#javaxservlethttp)
+  - [`javax.servlet.jsp`](#javaxservletjsp)
+  - [`javax.servlet.jsp.jstl.*`](#javaxservletjspjstl)
+  - [`javax.servlet.jsp.tagext`](#javaxservletjsptagext)
 
 # Overview
 
@@ -3079,3 +3087,237 @@ DriverPropertyInfo（驱动程序属性）
 - `DriverPropertyInfo(String name, String value)`
 
 Types(JDBC类型)
+
+# Servlet
+
+> 注：虽然提供了 Servlet 的相关类和接口，但更多的是作为一种指导，具体的实现取决于不同的提供商（如Tomcat）。
+
+## `javax.servlet`
+
+AsyncEvent
+- `AsyncEvent(AsyncContext context)` / `AsyncEvent(AsyncContext context, ServletRequest request, ServletResponse response)` / `AsyncEvent(AsyncContext context, ServletRequest request, ServletResponse response, Throwable throwable)` / `AsyncEvent(AsyncContext context, Throwable throwable)`
+- `AsyncContext	getAsyncContext()`
+- `ServletRequest	getSuppliedRequest()` / `ServletResponse	getSuppliedResponse()`
+- `Throwable	getThrowable()`
+
+GenericServlet（抽象）
+- `GenericServlet()`
+- `void destroy()`
+- `String getInitParameter(String name)` / `Enumeration<String> getInitParameterNames()`
+- `ServletConfig getServletConfig()` / `ServletContext getServletContext()` / `String getServletInfo()` / `String getServletName()`
+- `void init()` / `void init(ServletConfig config)`
+- `void log(String msg)` / `void log(String message, Throwable t)`
+- `abstract void service(ServletRequest req, ServletResponse res)`
+
+
+HttpConstraintElement(代表HttpConstraint注解值)
+HttpMethodConstraintElement（代表HttpMethodConstraint注解值）
+MultipartConfigElement（代表MultipartConfig注解值）
+ServletSecurityElement(ServletSecurity注解值)
+
+ServletContextAttributeEvent
+- `ServletContextEvent(ServletContext source)`
+- `ServletContext	getServletContext()`
+
+ServletContextEvent
+- `ServletContextEvent(ServletContext source)`
+- `ServletContext	getServletContext()`
+
+ServletInputStream(抽象)
+- `protected	ServletInputStream()`
+- `abstract boolean isFinished()` / `abstract boolean isReady()`
+- `int readLine(byte[] b, int off, int len)`
+- `abstract void setReadListener(ReadListener readListener)`
+
+ServletOutputStream(抽象)
+- `protected	ServletOutputStream()`
+- `abstract boolean isReady()`
+- `void print(boolean b)` / `void print(char c)` / `void print(double d)` / `void print(float f)` / `void print(int i)` / `void print(long l)` / `void print(String s)` / `void println()` / `void println(boolean b)` / `void println(char c)` / `void println(double d)` / `void println(float f)` / `void println(int i)` / `void println(long l)` / `void println(String s)`
+- `abstract void setWriteListener(WriteListener writeListener)`
+
+
+ServletRequestAttributeEvent
+- `ServletRequestAttributeEvent(ServletContext sc, ServletRequest request, String name, Object value)`
+- `String	getName()` / `Object	getValue()`
+
+ServletRequestEvent
+- `ServletRequestEvent(ServletContext sc, ServletRequest request)`
+- `ServletContext	getServletContext()`
+- `ServletRequest	getServletRequest()`
+
+ServletRequestWrapper
+- `ServletRequestWrapper(ServletRequest request)`
+- `AsyncContext getAsyncContext()`
+- `Object getAttribute(String name)` / `void setAttribute(String name, Object o)` / `void removeAttribute(String name)`
+- `Enumeration<String> getAttributeNames()`
+- `String getCharacterEncoding()` / `void setCharacterEncoding(String enc)`
+- `int getContentLength()` / `long getContentLengthLong()` / `String getContentType()`
+- `DispatcherType getDispatcherType()` / `RequestDispatcher getRequestDispatcher(String path)`
+- `ServletInputStream getInputStream()`
+- `String getLocalAddr()` / `String getLocalName()` / `int getLocalPort()`
+- `Locale getLocale()` / `Enumeration<Locale> getLocales()`
+- `String getParameter(String name)` / `Map<String,String[]> getParameterMap()` / `Enumeration<String> getParameterNames()` / `String[] getParameterValues(String name)`
+- `String getProtocol()`
+- `BufferedReader getReader()`
+- `String getRealPath(String path)`
+- `String getRemoteAddr()` / `String getRemoteHost()` / `int getRemotePort()`
+- `ServletRequest getRequest()` / `void setRequest(ServletRequest request)`
+- `String getScheme()`
+- `String getServerName()` / `int getServerPort()`
+- `ServletContext getServletContext()`
+- `boolean isAsyncStarted()` / `boolean isAsyncSupported()` / `boolean isSecure()` / `boolean isWrapperFor(Class<?> wrappedType)` / `boolean isWrapperFor(ServletRequest wrapped)`
+- `AsyncContext startAsync()` / `AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)`
+
+ServletResponseWrapper
+- `ServletResponseWrapper(ServletResponse response)`
+- `void flushBuffer()`
+- `int getBufferSize()` / `void setBufferSize(int size)`
+- `String getCharacterEncoding()` / `void setCharacterEncoding(String charset)`
+- `String getContentType()` / `void setContentType(String type)`
+- `Locale getLocale()` / `void setLocale(Locale loc)`
+- `ServletOutputStream getOutputStream()`
+- `ServletResponse getResponse()` / `void setResponse(ServletResponse response)`
+- `PrintWriter getWriter()`
+- `boolean isCommitted()` / `boolean isWrapperFor(Class<?> wrappedType)` / `boolean isWrapperFor(ServletResponse wrapped)`
+- `void reset()`
+- `void resetBuffer()`
+- `void setContentLength(int len)` / `void setContentLengthLong(long len)`
+
+
+## `javax.servlet.http`
+
+Cookie
+- `Cookie(String name, String value)`
+- `Object clone()`
+- `String getComment()` / `void setComment(String purpose)`
+- `String getDomain()` / `void setDomain(String domain)`
+- `int getMaxAge()` / `void setMaxAge(int expiry)`
+- `String getName()`
+- `String getPath()` / `void setPath(String uri)`
+- `boolean getSecure()` / `void setSecure(boolean flag)`
+- `String getValue()` / `void setValue(String newValue)`
+- `int getVersion()` / `void setVersion(int v)`
+- `boolean isHttpOnly()` / `void setHttpOnly(boolean isHttpOnly)`
+
+HttpServlet(抽象)
+- `HttpServlet()`
+- `protected void doDelete(HttpServletRequest req, HttpServletResponse resp)`
+- `protected void doGet(HttpServletRequest req, HttpServletResponse resp)`
+- `protected void doHead(HttpServletRequest req, HttpServletResponse resp)`
+- `protected void doOptions(HttpServletRequest req, HttpServletResponse resp)`
+- `protected void doPost(HttpServletRequest req, HttpServletResponse resp)`
+- `protected void doPut(HttpServletRequest req, HttpServletResponse resp)`
+- `protected void doTrace(HttpServletRequest req, HttpServletResponse resp)`
+- `protected long getLastModified(HttpServletRequest req)`
+- `protected void service(HttpServletRequest req, HttpServletResponse resp)` / `void service(ServletRequest req, ServletResponse res)`
+
+HttpServletRequestWrapper
+- `HttpServletRequestWrapper(HttpServletRequest request)`
+- `boolean authenticate(HttpServletResponse response)`
+- `String changeSessionId()`
+- `String getAuthType()`
+- `String getContextPath()`
+- `Cookie[] getCookies()`
+- `int getIntHeader(String name)` / `long getDateHeader(String name)` / `String getHeader(String name)` / `Enumeration<String> getHeaderNames()` / `Enumeration<String> getHeaders(String name)`
+- `String getMethod()`
+- `Part getPart(String name)` / `Collection<Part> getParts()`
+- `String getPathInfo()` / `String getPathTranslated()`
+- `String getQueryString()`
+- `String getRemoteUser()`
+- `String getRequestedSessionId()` / `String getRequestURI()` / `StringBuffer getRequestURL()`
+- `String getServletPath()`
+- `HttpSession getSession()` / `HttpSession getSession(boolean create)`
+- `Principal getUserPrincipal()`
+-`boolean isRequestedSessionIdFromCookie()` / `boolean isRequestedSessionIdFromUrl()` / `boolean isRequestedSessionIdFromURL()` / `boolean isRequestedSessionIdValid()` / `boolean isUserInRole(String role)`
+- `void login(String username, String password)` / `void logout()`
+- `<T extends HttpUpgradeHandler>T upgrade(Class<T> handlerClass)`
+
+HttpServletResponseWrapper
+- `HttpServletResponseWrapper(HttpServletResponse response)`
+- `void addCookie(Cookie cookie)`
+- `void addDateHeader(String name, long date)` / `void setDateHeader(String name, long date)`
+- `void addHeader(String name, String value)` / `void setIntHeader(String name, int value)`
+- `void setHeader(String name, String value)`
+- `void addIntHeader(String name, int value)` / `boolean containsHeader(String name)`
+- `String encodeRedirectURL(String url)` / `String encodeUrl(String url)`
+- `String getHeader(String name)` / `Collection<String> getHeaderNames()` / `Collection<String> getHeaders(String name)`
+- `int getStatus()` / `void setStatus(int sc)`
+- `void sendError(int sc)` / `void sendError(int sc, String msg)`
+`void sendRedirect(String location)`
+
+HttpSessionBindingEvent
+- `HttpSessionBindingEvent(HttpSession session, String name)` / `HttpSessionBindingEvent(HttpSession session, String name, Object value)`
+- `String	getName()`
+- `HttpSession	getSession()`
+- `Object	getValue()`
+
+HttpSessionEvent
+- `HttpSessionEvent(HttpSession source)`
+- `HttpSession	getSession()`
+
+## `javax.servlet.jsp`
+
+ErrorData
+- `ErrorData(Throwable throwable, int statusCode, String uri, String servletName)`
+- `String getRequestURI()`
+- `String getServletName()`
+- `int getStatusCode()`
+- `Throwable getThrowable()`
+
+JspContext(抽象)
+- `JspContext()`
+- `abstract Object findAttribute(String name)`
+- `abstract Object getAttribute(String name)` / `abstract Object getAttribute(String name, int scope)` / `abstract void setAttribute(String name, Object value)` / `abstract void setAttribute(String name, Object value, int scope)` / `abstract void removeAttribute(String name)` / `abstract void removeAttribute(String name, int scope)`
+- `abstract Enumeration<String> getAttributeNamesInScope(int scope)`
+- `abstract int getAttributesScope(String name)`
+- `abstract ELContext getELContext()`
+- `abstract ExpressionEvaluator getExpressionEvaluator()`
+- `abstract JspWriter getOut()`
+- `abstract VariableResolver getVariableResolver()`
+- `JspWriter popBody()`
+- `JspWriter pushBody(Writer writer)`
+
+JspEngineInfo(抽象)
+- `abstract String	getSpecificationVersion()`
+
+JspFactory(抽象)
+- `JspFactory()`
+- `static JspFactory getDefaultFactory()` / `static void setDefaultFactory(JspFactory deflt)`
+- `abstract JspEngineInfo getEngineInfo()`
+- `abstract JspApplicationContext getJspApplicationContext(ServletContext context)`
+- `abstract PageContext getPageContext(Servlet servlet, ServletRequest request, ServletResponse response, String errorPageURL, boolean needsSession, int buffer, boolean autoflush)`
+- `abstract void releasePageContext(PageContext pc)`
+
+JspWriter(抽象)
+- `protected	JspWriter(int bufferSize, boolean autoFlush)`
+- `abstract void clear()`
+- `abstract void clearBuffer()`
+- `abstract void close()`
+- `abstract void flush()`
+- `int getBufferSize()`
+- `abstract int getRemaining()`
+- `boolean isAutoFlush()`
+- `abstract void newLine()`
+- `abstract void print(boolean b)` / `abstract void print(char c)` / `abstract void print(char[] s)` / `abstract void print(double d)` / `abstract void print(float f)` / `abstract void print(int i)` / `abstract void print(long l)` / `abstract void print(Object obj)` / `abstract void print(String s)` / `abstract void println()` / `abstract void println(boolean x)` / `abstract void println(char x)` / `abstract void println(char[] x)` / `abstract void println(double x)` / `abstract void println(float x)` / `abstract void println(int x)` / `abstract void println(long x)` / `abstract void println(Object x)` / `abstract void println(String x)`
+
+PageContext
+- `PageContext()`
+- `abstract void forward(String relativeUrlPath)`
+- `ErrorData getErrorData()` / `abstract Exception getException()`
+- `abstract Object getPage()`
+- `abstract ServletRequest getRequest()` / `abstract ServletResponse getResponse()`
+- `abstract ServletConfig getServletConfig()` / `abstract ServletContext getServletContext()`
+- `abstract HttpSession getSession()`
+- `abstract void handlePageException(Exception e)` / `abstract void handlePageException(Throwable t)`
+- `abstract void include(String relativeUrlPath)` / `abstract void include(String relativeUrlPath, boolean flush)`
+- `abstract void initialize(Servlet servlet, ServletRequest request, ServletResponse response, String errorPageURL, boolean needsSession, int bufferSize, boolean autoFlush)`
+- `BodyContent pushBody()`
+- `abstract void release()`
+
+## `javax.servlet.jsp.jstl.*`
+
+core, fmt, sql, tlv 是 JSTL 相关。
+
+## `javax.servlet.jsp.tagext`
+
+是扩展的标签库。
