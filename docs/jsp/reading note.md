@@ -347,7 +347,7 @@ JSTL中的标签有五类：
 
 
 在JSP2.0之后，引入了 EL（Expression Language，表达式），它既可以与JSP中的Java代码结合使用，也可以和JSTL结合使用。 
-> 注：EL 应该是 Apache 出的？百度了一下，发现“java el”这个组合，在2018年很少有新的文章出现，应该是淘汰了。
+> 注：EL对应的包 javax.servlet.jsp.el 差不多所有内容都被 Deprecated 了。百度了一下，发现“java el”这个组合，在2018年很少有新的文章出现，应该是淘汰了。
 
 使用EL的格式 `${xxx}`，例如： `${sessionScope.user["name"]}` 。
 
