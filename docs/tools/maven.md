@@ -1,16 +1,21 @@
 > 2019-10-04 关于maven的简介。来自[w3cschool](https://www.w3cschool.cn/maven/)。资料可能有点老，部分内容结合了官方文档。不过，这篇教程，本身质量不太好，起码是不太适合完全新手。
 
+> 2019-10-05 从 [易百教程](https://www.yiibai.com/maven)补充了一些内容。关于webapp的内容，比w3cschool完整。
+
 - [简介](#%e7%ae%80%e4%bb%8b)
   - [安装](#%e5%ae%89%e8%a3%85)
   - [仓库](#%e4%bb%93%e5%ba%93)
 - [POM](#pom)
   - [生命周期](#%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f)
+  - [依赖](#%e4%be%9d%e8%b5%96)
   - [环境配置](#%e7%8e%af%e5%a2%83%e9%85%8d%e7%bd%ae)
   - [语法TODO](#%e8%af%ad%e6%b3%95todo)
 - [命令](#%e5%91%bd%e4%bb%a4)
   - [创建工程](#%e5%88%9b%e5%bb%ba%e5%b7%a5%e7%a8%8b)
   - [构建工程](#%e6%9e%84%e5%bb%ba%e5%b7%a5%e7%a8%8b)
+  - [其他](#%e5%85%b6%e4%bb%96)
 - [插件](#%e6%8f%92%e4%bb%b6)
+- [与IDE](#%e4%b8%8eide)
 
 # 简介
 
@@ -26,6 +31,21 @@ Maven 使用约定而不是配置。Maven 为工程提供了合理的默认行�
 - Tests `${basedir}/src/test`
 - Complied byte code `${basedir}/target`
 - distributable JAR `${basedir}/target/classes`
+
+更全的[目录布局](http://maven.apache.org/guides/introduction/introduction-to-the-standard-directory-layout.html)。如果是多项目工程，则每个项目的布局都是如此。
+- `src/main/java` Application/Library sources
+- `src/main/resources` Application/Library resources
+- `src/main/filters` Resource filter files
+- `src/main/webapp` Web application sources
+- `src/test/java` Test sources
+- `src/test/resources` Test resources
+- `src/test/filters` Test resource filter files
+- `src/it` Integration Tests (primarily for plugins)
+- `src/assembly` Assembly descriptors
+- `src/site` Site
+- `LICENSE.txt` Project's license
+- `NOTICE.txt` Notices and attributions required by libraries that the project depends on
+- `README.txt` Project's readme
 
 ## 安装
 
@@ -45,11 +65,15 @@ mvn -v
 仓库是一个位置（place），可以存储所有的工程 jar 文件、library jar 文件、插件或任何其他的工程指定的文件。
 
 Maven 仓库有三种类型：本地（local）、中央（central）、远程（remote）。
-- Maven 本地仓库保存工程的所有依赖（library jar、plugin jar 等）。第一次运行 maven时，会自动下载所有依赖的 jar 文件到该仓库。本地仓库的位置一般是 `$HOME/.m2`
-- Maven 中央仓库是由 Maven 社区提供的仓库，其中包含了大量常用的库。
-- 远程仓库是开发人员自定义的仓库，包含了工程会用到的、但不在中央仓库中的 jar 文件。
+- Maven 本地仓库保存工程的所有依赖（library jar、plugin jar 等）。第一次运行 maven时，会自动下载所有依赖的 jar 文件到该仓库。本地仓库的位置一般是 `$HOME/.m2`。可以通过 `$M2_HOME/conf/setting/xml`的 localReponsitory 进行重新设定。
+- [Maven中央仓库](https://search.maven.org/)是由 Maven 社区提供的仓库，其中包含了大量常用的库。
+- 远程仓库是开发人员自定义的仓库，包含了工程会用到的、但不在中央仓库中的 jar 文件。方法是在 pom.xml 中指定 project-repositories-repository 。
 
-除了这三种仓库可以作为依赖包的来源外，还有外部依赖，就是在 dependency 中指定 systemPath 和 scope 。
+
+有些包不在任何仓库内，但是，可以“安装”到本地仓库内。安装完成后，通过普通的 dependency 引入。（参见“依赖”一节的“外部依赖”。安装应该是外部依赖的另一种做法，从管理的角度看，比安装好。）
+```bash
+mvn install:install-file -Dfile=/path/to/jarfile.jar -DgroupId=xxx -DartifactId=xxx -Dversion=x.x -Dpackaging=jar
+```
 
 # POM
 
@@ -420,6 +444,44 @@ POM 也包含了目标和插件。当执行一个任务或者目标时，Maven �
 </project>
 ```
 
+## 依赖
+
+需要用到的包，只要在中央仓库之内的，均可以直接通过 dependency 指定：
+```xml
+<dependencies>
+    <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>1.2.14</version>
+    </dependency>
+</dependencies>
+```
+
+使用远程仓库时，需要指定远程仓库的地址后再通过 dependency 指定：
+```xml
+<project>
+    <repositories>
+        <repository>
+            <id>java.net</id>
+            <url>...</url>
+        </repository>
+    </repositories>
+</project>
+```
+
+外部依赖时，需要自行指定包的路径：
+```xml
+<dependencies>
+    <dependency>
+        <groupId>ldapjdk</groupId>
+        <artifactId>ldapjdk</artifactId>
+        <scope>system</scope>
+        <version>1.0</version>
+        <systemPath>${basedir}\src\lib\ldapjdk.jar</systemPath>
+    </dependency>
+</dependencies>
+```
+
 ## 环境配置
 
 构建一组配置，用于根据不同的环境定制不同的构建过程，如 Production 和 Development 。
@@ -451,11 +513,12 @@ POM 也包含了目标和插件。当执行一个任务或者目标时，Maven �
 ```xml
 <project>
     <profiles>
-        <profile></profile>
+        <profile>
             <id>...</id>
             <build>
                 ...
             </build>
+        </profile>
     </profiles>
 </project>
 ```
@@ -469,17 +532,70 @@ POM 也包含了目标和插件。当执行一个任务或者目标时，Maven �
 
 ## 创建工程
 
-Maven 使用原型（archetype）插件创建工程。借助 maven-archetype-quickstart 插件，可以创建若干种不同的工程：`mvn archetype:generate` 。创建过程通过交互式方式完成。
+Maven 使用原型（archetype）插件创建工程。`mvn archetype:generate` 可以创建若干种不同的工程。如果未指定参数，则以交互模式创建；指定参数，必须指定的是：groupId(组织)、artifactId（项目）、archetypeArtifactId（原型）、interactiveMode（是否交互模式）。
 
-一个HelloWorld工程，包括：src/java/main、src/java/test、pom.xml 。构建过程中还会生成 target/classes、target/site 等目录。
+可以通过 `mvn archetype:generate > templates.txt` 获得所有(2000+)的原型清单。  
+可以使用 `mvn archetype:generate -Dfilter=xxx` 进行过滤。
 
-如果是创建webapp，只需指定 archetype 为 maven-archetype-webapp 。（应该是交互模式的第一个问题。）
+
+**最简单的原型就是：maven-archetype-webapp、maven-archetype-quickstart。**
+也有使用 Spring/Struts 的原型。
+
+创建quickstart的命令是 `mvn archetype:generate -DgroupId=xxxx -DartifactId=xxxx -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false` 。  
+一个基于 quickstart 的工程目录是：
+```
+--src
+----main
+------java
+--------com.xxx.App.java # 注意此处存在层级目录
+----test
+------java
+--------com.xxx.AppTest.java # 注意此处存在层次目录
+--target
+----classes
+----site
+----xxxx-SNAPSHOT.jar
+```
+
+创建webapp的命令是 `mvn archetype:generate -DgroupId=xxxx -DartifactId=xxxx -DarchetypeArtifactId=maven-archetype-webapp -DinteractiveMode=false` 。  
+一个基于 webapp 的工程目录是：
+```
+--src
+----main
+-----java # 非官方生成，此处存放Java文件
+-----webapp
+-------index.jsp
+-------WEB-INF
+---------web.xml
+--target
+----xxxx.war
+```
 
 ## 构建工程
 
 当通过 `mvn xx-phase` 调用构建生命周期的某个阶段时，该阶段之前的所有阶段都会被执行。（参见[构建生命周期](#%e6%9e%84%e5%bb%ba%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f)。）
 
-`mvn clean package` 将会清理之前的构建文件并重新打包。打包的文件保存在 target/xxx-x.x-SNAPSHOT.jar 。
+`mvn package` 会构建并打包项目。
+
+打包的文件保存在 target/xxx-x.x-SNAPSHOT.jar 。(注意：不带MANIFESY的jar无法通过 `java -jar`运行，只能视为class文件，因此，通过 `java -cp xx.jar MainClass`运行。)
+
+构建成功的webapp的war，将至置于 tomcat/webapps/ 下，启动服务器即可访问。
+
+## 其他
+
+使用Maven构建项目：`mvn package`。
+
+使用Maven清理项目：`mvn clean`。
+
+使用Maven运行单元测试：`mvn test`。  
+可以通过 `mvn -Dtest=xxx test` 运行指定的测试xxx。
+
+将项目安装到Maven本地资源库：`mvn install`。
+
+生成基于Maven的项目文档站点：`mvn site`
+
+部署基于Maven的war文件到Tomcat：`mvn tomcat:deploy` / `mvn tomcat:undeploy` / `mvn tomcat:redeploy` 。  
+这个命令需要进行多个设置：（1）tomcat/conf/tomcat-users.xml中设置用户；（2）maven/conf/settings.xml中添加该用户；（3）使用org.apache.tomcat.maven组件。
 
 # 插件
 
@@ -498,3 +614,6 @@ Maven提供两种类型的插件：Build plugins（用于build）、Reporting pl
 - javadoc：为工程生成 Javadoc。
 - antrun：从构建过程的任意一个阶段中运行一个 ant 任务的集合。
 
+# 与IDE
+
+IDE中有一些特性，使得 maven 使用更加方便，可以了解一下。
