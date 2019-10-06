@@ -3103,9 +3103,33 @@ Types(JDBC类型)
 
 # Servlet
 
-> 注：虽然提供了 Servlet 的相关类和接口，但更多的是作为一种指导，具体的实现取决于不同的提供商（如Tomcat）。
+> 注：来自JEE，Servlet提供了相关类和接口，作为一种指导，具体的实现取决于不同的提供商（如Tomcat）。此处，罗列了接口，因为作为HttpJspPage（JSP页的类）也是一个接口。
 
 ## `javax.servlet`
+
+接口：
+- AsyncContext
+- AsyncListener
+- Filter
+- FilterChain
+- FilterConfig
+- FilterRegistration
+- ReadListener / WriteListener
+- Registration
+- RequestDispatcher
+- Servlet
+- ServletConfig
+- ServletContainerInitializer
+- ServletContext
+- ServletContextAttributeListener
+- ServletContextListener
+- ServletRegistration
+- **ServletRequest** / **ServletResponse**
+- ServletRequestAttributeListener
+- ServletRequestListener
+- SessionCookieConfig
+- SingleThreadModel
+
 
 AsyncEvent
 - `AsyncEvent(AsyncContext context)` / `AsyncEvent(AsyncContext context, ServletRequest request, ServletResponse response)` / `AsyncEvent(AsyncContext context, ServletRequest request, ServletResponse response, Throwable throwable)` / `AsyncEvent(AsyncContext context, Throwable throwable)`
@@ -3199,6 +3223,19 @@ ServletResponseWrapper
 
 ## `javax.servlet.http`
 
+接口：
+- HttpServletRequest / HttpServletResponse
+- **HttpSession**
+- HttpSessionActivationListener
+- HttpSessionAttributeListener
+- HttpSessionBindingListener
+- HttpSessionContext
+- HttpSessionIdListener
+- HttpSessionListener
+- HttpUpgradeHandler
+- Part
+- WebConnection
+
 Cookie
 - `Cookie(String name, String value)`
 - `Object clone()`
@@ -3269,6 +3306,11 @@ HttpSessionEvent
 - `HttpSession	getSession()`
 
 ## `javax.servlet.jsp`
+
+接口：
+- HttpJspPage
+- JspApplicationContext
+- JspPage
 
 ErrorData
 - `ErrorData(Throwable throwable, int statusCode, String uri, String servletName)`
