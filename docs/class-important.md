@@ -62,8 +62,8 @@ Collection
 - List
   - AbstractList*
     - LinkedList
-    - ArrayList
-    - Vector
+    - ArrayList*
+    - Vector*
 - Set
   - HashSet*
   - SortedSet
