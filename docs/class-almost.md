@@ -1,6 +1,6 @@
 > 2019-09-25 考虑到效率问题，资料来源是Java文档的中文版，最新的是[Java8](http://www.matools.com/api/java8)（实话说，这一版的翻译真不行）。从之前的资料可知，Java的最新几个长期版本正好是8，11。尤其是8，出现了大幅更新。BTW 最新版已经到13了。分析核心库的主要目的，不是抄书，而是对核心类的使用有个基本了解，知道在什么时候需要使用什么类。其间，可能会可以忽略某些类，例如，大部分接口，安全类等。
 
-> 2019-09-26 抄书一天半下来，发现：抄录全部方法，有一些效果，但效果的是在归类方法时发生的。整体来说，效率还是偏慢。后面打算采取的策略是：先过一遍类，对于重要的类再抄录方法，不重要的类只保留名称。有些包可能整体被忽略，如 java.nio.channels, java.nio.charset 。
+> 2019-09-26 抄书一天半下来，发现：抄录全部方法，有一些效果，但效果的是在归类方法时发生的。整体来说，效率还是偏慢。后面打算采取的策略是：先过一遍类，对于重要的类再抄录方法，不重要的类只保留名称。有些包可能整体被忽略，如 java.nio.channels（这个包其实蛮重要）, java.nio.charset 。
 
 > 2019-09-28 整理方法列表还是有点太慢了。需要快速阅读类的主要介绍，以此判定重要类，毕竟，重要的类没有那么多。
 
@@ -801,7 +801,20 @@ URLDecoder / URLEncoder
 
 ### 数据库
 
-TODO 数据库相关应该是单独的包，不在 java 标准库之内。
+DriverManager
+- 驱动管理，JDBC2.0提供另一种更好方法：DataSource 。
+- 静态方法：
+  - registerDriver(), deregisterDriver()
+  - getDriver() / getDrivers()
+  - getConnection()
+  - getLoginTimeout() / setLoginTimeout()
+  - getLogWriter() / setLogWriter() / println()
+
+DriverPropertyInfo
+- （驱动程序属性）
+- 对象方法
+  - 实例：DriverPropertyInfo()
+  - 属性：choices / description / name / required / value
 
 ## 特殊形式
 
