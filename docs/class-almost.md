@@ -10,6 +10,8 @@
 
 > 2019-10-02 开始接触JSP，目前的认知是 JEE 的 javax.servlet.* 都是与JSP相关的包。不过，一旦开始使用框架，那基本也不太用的上了。
 
+> 2019-10-07 之前在整理基本部分类包时，总是忽略接口而关注类。在sql和servlet这两个部分，发现接口真的很重要，制定标准，留给各个开发商实现。
+
 - [Overview](#overview)
   - [重要类](#%e9%87%8d%e8%a6%81%e7%b1%bb)
     - [数据类型与结构](#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b%e4%b8%8e%e7%bb%93%e6%9e%84)
@@ -2425,6 +2427,10 @@ ZoneOffset(ZoneId的子类，相对UTC的偏移)
   - `Iterator<E> iterator()` / `ListIterator<E> listIterator()` / `ListIterator<E> listIterator(int index)`
 - 转换：`Object[] toArray()` / `<T> T[] toArray(T[] a)`
 
+`Enumeration<E>`(接口)
+- `boolean hasMoreElements()`
+- `E nextElement()`
+
 **Collections**（静态方法,List/Map/Set）
 - `static List	EMPTY_LIST` / `static Map	EMPTY_MAP` / `static Set	EMPTY_SET`
 - 搜索：`static <T> int binarySearch(List<? extends Comparable<? super T>> list, T key)` / `static <T> int binarySearch(List<? extends T> list, T key, Comparator<? super T> c)`
@@ -3063,31 +3069,35 @@ LogManager(维护日志记录器的共享状态)
 
 ## java.sql
 
-Date(用于SQL的Date值)
-- `Date(long date)`
-- `void	setTime(long date)`
-- 实例：`static Date	valueOf(LocalDate date)` / `static Date	valueOf(String s)`
-- `Instant	toInstant()` / `LocalDate	toLocalDate()`
-- `String	toString()`
+接口：
+- Array
+- Blob
+- Clob
+- DatabaseMetaData
+- Driver
+- DriverAction
+- NClob
+- ParameterMetaData
+- Ref
+- ResultSetMetaData
+- RowId
+- Savepoint
+- SQLData
+- SQLInput
+- SQLOutput
+- SQLType
+- SQLXML
+- Struct
+- Wrapper
 
-Time(用于SQL的TIME值)
-- `Time(long time)`
-- `Instant	toInstant()` / `LocalTime	toLocalTime()`
-- `static Time	valueOf(LocalTime time)` / `static Time	valueOf(String s)`
-- `String	toString()`
 
+Types(JDBC类型)  
+Date(用于SQL的Date值)  
+Time(用于SQL的TIME值)  
 Timestamp（用于SQL的TIMESTAMP值）
-- `Timestamp(long time)`
-- 实例：`static Timestamp from(Instant instant)` / `static Timestamp valueOf(LocalDateTime dateTime)` / `static Timestamp valueOf(String s)`
-- 比较：`int compareTo(Date o)` / `int compareTo(Timestamp ts)` / `boolean equals(Object ts)` / `boolean equals(Timestamp ts)`
-- `boolean after(Timestamp ts)` / `boolean before(Timestamp ts)`
-- `int getNanos()` / `void setNanos(int n)`
-- `long getTime()` / `void setTime(long time)`
-- `Instant toInstant()` / `LocalDateTime toLocalDateTime()`
-- `String toString()`
 
 
-DriverManager（驱动管理，JDBC2.0提供另一种更好方法：DataSource）
+**DriverManager**（驱动管理，JDBC2.0提供另一种更好方法：DataSource）
 - `static void registerDriver(Driver driver)` / `static void registerDriver(Driver driver, DriverAction da)` / `static void deregisterDriver(Driver driver)`
 - `static Connection getConnection(String url)` / `static Connection getConnection(String url, Properties info)` / `static Connection getConnection(String url, String user, String password)`
 - `static Driver getDriver(String url)` / `static Enumeration<Driver> getDrivers()`
@@ -3095,11 +3105,240 @@ DriverManager（驱动管理，JDBC2.0提供另一种更好方法：DataSource�
 - `static PrintWriter getLogWriter()` / `static void setLogWriter(PrintWriter out)`
 - `static void println(String message)`
 
-DriverPropertyInfo（驱动程序属性）
-- `String[]	choices` / `String	description` / `String	name` / `boolean required` / `String value`
-- `DriverPropertyInfo(String name, String value)`
+**Connection**
+- `void abort(Executor executor)` / `boolean isValid(int timeout)`
+-  `void close()` / `boolean isClosed()`
+- `SQLWarning getWarnings()` / `void clearWarnings()`
+- `Array createArrayOf(String typeName, Object[] elements)` / `Blob createBlob()` / `Clob createClob()` / `NClob createNClob()` / `SQLXML createSQLXML()` / `Struct createStruct(String typeName, Object[] attributes)`
+- `boolean getAutoCommit()` / `void setAutoCommit(boolean autoCommit)`
+- `String getCatalog()` / `void setCatalog(String catalog)`
+- `Properties getClientInfo()` / `String getClientInfo(String name)` / `void setClientInfo(Properties properties)` / `void setClientInfo(String name, String value)`
+- `int getHoldability()` / `void setHoldability(int holdability)`
+- `DatabaseMetaData getMetaData()`
+- `int getNetworkTimeout()` / `void setNetworkTimeout(Executor executor, int milliseconds)`
+- `String getSchema()` / `void setSchema(String schema)`
+- `void setTransactionIsolation(int level)` / `int getTransactionIsolation()`
+- `Map<String,Class<?>> getTypeMap()` / `void setTypeMap(Map<String,Class<?>> map)`
+- `void setReadOnly(boolean readOnly)` / `boolean isReadOnly()`
+- `String nativeSQL(String sql)`
+- `Savepoint setSavepoint()` / `Savepoint setSavepoint(String name)` / `void releaseSavepoint(Savepoint savepoint)`
+- `Statement createStatement()` / `Statement createStatement(int resultSetType, int resultSetConcurrency)` / `Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)`
+- `CallableStatement prepareCall(String sql)` / `CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency)` / `CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)`
+- `PreparedStatement prepareStatement(String sql)` / `PreparedStatement prepareStatement(String sql, int autoGeneratedKeys)` / `PreparedStatement prepareStatement(String sql, int[] columnIndexes)` / `PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency)` / `PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)` / `PreparedStatement prepareStatement(String sql, String[] columnNames)`
+- `void commit()` / `void rollback()` / `void rollback(Savepoint savepoint)`
 
-Types(JDBC类型)
+**Statement**
+- `void addBatch(String sql)` / `void clearBatch()` / `int[] executeBatch()` / `default long[] executeLargeBatch()`
+- `void cancel()`
+- `SQLWarning getWarnings()` / `void clearWarnings()`
+- `void close()` / `boolean isClosed()`
+- `void closeOnCompletion()` / `boolean isCloseOnCompletion()`
+- `boolean execute(String sql)` / `boolean execute(String sql, int autoGeneratedKeys)` / `boolean execute(String sql, int[] columnIndexes)` / `boolean execute(String sql, String[] columnNames)`
+- `ResultSet executeQuery(String sql)` / `int executeUpdate(String sql)` / `int executeUpdate(String sql, int autoGeneratedKeys)` / `int executeUpdate(String sql, int[] columnIndexes)` / `int executeUpdate(String sql, String[] columnNames)`
+- `default long executeLargeUpdate(String sql)` / `default long executeLargeUpdate(String sql, int autoGeneratedKeys)` / `default long executeLargeUpdate(String sql, int[] columnIndexes)` / `default long executeLargeUpdate(String sql, String[] columnNames)`
+- `Connection getConnection()`
+- `void setFetchDirection(int direction)` / `int getFetchDirection()`
+- `void setFetchSize(int rows)` / `int getFetchSize()`
+- `ResultSet getGeneratedKeys()`
+- `default void setLargeMaxRows(long max)` / `default long getLargeMaxRows()`
+- `void setMaxFieldSize(int max)` / `int getMaxFieldSize()`
+- `void setMaxRows(int max)` / `int getMaxRows()`
+- `boolean getMoreResults()` / `boolean getMoreResults(int current)`
+- `void setQueryTimeout(int seconds)` / `int getQueryTimeout()`
+- `ResultSet getResultSet()`
+- `int getResultSetConcurrency()` / `int getResultSetHoldability()` / `int getResultSetType()`
+- `int getUpdateCount()` / `default long getLargeUpdateCount()`
+- `void setPoolable(boolean poolable)` / `boolean isPoolable()`
+- `void setCursorName(String name)`
+- `void setEscapeProcessing(boolean enable)`
+
+**ResultSet**
+- 光标和位移
+  - `String getCursorName()`
+  - `int getHoldability()`
+  - `boolean next()`
+  - `boolean previous()`
+  - `void afterLast()` / `boolean isAfterLast()`
+  - `void beforeFirst()` / `boolean isBeforeFirst()`
+  - `boolean first()` / `boolean isFirst()`
+  - `boolean last()` / `boolean isLast()`
+  - `int getRow()`
+  - `void moveToCurrentRow()`
+  - `void moveToInsertRow()`
+  - `boolean absolute(int row)` / `boolean relative(int rows)`
+- 行操作
+  - `void insertRow()` / `boolean rowInserted()`
+  - `void deleteRow()` / `boolean rowDeleted()`
+  - `void updateRow()` / `boolean rowUpdated()`
+  - `void refreshRow()`
+  - `void cancelRowUpdates()`
+- 列
+  - `int findColumn(String columnLabel)`
+- `void clearWarnings()` / `SQLWarning getWarnings()`
+- `void close()` / `boolean isClosed()`
+- `void setFetchDirection(int direction)` / `int getFetchDirection()`
+- `void setFetchSize(int rows)` / `int getFetchSize()`
+- `int getConcurrency()`
+- `ResultSetMetaData getMetaData()`
+- `Statement getStatement()`
+- `int getType()`
+- `boolean wasNull()`
+- 获取数据
+  - `short getShort(int columnIndex)` / `short getShort(String columnLabel)`
+  - `int getInt(int columnIndex)` / `int getInt(String columnLabel)`
+  - `long getLong(int columnIndex)` / `long getLong(String columnLabel)`
+  - `float getFloat(int columnIndex)` / `float getFloat(String columnLabel)`
+  - `double getDouble(int columnIndex)` / `double getDouble(String columnLabel)`
+  - `boolean getBoolean(int columnIndex)` / `boolean getBoolean(String columnLabel)`
+  - `byte getByte(int columnIndex)` / `byte getByte(String columnLabel)`
+  - `byte[] getBytes(int columnIndex)` / `byte[] getBytes(String columnLabel)`
+  - `Blob getBlob(int columnIndex)` / `Blob getBlob(String columnLabel)`
+  - `Clob getClob(int columnIndex)` / `Clob getClob(String columnLabel)`
+  - `Date getDate(int columnIndex)` / `Date getDate(int columnIndex, Calendar cal)` / `Date getDate(String columnLabel)` / `Date getDate(String columnLabel, Calendar cal)`
+  - `Time getTime(int columnIndex)` / `Time getTime(int columnIndex, Calendar cal)` / `Time getTime(String columnLabel)` / `Time getTime(String columnLabel, Calendar cal)`
+  - `Timestamp getTimestamp(int columnIndex)` / `Timestamp getTimestamp(int columnIndex, Calendar cal)` / `Timestamp getTimestamp(String columnLabel)` / `Timestamp getTimestamp(String columnLabel, Calendar cal)`
+  - `Array getArray(int columnIndex)` / `Array getArray(String columnLabel)`
+  - `SQLXML getSQLXML(int columnIndex)` / `SQLXML getSQLXML(String columnLabel)`
+  - `String getString(int columnIndex)` / `String getString(String columnLabel)`
+  - `URL getURL(int columnIndex)` / `URL getURL(String columnLabel)`
+  - `InputStream getAsciiStream(int columnIndex)` / `InputStream getAsciiStream(String columnLabel)`
+  - `BigDecimal getBigDecimal(int columnIndex)` / `BigDecimal getBigDecimal(String columnLabel)`
+  - `InputStream getBinaryStream(int columnIndex)` / `InputStream getBinaryStream(String columnLabel)`
+  - `Reader getCharacterStream(int columnIndex)` / `Reader getCharacterStream(String columnLabel)`
+  - `Reader getNCharacterStream(int columnIndex)` / `Reader getNCharacterStream(String columnLabel)`
+  - `NClob getNClob(int columnIndex)` / `NClob getNClob(String columnLabel)`
+  - `String getNString(int columnIndex)` / `String getNString(String columnLabel)`
+  - `Object getObject(int columnIndex)` / `<T> T getObject(int columnIndex, Class<T> type)` / `Object getObject(int columnIndex, Map<String,Class<?>> map)` / `Object getObject(String columnLabel)` / `<T> T getObject(String columnLabel, Class<T> type)` / `Object getObject(String columnLabel, Map<String,Class<?>> map)`
+  - `Ref getRef(int columnIndex)` / `Ref getRef(String columnLabel)`
+  - `RowId getRowId(int columnIndex)` / `RowId getRowId(String columnLabel)`
+- 更新数据
+  - `void updateArray(int columnIndex, Array x)` / `void updateArray(String columnLabel, Array x)`
+  - `void updateAsciiStream(int columnIndex, InputStream x)` / `void updateAsciiStream(int columnIndex, InputStream x, int length)` / `void updateAsciiStream(int columnIndex, InputStream x, long length)` / `void updateAsciiStream(String columnLabel, InputStream x)` / `void updateAsciiStream(String columnLabel, InputStream x, int length)` / `void updateAsciiStream(String columnLabel, InputStream x, long length)`
+  - `void updateBigDecimal(int columnIndex, BigDecimal x)` / `void updateBigDecimal(String columnLabel, BigDecimal x)`
+  - `void updateBinaryStream(int columnIndex, InputStream x)` / `void updateBinaryStream(int columnIndex, InputStream x, int length)` / `void updateBinaryStream(int columnIndex, InputStream x, long length)` / `void updateBinaryStream(String columnLabel, InputStream x)` / `void updateBinaryStream(String columnLabel, InputStream x, int length)` / `void updateBinaryStream(String columnLabel, InputStream x, long length)`
+  - `void updateBlob(int columnIndex, Blob x)` / `void updateBlob(int columnIndex, InputStream inputStream)` / `void updateBlob(int columnIndex, InputStream inputStream, long length)` / `void updateBlob(String columnLabel, Blob x)` / `void updateBlob(String columnLabel, InputStream inputStream)` / `void updateBlob(String columnLabel, InputStream inputStream, long length)`
+  - `void updateBoolean(int columnIndex, boolean x)` / `void updateBoolean(String columnLabel, boolean x)`
+  - `void updateByte(int columnIndex, byte x)` / `void updateByte(String columnLabel, byte x)`
+  - `void updateBytes(int columnIndex, byte[] x)` / `void updateBytes(String columnLabel, byte[] x)`
+  - `void updateCharacterStream(int columnIndex, Reader x)` / `void updateCharacterStream(int columnIndex, Reader x, int length)` / `void updateCharacterStream(int columnIndex, Reader x, long length)` / `void updateCharacterStream(String columnLabel, Reader reader)` / `void updateCharacterStream(String columnLabel, Reader reader, int length)` / `void updateCharacterStream(String columnLabel, Reader reader, long length)`
+  - `void updateClob(int columnIndex, Clob x)` / `void updateClob(int columnIndex, Reader reader)` / `void updateClob(int columnIndex, Reader reader, long length)` / `void updateClob(String columnLabel, Clob x)` / `void updateClob(String columnLabel, Reader reader)` / `void updateClob(String columnLabel, Reader reader, long length)`
+  - `void updateDate(int columnIndex, Date x)` / `void updateDate(String columnLabel, Date x)`
+  - `void updateDouble(int columnIndex, double x)` / `void updateDouble(String columnLabel, double x)`
+  - `void updateFloat(int columnIndex, float x)` / `void updateFloat(String columnLabel, float x)`
+  - `void updateInt(int columnIndex, int x)` / `void updateInt(String columnLabel, int x)`
+  - `void updateLong(int columnIndex, long x)` / `void updateLong(String columnLabel, long x)`
+  - `void updateNCharacterStream(int columnIndex, Reader x)` / `void updateNCharacterStream(int columnIndex, Reader x, long length)` / `void updateNCharacterStream(String columnLabel, Reader reader)` / `void updateNCharacterStream(String columnLabel, Reader reader, long length)`
+  - `void updateNClob(int columnIndex, NClob nClob)` / `void updateNClob(int columnIndex, Reader reader)` / `void updateNClob(int columnIndex, Reader reader, long length)` / `void updateNClob(String columnLabel, NClob nClob)` / `void updateNClob(String columnLabel, Reader reader)` / `void updateNClob(String columnLabel, Reader reader, long length)`
+  - `void updateNString(int columnIndex, String nString)` / `void updateNString(String columnLabel, String nString)`
+  - `void updateNull(int columnIndex)` / `void updateNull(String columnLabel)`
+  - `void updateObject(int columnIndex, Object x)` / `void updateObject(int columnIndex, Object x, int scaleOrLength)`
+  - `default void updateObject(int columnIndex, Object x, SQLType targetSqlType)` / `default void updateObject(int columnIndex, Object x, SQLType targetSqlType, int scaleOrLength)`
+  - `void updateObject(String columnLabel, Object x)` / `void updateObject(String columnLabel, Object x, int scaleOrLength)`
+  - `default void updateObject(String columnLabel, Object x, SQLType targetSqlType)` / `default void updateObject(String columnLabel, Object x, SQLType targetSqlType, int scaleOrLength)`
+  - `void updateRef(int columnIndex, Ref x)` / `void updateRef(String columnLabel, Ref x)`
+  - `void updateRowId(int columnIndex, RowId x)` / `void updateRowId(String columnLabel, RowId x)`
+  - `void updateShort(int columnIndex, short x)` / `void updateShort(String columnLabel, short x)`
+  - `void updateSQLXML(int columnIndex, SQLXML xmlObject)` / `void updateSQLXML(String columnLabel, SQLXML xmlObject)`
+  - `void updateString(int columnIndex, String x)` / `void updateString(String columnLabel, String x)`
+  - `void updateTime(int columnIndex, Time x)` / `void updateTime(String columnLabel, Time x)`
+  - `void updateTimestamp(int columnIndex, Timestamp x)` / `void updateTimestamp(String columnLabel, Timestamp x)`
+
+
+**PreparedStatement**(预编译)
+- `void addBatch()`
+- `void clearParameters()`
+- `boolean execute()` / `default long executeLargeUpdate()` / `ResultSet executeQuery()` / `int executeUpdate()`
+- `ResultSetMetaData getMetaData()`
+- `ParameterMetaData getParameterMetaData()`
+- 设置参数
+  - `void setArray(int parameterIndex, Array x)`
+  - `void setAsciiStream(int parameterIndex, InputStream x)` / `void setAsciiStream(int parameterIndex, InputStream x, int length)` / `void setAsciiStream(int parameterIndex, InputStream x, long length)`
+  - `void setBigDecimal(int parameterIndex, BigDecimal x)`
+  - `void setBinaryStream(int parameterIndex, InputStream x)` / `void setBinaryStream(int parameterIndex, InputStream x, int length)` / `void setBinaryStream(int parameterIndex, InputStream x, long length)`
+  - `void setBlob(int parameterIndex, Blob x)` / `void setBlob(int parameterIndex, InputStream inputStream)` / `void setBlob(int parameterIndex, InputStream inputStream, long length)`
+  - `void setBoolean(int parameterIndex, boolean x)`
+  - `void setByte(int parameterIndex, byte x)`
+  - `void setBytes(int parameterIndex, byte[] x)`
+  - `void setCharacterStream(int parameterIndex, Reader reader)` / `void setCharacterStream(int parameterIndex, Reader reader, int length)` / `void setCharacterStream(int parameterIndex, Reader reader, long length)`
+  - `void setClob(int parameterIndex, Clob x)` / `void setClob(int parameterIndex, Reader reader)` / `void setClob(int parameterIndex, Reader reader, long length)`
+  - `void setDate(int parameterIndex, Date x)` / `void setDate(int parameterIndex, Date x, Calendar cal)`
+  - `void setDouble(int parameterIndex, double x)`
+  - `void setFloat(int parameterIndex, float x)`
+  - `void setInt(int parameterIndex, int x)`
+  - `void setLong(int parameterIndex, long x)`
+  - `void setNCharacterStream(int parameterIndex, Reader value)` / `void setNCharacterStream(int parameterIndex, Reader value, long length)`
+  - `void setNClob(int parameterIndex, NClob value)` / `void setNClob(int parameterIndex, Reader reader)` / `void setNClob(int parameterIndex, Reader reader, long length)`
+  - `void setNString(int parameterIndex, String value)`
+  - `void setNull(int parameterIndex, int sqlType)` / `void setNull(int parameterIndex, int sqlType, String typeName)`
+  - `void setObject(int parameterIndex, Object x)` / `void setObject(int parameterIndex, Object x, int targetSqlType)` / `void setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength)`
+  - `default void setObject(int parameterIndex, Object x, SQLType targetSqlType)` / `default void setObject(int parameterIndex, Object x, SQLType targetSqlType, int scaleOrLength)`
+  - `void setRef(int parameterIndex, Ref x)`
+  - `void setRowId(int parameterIndex, RowId x)`
+  - `void setShort(int parameterIndex, short x)`
+  - `void setSQLXML(int parameterIndex, SQLXML xmlObject)`
+  - `void setString(int parameterIndex, String x)`
+  - `void setTime(int parameterIndex, Time x)` / `void setTime(int parameterIndex, Time x, Calendar cal)`
+  - `void setTimestamp(int parameterIndex, Timestamp x)` / `void setTimestamp(int parameterIndex, Timestamp x, Calendar cal)`
+  - `void setURL(int parameterIndex, URL x)`
+
+
+**CallableStatement**(存储过程)
+- `void registerOutParameter(int parameterIndex, int sqlType)` / `void registerOutParameter(int parameterIndex, int sqlType, int scale)` / `void registerOutParameter(int parameterIndex, int sqlType, String typeName)` / `default void registerOutParameter(int parameterIndex, SQLType sqlType)` / `default void registerOutParameter(int parameterIndex, SQLType sqlType, int scale)` / `default void registerOutParameter(int parameterIndex, SQLType sqlType, String typeName)` / `void registerOutParameter(String parameterName, int sqlType)` / `void registerOutParameter(String parameterName, int sqlType, int scale)` / `void registerOutParameter(String parameterName, int sqlType, String typeName)` / `default void registerOutParameter(String parameterName, SQLType sqlType)` / `default void registerOutParameter(String parameterName, SQLType sqlType, int scale)` / `default void registerOutParameter(String parameterName, SQLType sqlType, String typeName)`
+- `boolean wasNull()`
+- 获取数据
+  - `Array getArray(int parameterIndex)` / `Array getArray(String parameterName)`
+  - `BigDecimal getBigDecimal(int parameterIndex)` / `BigDecimal getBigDecimal(String parameterName)`
+  - `Blob getBlob(int parameterIndex)` / `Blob getBlob(String parameterName)`
+  - `boolean getBoolean(int parameterIndex)` / `boolean getBoolean(String parameterName)`
+  - `byte getByte(int parameterIndex)` / `byte getByte(String parameterName)`
+  - `byte[] getBytes(int parameterIndex)` / `byte[] getBytes(String parameterName)`
+  - `Reader getCharacterStream(int parameterIndex)` / `Reader getCharacterStream(String parameterName)`
+  - `Clob getClob(int parameterIndex)` / `Clob getClob(String parameterName)`
+  - `Date getDate(int parameterIndex)` / `Date getDate(int parameterIndex, Calendar cal)` / `Date getDate(String parameterName)` / `Date getDate(String parameterName, Calendar cal)`
+  - `double getDouble(int parameterIndex)` / `double getDouble(String parameterName)`
+  - `float getFloat(int parameterIndex)` / `float getFloat(String parameterName)`
+  - `int getInt(int parameterIndex)` / `int getInt(String parameterName)`
+  - `long getLong(int parameterIndex)` / `long getLong(String parameterName)`
+  - `Reader getNCharacterStream(int parameterIndex)` / `Reader getNCharacterStream(String parameterName)`
+  - `NClob getNClob(int parameterIndex)` / `NClob getNClob(String parameterName)`
+  - `String getNString(int parameterIndex)` / `String getNString(String parameterName)`
+  - `Object getObject(int parameterIndex)` / `<T> T getObject(int parameterIndex, Class<T> type)` / `Object getObject(int parameterIndex, Map<String,Class<?>> map)` / `Object getObject(String parameterName)` / `<T> T getObject(String parameterName, Class<T> type)` / `Object getObject(String parameterName, Map<String,Class<?>> map)`
+  - `Ref getRef(int parameterIndex)` / `Ref getRef(String parameterName)`
+  - `RowId getRowId(int parameterIndex)` / `RowId getRowId(String parameterName)`
+  - `short getShort(int parameterIndex)` / `short getShort(String parameterName)`
+  - `SQLXML getSQLXML(int parameterIndex)` / `SQLXML getSQLXML(String parameterName)`
+  - `String getString(int parameterIndex)` / `String getString(String parameterName)`
+  - `Time getTime(int parameterIndex)` / `Time getTime(int parameterIndex, Calendar cal)` / `Time getTime(String parameterName)` / `Time getTime(String parameterName, Calendar cal)`
+  - `Timestamp getTimestamp(int parameterIndex)` / `Timestamp getTimestamp(int parameterIndex, Calendar cal)` / `Timestamp getTimestamp(String parameterName)` / `Timestamp getTimestamp(String parameterName, Calendar cal)`
+  - `URL getURL(int parameterIndex)` / `URL getURL(String parameterName)`
+- 设置数据
+  - `void setAsciiStream(String parameterName, InputStream x)` / `void setAsciiStream(String parameterName, InputStream x, int length)` / `void setAsciiStream(String parameterName, InputStream x, long length)`
+  - `void setBigDecimal(String parameterName, BigDecimal x)`
+  - `void setBinaryStream(String parameterName, InputStream x)` / `void setBinaryStream(String parameterName, InputStream x, int length)` / `void setBinaryStream(String parameterName, InputStream x, long length)`
+  - `void setBlob(String parameterName, Blob x)` / `void setBlob(String parameterName, InputStream inputStream)` / `void setBlob(String parameterName, InputStream inputStream, long length)`
+  - `void setBoolean(String parameterName, boolean x)`
+  - `void setByte(String parameterName, byte x)`
+  - `void setBytes(String parameterName, byte[] x)`
+  - `void setCharacterStream(String parameterName, Reader reader)` / `void setCharacterStream(String parameterName, Reader reader, int length)` / `void setCharacterStream(String parameterName, Reader reader, long length)`
+  - `void setClob(String parameterName, Clob x)` / `void setClob(String parameterName, Reader reader)` / `void setClob(String parameterName, Reader reader, long length)`
+  - `void setDate(String parameterName, Date x)` / `void setDate(String parameterName, Date x, Calendar cal)`
+  - `void setDouble(String parameterName, double x)`
+  - `void setFloat(String parameterName, float x)`
+  - `void setInt(String parameterName, int x)`
+  - `void setLong(String parameterName, long x)`
+  - `void setNCharacterStream(String parameterName, Reader value)` / `void setNCharacterStream(String parameterName, Reader value, long length)`
+  - `void setNClob(String parameterName, NClob value)` / `void setNClob(String parameterName, Reader reader)` / `void setNClob(String parameterName, Reader reader, long length)`
+  - `void setNString(String parameterName, String value)`
+  - `void setNull(String parameterName, int sqlType)` / `void setNull(String parameterName, int sqlType, String typeName)`
+  - `void setObject(String parameterName, Object x)` / `void setObject(String parameterName, Object x, int targetSqlType)` / `void setObject(String parameterName, Object x, int targetSqlType, int scale)` / `default void setObject(String parameterName, Object x, SQLType targetSqlType)` / `default void setObject(String parameterName, Object x, SQLType targetSqlType, int scaleOrLength)`
+  - `void setRowId(String parameterName, RowId x)`
+  - `void setShort(String parameterName, short x)`
+  - `void setSQLXML(String parameterName, SQLXML xmlObject)`
+  - `void setString(String parameterName, String x)`
+  - `void setTime(String parameterName, Time x)` / `void setTime(String parameterName, Time x, Calendar cal)`
+  - `void setTimestamp(String parameterName, Timestamp x)` / `void setTimestamp(String parameterName, Timestamp x, Calendar cal)`
+  - `void setURL(String parameterName, URL val)`
+
 
 # Servlet
 
