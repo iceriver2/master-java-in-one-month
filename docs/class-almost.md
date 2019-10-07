@@ -3118,18 +3118,36 @@ Types(JDBC类型)
 - Registration
 - RequestDispatcher
 - Servlet
-- ServletConfig
+- **ServletConfig**
 - ServletContainerInitializer
-- ServletContext
+- **ServletContext**
 - ServletContextAttributeListener
 - ServletContextListener
 - ServletRegistration
-- **ServletRequest** / **ServletResponse**
 - ServletRequestAttributeListener
 - ServletRequestListener
 - SessionCookieConfig
 - SingleThreadModel
 
+**ServletRequest**(接口)
+- `AsyncContext getAsyncContext()` / `boolean isAsyncStarted()` / `boolean isAsyncSupported()` / `AsyncContext startAsync()` / `AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)`
+- 属性：`Enumeration<String> getAttributeNames()` / `Object getAttribute(String name)` / `void setAttribute(String name, Object o)` / `void removeAttribute(String name)`
+- 字符集：`void setCharacterEncoding(String env)` / `String getCharacterEncoding()`
+- 内容：`String getContentType()` / `int getContentLength()` / `long getContentLengthLong()`
+- `DispatcherType getDispatcherType()` / `RequestDispatcher getRequestDispatcher(String path)`
+- 流：`ServletInputStream getInputStream()` / `BufferedReader getReader()`
+- 请求信息：`String getProtocol()` / `String getLocalAddr()` / `String getLocalName()` / `int getLocalPort()` / `String getRealPath(String path)` / `String getRemoteAddr()` / `String getRemoteHost()` / `int getRemotePort()` / `String getScheme()` / `String getServerName()` / `int getServerPort()` / `ServletContext getServletContext()` / `boolean isSecure()`
+- `Enumeration<Locale> getLocales()` / `Locale getLocale()`
+- `Enumeration<String> getParameterNames()` / `String getParameter(String name)` / `Map<String,String[]> getParameterMap()` / `String[] getParameterValues(String name)`
+
+**ServletResponse**（接口）
+- `void flushBuffer()` / `void reset()` / `void resetBuffer()`
+- `int getBufferSize()` / `void setBufferSize(int size)`
+- `String getCharacterEncoding()` / `void setCharacterEncoding(String charset)`
+- `String getContentType()` / `void setContentType(String type)` / `void setContentLength(int len)` / `void setContentLengthLong(long len)`
+- `Locale getLocale()` / `void setLocale(Locale loc)`
+- `ServletOutputStream getOutputStream()` / `PrintWriter getWriter()`
+- `boolean isCommitted()`
 
 AsyncEvent
 - `AsyncEvent(AsyncContext context)` / `AsyncEvent(AsyncContext context, ServletRequest request, ServletResponse response)` / `AsyncEvent(AsyncContext context, ServletRequest request, ServletResponse response, Throwable throwable)` / `AsyncEvent(AsyncContext context, Throwable throwable)`
@@ -3224,8 +3242,6 @@ ServletResponseWrapper
 ## `javax.servlet.http`
 
 接口：
-- HttpServletRequest / HttpServletResponse
-- **HttpSession**
 - HttpSessionActivationListener
 - HttpSessionAttributeListener
 - HttpSessionBindingListener
@@ -3236,7 +3252,37 @@ ServletResponseWrapper
 - Part
 - WebConnection
 
-Cookie
+**HttpSession**（接口）
+- `void removeAttribute(String name)` / `Object getAttribute(String name)` / `void setAttribute(String name, Object value)` / `Enumeration<String> getAttributeNames()`
+- `long getCreationTime()` / `long getLastAccessedTime()`
+- `String getId()`
+- `int getMaxInactiveInterval()` / `void setMaxInactiveInterval(int interval)`
+- `ServletContext getServletContext()`
+- `void invalidate()`
+- `boolean isNew()`
+
+
+**HttpServletRequest**（接口，继承 ServletRequest）
+- 方法：`String getMethod()`
+- Cookie：`Cookie[] getCookies()` 
+- Session:`String changeSessionId()` / `String getRequestedSessionId()` / `HttpSession getSession()` / `HttpSession getSession(boolean create)` / `boolean isRequestedSessionIdFromCookie()` / `boolean isRequestedSessionIdFromURL()` / `boolean isRequestedSessionIdValid()`
+- 路径：`String getContextPath()` / `String getServletPath()` / `String getRequestURI()` / `StringBuffer getRequestURL()` / `String getQueryString()` / `String getPathInfo()` / `String getPathTranslated()`
+- 授权：`boolean authenticate(HttpServletResponse response)` / `String getAuthType()` / `String getRemoteUser()` / `Principal getUserPrincipal()` / `void login(String username, String password)` / `void logout()` / `boolean isUserInRole(String role)`
+- 头部：`Enumeration<String> getHeaderNames()` / `Enumeration<String> getHeaders(String name)` / `String getHeader(String name)` / `long getDateHeader(String name)` / `int getIntHeader(String name)`
+- `Collection<Part> getParts()` / `Part getPart(String name)`
+- `<T extends HttpUpgradeHandler>T upgrade(Class<T> handlerClass)`
+
+**HttpServletResponse**（接口，继承ServletResponse）
+- 若干 `SC_XX` 常量表示 status code
+- `void addCookie(Cookie cookie)`
+- `void addHeader(String name, String value)` / `void addDateHeader(String name, long date)` / `void addIntHeader(String name, int value)` / `void setHeader(String name, String value)` / `void setDateHeader(String name, long date)` / `void setIntHeader(String name, int value)` / `boolean containsHeader(String name)`
+- `String encodeRedirectURL(String url)` / `String encodeURL(String url)`
+- `Collection<String> getHeaders(String name)` / `Collection<String> getHeaderNames()` / `String getHeader(String name)`
+- `int getStatus()` / `void setStatus(int sc)`
+- `void sendError(int sc)` / `void sendError(int sc, String msg)`
+- `void sendRedirect(String location)`
+
+**Cookie**
 - `Cookie(String name, String value)`
 - `Object clone()`
 - `String getComment()` / `void setComment(String purpose)`
@@ -3344,7 +3390,7 @@ JspFactory(抽象)
 - `abstract void releasePageContext(PageContext pc)`
 
 JspWriter(抽象)
-- `protected	JspWriter(int bufferSize, boolean autoFlush)`
+- `protected JspWriter(int bufferSize, boolean autoFlush)`
 - `abstract void clear()`
 - `abstract void clearBuffer()`
 - `abstract void close()`
