@@ -11,15 +11,14 @@
   - [application](#application)
   - [out](#out)
   - [config](#config)
+- [JDBC](#jdbc)
 - [框架](#%e6%a1%86%e6%9e%b6)
 
 - JavaWeb编程
-  - Web编程基础：Tomcat服务器、JSP语法、EL、内置对象、Servlet API、Listener和Filter
+  - Web编程基础：Tomcat服务器、EL、Servlet API、Listener和Filter
   - Web编程进阶：自定义标签库、MVC和DAO、JSTL／DisplayTag等常见标签库的用法
-  - Web编程原理：请求／响应架构原理、HTTP协议、深刻掌握JSP运行原理、掌握Web容器底层的线程池、Socket通信、调用Servlet的命令模式
-  - Ajax编程：XMLHttpRequest和异步请求、发送请求与处理响应、常见AJax库（Prototype、JQuery、ExtJS、DWR）用法、结合HTTP协议，异步请求深入研究Ajax库的设计
+  - Web编程原理：深刻掌握JSP运行原理、掌握Web容器底层的线程池、Socket通信、调用Servlet的命令模式
 - JDBC编程
-  - SQL基础：基本SQL、基本查询、多表查询、结果集的交／并／差运算
   - JDBC基础：常见数据库操作、JDBC操作常见数据库、RowSet与离线结果集、数据库连接池、事务管理、批处理
   - JDBC进阶：存储过程、函数、触发器、理解JDBC的不足、掌握ORM工具优势和设计
   - DHTML编程：HTML、Javascript、DOM和事件机制
@@ -238,6 +237,10 @@ JSP的内置对象：**request**、**response**、**session**、**application**�
 
 > 注：当一个变量同时出现在get/post方式中时，会以数组形式保存。
 
+
+request对象的常用方法：`getAttrbute()`获取属性 / `removeAttribute()`删除属性 / `setAttribute()`设置属性 / `getAttributeNames()`获取属性枚举, `getCharacterEncoding()`获取请求的字符编码 / `setCharacterEncoding()`设置请求的字符编码, `getContentType()`获取内容的MIME, `getContextPath()`获取相对ROOT的应用的位置, `getLocalAddr()`获取服务器地址, `getLocalName()`获取服务器名称, `getMethod()`获取请求类型, `getParameter()`获取参数值, `getParameterMap()`获取参数值的映射, `getParameterNames()`获取参数名称的枚举, `getParameterValues()`获取参数值的数组, `getProtocol()`获取协议及版本号, `getQueryString()`获取查询字符串, `getRemoteAddr()`获取客户地址, `getRemoteHost()`获取客户名称, `getRemotePort()`获取客户端口, `getRequestURI()`获取请求路径, `getRequestURL()`获取标准全路径, `getServerPort()`获取服务端端口, `getServletPath()`获取servlet路径（JSP路径）, `getSession()`获得关联的会话。
+
+
 ServletRequest(接口)
 - `AsyncContext getAsyncContext()` / `boolean isAsyncStarted()` / `boolean isAsyncSupported()` / `AsyncContext startAsync()` / `AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)`
 - 属性：`Enumeration<String> getAttributeNames()` / `Object getAttribute(String name)` / `void setAttribute(String name, Object o)` / `void removeAttribute(String name)`
@@ -261,6 +264,9 @@ HttpServletRequest（接口，继承 ServletRequest）
 
 ## Response
 
+response 对象的常用方法：`flushBuffer()`强制输出缓冲, `getBufferSize()`获得缓冲区大小 / `setBufferSize()`设置缓冲区大小, `getCharacterEncoding()`获得响应的字符编码 / `setCharacterEncoding()`设置响应的字符编码, `getContentType()`获得响应的MIME / `setContentType()`设置响应的MIME, `getOutputStream()`获得输出流, `getWriter()`获得PrintWriter对象, `sendRedirect()`重定向, `setHeader()`设置头部。
+
+
 ServletResponse（接口）
 - `void flushBuffer()` / `void reset()` / `void resetBuffer()`
 - `int getBufferSize()` / `void setBufferSize(int size)`
@@ -282,9 +288,12 @@ HttpServletResponse（接口，继承ServletResponse）
 
 ## Cookie
 
-Cookie在安全性较高的场合不要使用。浏览器只允许存放300个Cookie，每个站点最多20个，每个Cookie最大4KB。  
+Cookie在安全性较高的场合不要使用。浏览器只允许存放300个Cookie，每个站点最多20个，每个Cookie最大4KB。
 
-Cookie的使用，先创建一个 Cookie 对象，然后通过 response.addCookie() 将其发送到客户端，通过 request.getCookies() 方法查找获取。  
+Cookie的使用，先创建一个 Cookie 对象，然后通过 response.addCookie() 将其发送到客户端，通过 request.getCookies() 方法查找获取。
+
+Cookie对象自身也有一些方法可以设置属性，如 `getComment()`/`setComment()`获取/设置注释, `getDomain()`/`setDomian()`获取/设置域, `getMaxAge()`/`setMaxAge()`获取/设置有效时间, `getName()`/`setName()`获取设置名称, `getPath()`/`getPath()`获取/设置路径, `getSecure()`/`setSecure()`获取设置SSL, `getValue()`/`setValue()`获取/设置值。
+
 
 Cookie(类)
 - `Cookie(String name, String value)`
@@ -301,6 +310,9 @@ Cookie(类)
 
 ## Session
 
+session对象的常用方法有：`getAttribute()`获取属性 / `removeAttribute()`删除属性 / `getAttributeNames()`获取属性的枚举, `getMaxInactiveInterval()`获取有效时间 / `setMaxInactiveInterval()`设置有效时间, `getServletContext()`获得会话所属上下文, `invalidate()`使会话失效, `isNew()`是否新会话。
+
+
 HttpSession（接口）
 - `void removeAttribute(String name)` / `Object getAttribute(String name)` / `void setAttribute(String name, Object value)` / `Enumeration<String> getAttributeNames()`
 - `long getCreationTime()` / `long getLastAccessedTime()`
@@ -313,6 +325,9 @@ HttpSession（接口）
 ## application
 
 application对象在多个程序或多个用户之间共享数据。服务器一启动，就会自动创建 application 对象，会一直持续到服务器关闭。
+
+application对象的常用方法：`getAttribute()`获得属性 / `removeAttribute()`删除属性 / `setAttribute()`设置属性 / `getAttributeNames()`获得属性的枚举, `getContext()`获得指定URI的上下文, `getInitParameter()`获得默认参数值 /  `getInitParameterName()`获得默认参数名称, `getRealPath()`返回path的物理路径, `getServletContextName()`获得上下文的显示名称。 
+
 
 ServletContext(接口)
 - `<T extends Filter>T createFilter(Class<T> clazz)` / `FilterRegistration.Dynamic addFilter(String filterName, Class<? extends Filter> filterClass)` / `FilterRegistration.Dynamic addFilter(String filterName, Filter filter)` / `FilterRegistration.Dynamic addFilter(String filterName, String className)`
@@ -339,7 +354,12 @@ ServletContext(接口)
 
 ## out
 
+> 注：发现 out 在页面可以直接使用，但是，一旦放入自定义方法中即会找不到变量。
+
 out对象向客户端输出内容，由 Web容器指定为 javax.servlet.jsp.JspWriter 类的一个子类。
+
+out对象的常用方法包括：`clear()`清空缓冲区, `clearBuffer()`清空缓冲区, `close()`刷新缓冲区后关闭, `flush()`刷新缓冲区, `getBufferSize()`获得缓冲区大小, `isAutoFlush()`是否自动刷新, `print()`打印 。
+
 
 JspWriter(抽象)
 - `protected JspWriter(int bufferSize, boolean autoFlush)`
@@ -357,6 +377,10 @@ JspWriter(抽象)
 ## config
 
 config对象是 servletConfig 类的一个对象，用于处理当前页面的句柄（？），仅在页面范围内有效，使用的较少。
+
+# JDBC
+
+
 
 # 框架
 
