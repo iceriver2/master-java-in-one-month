@@ -3359,7 +3359,6 @@ Timestamp（用于SQL的TIMESTAMP值）
 - Servlet
 - **ServletConfig**
 - ServletContainerInitializer
-- **ServletContext**
 - ServletContextAttributeListener
 - ServletContextListener
 - ServletRegistration
@@ -3367,6 +3366,30 @@ Timestamp（用于SQL的TIMESTAMP值）
 - ServletRequestListener
 - SessionCookieConfig
 - SingleThreadModel
+
+
+**ServletContext**(接口)
+- `<T extends Filter>T createFilter(Class<T> clazz)` / `FilterRegistration.Dynamic addFilter(String filterName, Class<? extends Filter> filterClass)` / `FilterRegistration.Dynamic addFilter(String filterName, Filter filter)` / `FilterRegistration.Dynamic addFilter(String filterName, String className)`
+- `<T extends EventListener>T createListener(Class<T> clazz)` / `void addListener(Class<? extends EventListener> listenerClass)` / `void addListener(String className)` / `<T extends EventListener>void addListener(T t)`
+- `<T extends Servlet>T createServlet(Class<T> clazz)` / `ServletRegistration.Dynamic addServlet(String servletName, Class<? extends Servlet> servletClass)` / `ServletRegistration.Dynamic addServlet(String servletName, Servlet servlet)` / `ServletRegistration.Dynamic addServlet(String servletName, String className)`
+- `void declareRoles(String... roleNames)`
+- `Enumeration<String> getAttributeNames()` / `Object getAttribute(String name)` / `void removeAttribute(String name)` / `void setAttribute(String name, Object object)`
+- `ClassLoader getClassLoader()`
+- `ServletContext getContext(String uripath)` / `String getContextPath()`
+- `int getEffectiveMajorVersion()` / `int getEffectiveMinorVersion()` / `int getMajorVersion()` / `int getMinorVersion()`
+- `Set<SessionTrackingMode> getDefaultSessionTrackingModes()` / `Set<SessionTrackingMode> getEffectiveSessionTrackingModes()` / `void setSessionTrackingModes(Set<SessionTrackingMode> sessionTrackingModes)`
+- `Map<String,? extends FilterRegistration> getFilterRegistrations()` / `FilterRegistration getFilterRegistration(String filterName)`
+- `Enumeration<String> getInitParameterNames()` / `String getInitParameter(String name)` / `boolean setInitParameter(String name, String value)`
+- `JspConfigDescriptor getJspConfigDescriptor()`
+- `String getMimeType(String file)`
+- `RequestDispatcher getNamedDispatcher(String name)` / `RequestDispatcher getRequestDispatcher(String path)`
+- `String getRealPath(String path)`
+- `URL getResource(String path)` / `InputStream getResourceAsStream(String path)` / `Set<String> getResourcePaths(String path)`
+- `String getServerInfo()`
+- `Servlet getServlet(String name)` / `String getServletContextName()` / `Enumeration<String> getServletNames()` / `ServletRegistration getServletRegistration(String servletName)` / `Map<String,? extends ServletRegistration> getServletRegistrations()` / `Enumeration<Servlet> getServlets()`
+- `SessionCookieConfig getSessionCookieConfig()`
+- `String getVirtualServerName()`
+- `void log(Exception exception, String msg)` / `void log(String msg)` / `void log(String message, Throwable throwable)`
 
 **ServletRequest**(接口)
 - `AsyncContext getAsyncContext()` / `boolean isAsyncStarted()` / `boolean isAsyncSupported()` / `AsyncContext startAsync()` / `AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)`
