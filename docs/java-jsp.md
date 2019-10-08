@@ -19,6 +19,8 @@
   - [ResultSetMetaData](#resultsetmetadata)
 - [JavaBean](#javabean)
 - [Servlet](#servlet)
+  - [servlet配置](#servlet%e9%85%8d%e7%bd%ae)
+  - [转发](#%e8%bd%ac%e5%8f%91)
 - [框架](#%e6%a1%86%e6%9e%b6)
 - [服务器](#%e6%9c%8d%e5%8a%a1%e5%99%a8)
 
@@ -527,7 +529,7 @@ Servlet是用Java编写的运行在Web服务器中的程序，也是一个类。
 
 Servlet由Web服务器引擎负责编译执行。当客户端访问Servlet时，服务器将启动一个线程，加载该Servlet，由Servlet接受HTTP请求并做出响应。
 
-Servlet的生命周期有3个过程：
+Servlet的生命周期有3个过程(初始化和销毁都是一次性)：
 - Servlet的初始化。服务器引擎生成Servlet类的对象并加载，通过这个对象的 `init()` 完成初始化工作。
 - 生成的Servlet类的对象调用 `service()` 方法来响应请求。每发生一次请求， `service()`都会被调用一次。
 - Servlet类的对象常驻内存直至Web服务器关闭。当Web服务器关闭时，将调用Servlet类的对象的 `destory()` 方法来消除此对象。
@@ -548,7 +550,7 @@ java.lang.Object
 ```
 
 HttpServlet类（抽象）继承GenericServlet类（抽象），用于创建一个基于HTTP协议的Servlet。  
-继承它的类需要实现这些方法：`doGet()`, `doPost()`, `doPut()`, `doDelete()`, `init()`/`destory()`, `getServletInfo()`。此外，还可以重载`service()`，此方法处理标准的HTTP请求，并转发需求到各个 doXXX() 方法。
+继承它的类需要实现这些方法：`doGet()`, `doPost()`, `doPut()`, `doDelete()`, `init()`/`destory()`, `getServletInfo()`。此外，还可以重载`service()`，此方法处理标准的HTTP请求，并转发需求到各个 doXXX() 方法。`service()`和doXXX()不能同时使用。
 ```java
 public abstract class HttpServlet extends GenericServlet implements java.io.Seriaizable {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -571,7 +573,7 @@ public abstract class HttpServlet extends GenericServlet implements java.io.Seri
 
 部署Servlet
 - 部署其class。将class文件复制到`WEB_INFO/classes`目录；如果该class属于某个包，则按包的路径存放。
-- 在`WEB-INFO/web.xml`中`<web-app>`部分加入Servlet的配置。
+- 在`WEB-INFO/web.xml`中`<web-app>`部分加入Servlet的配置。有多少就配多少，服务器会根据servlet-name自动配对。
 ```xml
 <!-- 注意：这不是两种格式！一个servlet的配置，就需要2个部分。 -->
 <servlet>
@@ -619,6 +621,33 @@ public class FirstServlet extends HttpServlet {
   </servlet-mapping>
 </web-app>
 ```
+
+## servlet配置
+
+`<servlet>`元素包括子元素
+- `<description>`描述
+- `<display-name>`显示名称
+- `<icon>`图标
+- `<servlet-name>`名称，必备
+- `<servlet-class>`完整类名，必备
+- `<jsp-file>`对JSP文件进行映射
+- `<init-param>`初始化参数，内含多个`<param-name>`和`<param-value>`
+- `<load-on-startup>`加载顺序
+- `<run-as>`指定用于执行组件的角色，内含`<role-name>`角色名
+- `<security-role-ref>`安全角色，内含`<role-link>`角色引用
+
+`<servlet-mapping>`元素用于在Servlet和URL中定义映射。包含子元素
+- `<servlet-name>`名称（与`<servlet>`中同名）
+- `<url-pattern>`对应的URL，可以精确批评，也可以使用通配符*，如`/admin/*`或`*.do`。
+
+## 转发
+
+转发通过 javax.servlet.RequestDispatcher 接口。RequestDispatcher 定义了两种接口：`forward()`、`include()`，参数都是 ServletRequest 和 ServletResponse 。
+
+RequestDispatcher对象由 Servlet 容器创建，用于封装一个由路径所标识的服务器资源。有三种方法可以获得此对象。
+- ServletRequest接口的 `RequestDispatcher getRequestDispatcher(String path)`，可以是绝对路径或相对路径
+- ServletContext接口的 `RequestDispatcher getRequestDispatcher(String path)`，必须是绝对路径
+- ServletContext接口的 `RequestDispatcher getNamedDispatcher(String name)`使用web.xml配置中的Servlet名称
 
 # 框架
 
