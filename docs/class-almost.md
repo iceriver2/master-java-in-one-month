@@ -3357,7 +3357,6 @@ Timestamp（用于SQL的TIMESTAMP值）
 - Registration
 - RequestDispatcher
 - Servlet
-- **ServletConfig**
 - ServletContainerInitializer
 - ServletContextAttributeListener
 - ServletContextListener
@@ -3367,6 +3366,10 @@ Timestamp（用于SQL的TIMESTAMP值）
 - SessionCookieConfig
 - SingleThreadModel
 
+**ServletConfig**
+- `String getInitParameter(String name)` / `Enumeration<String> getInitParameterNames()`
+- `ServletContext getServletContext()`
+- `String getServletName()`
 
 **ServletContext**(接口)
 - `<T extends Filter>T createFilter(Class<T> clazz)` / `FilterRegistration.Dynamic addFilter(String filterName, Class<? extends Filter> filterClass)` / `FilterRegistration.Dynamic addFilter(String filterName, Filter filter)` / `FilterRegistration.Dynamic addFilter(String filterName, String className)`
