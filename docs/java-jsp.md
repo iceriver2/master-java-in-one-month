@@ -17,6 +17,7 @@
   - [ResultSet](#resultset)
   - [DatabaseMetaData](#databasemetadata)
   - [ResultSetMetaData](#resultsetmetadata)
+- [JavaBean](#javabean)
 - [框架](#%e6%a1%86%e6%9e%b6)
 - [服务器](#%e6%9c%8d%e5%8a%a1%e5%99%a8)
 
@@ -337,11 +338,6 @@ config对象是 servletConfig 类的一个对象，用于处理当前页面的�
 如果在 Maven 中使用，应该在 pom.xml 的 `<dependencies>` 中加入依赖关系。
 
 
-数据库连接池负责分配、管理和释放数据库连接，允许重复使用一个现有的数据库连接。
-
-Tomcat内置的数据库连接池是 DBCP（Database Connection Pool），DBCP 是 jakarata Commons 的一个子项目。DBCP的组件包是 tomcat-dbcp.jar，位于 Tomcat/lib 目录。
-
-
 一个完整的例子
 ```java
 try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dwing", "root", "root")) {
@@ -374,7 +370,18 @@ try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/
 PHP和JS中使用数据库短连接，查询结果立即断开连接。因此，总是把查询结果作为数组（对象数组或二维数组）一次性返回。分页需要两步查询：查询全部数量，查询本页数据。  
 JDBC使用数据库长连接，只在需要时读取相应数据。因此，分页可以只需一步查询，通过`last()`获得总数，通过`absolute()`控制指针移动到需要读取的本页数据。当然，更好的方法，仍然是两步查询：查询全部数量，查询本页数据。
 
+
 事务的处理也比较简单，先设置不自动提交 `setAutoCommit(false)`，然后，正常执行各种`executeQuery()`，最后再`commit()`或`rollback()`。
+
+
+数据库连接池负责分配、管理和释放数据库连接，允许重复使用一个现有的数据库连接。  
+Tomcat内置的数据库连接池是 DBCP（Database Connection Pool），DBCP 是 jakarata Commons 的一个子项目。DBCP的组件包是 tomcat-dbcp.jar，位于 Tomcat/lib 目录。  
+要使用Tomcat的连接池，必须先在 TOmcat/conf/server.xml 中配置：
+```xml
+<Resource name="" auth="" type="" url="" username="" password="" maxActive="" maxIdle="" maxWait="">
+```
+使用连接池获取连接，主要是通过 `javax.sql.DataSource.getConnection()` 。
+
 
 ## Connection
 
@@ -467,6 +474,46 @@ DatabaseMetaData 的常用方法： `getURL()`, `getUserName()`, `getTables()` �
 ResultSetMetaData 用于获得 ResultSet 的类型和属性信息。通过 ResultSet 的 `getMetaData()` 获得一个实例。
 
 常用方法有： `getColumnCount()`, `getColumnName()`, `getColumnTypeName()` 。
+
+# JavaBean
+
+JavaBean 是一种组件技术。
+
+JavaBean分为两种：可视化JavaBean、非可视化JavaBean。可视化JavaBean是指带有界面的类，如按钮、文本框等，CS模式多用这种，类似控件；非可视化就是没有界面，Web开发多用这种，可以执行复杂的任务（如计算、数据处理）。
+
+JavaBean类的规则：
+- **默认的无参数构造方法**
+- `getXXX()` / `setXXX()` 获取和设置变量值
+- 如果是 boolean 数据，多一种 `isXXX()`
+- 所有方法都是 public
+
+部署JavaBean
+- 部署其class。将class文件复制到`WEB_INFO/classes`目录；如果该class属于某个包，则按包的路径存放。
+- 部署jar。将jar复制到`WEB-INFO/lib`目录。
+
+在JSP中使用JavaBean，使用`<jsp:useBean>`指令，在`class`字段中指定JavaBean类的全名。也可通过`<%@ page import="">`引入。
+
+
+一个完整的例子，包括JaveBean类和JSP文件：
+```java
+// 编译后，放置于 WEB-INFO/classes 下
+public class Print {
+    public String name;
+    public Print() {}
+    public void setName(String n) { name = n; }
+    public String getName() { return name; }
+}
+```
+```jsp
+<!-- 使用Print，并设置属性name -->
+<jsp:useBean id="myprint" class="Print" scope="page">
+    <!-- 设置属性 -->
+    <jsp:getProperty name="myprint" property="name" value="hello" />
+</jsp:useBean>
+
+<jsp:getProperty name="myprint" property="name"/> <!-- // hello -->
+```
+
 
 # 框架
 
