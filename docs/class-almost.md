@@ -3417,7 +3417,7 @@ AsyncEvent
 - `ServletRequest	getSuppliedRequest()` / `ServletResponse	getSuppliedResponse()`
 - `Throwable	getThrowable()`
 
-GenericServlet（抽象）
+**GenericServlet**（抽象）
 - `GenericServlet()`
 - `void destroy()`
 - `String getInitParameter(String name)` / `Enumeration<String> getInitParameterNames()`
@@ -3557,7 +3557,7 @@ ServletResponseWrapper
 - `int getVersion()` / `void setVersion(int v)`
 - `boolean isHttpOnly()` / `void setHttpOnly(boolean isHttpOnly)`
 
-HttpServlet(抽象)
+**HttpServlet**(抽象)
 - `HttpServlet()`
 - `protected void doDelete(HttpServletRequest req, HttpServletResponse resp)`
 - `protected void doGet(HttpServletRequest req, HttpServletResponse resp)`
