@@ -21,6 +21,7 @@
 - [Servlet](#servlet)
   - [servlet配置](#servlet%e9%85%8d%e7%bd%ae)
   - [转发](#%e8%bd%ac%e5%8f%91)
+  - [其他](#%e5%85%b6%e4%bb%96)
 - [框架](#%e6%a1%86%e6%9e%b6)
 - [服务器](#%e6%9c%8d%e5%8a%a1%e5%99%a8)
 
@@ -648,6 +649,14 @@ RequestDispatcher对象由 Servlet 容器创建，用于封装一个由路径所
 - ServletRequest接口的 `RequestDispatcher getRequestDispatcher(String path)`，可以是绝对路径或相对路径
 - ServletContext接口的 `RequestDispatcher getRequestDispatcher(String path)`，必须是绝对路径
 - ServletContext接口的 `RequestDispatcher getNamedDispatcher(String name)`使用web.xml配置中的Servlet名称
+
+## 其他
+
+关于JSP的内容，还有不少。可以参见 servlet 的类包，例如：Filter、FilterChain、ServletContextListener、HttpSessionListener 等。
+
+使用 Filter 需要在 web.xml 中配置 `<filter>` 和 `<filter-mapping>` 。`<filter>`包含`<filter-name>`、`<filter-class>`、`<init-params>`等子元素，`<filter-mapping>`包含`<filter-name>`和`<servlet-name>`子元素。
+
+使用 Listener 需要在 web.xml 中配置 `<listener>` 。`<listener>`元素包含`<listener-class>`子元素。
 
 # 框架
 
