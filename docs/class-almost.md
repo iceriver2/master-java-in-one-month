@@ -3355,7 +3355,6 @@ Timestamp（用于SQL的TIMESTAMP值）
 - FilterRegistration
 - ReadListener / WriteListener
 - Registration
-- RequestDispatcher
 - Servlet
 - ServletContainerInitializer
 - ServletContextAttributeListener
@@ -3365,6 +3364,10 @@ Timestamp（用于SQL的TIMESTAMP值）
 - ServletRequestListener
 - SessionCookieConfig
 - SingleThreadModel
+
+RequestDispatcher
+- `void	forward(ServletRequest request, ServletResponse response)`
+- `void	include(ServletRequest request, ServletResponse response)`
 
 **ServletConfig**
 - `String getInitParameter(String name)` / `Enumeration<String> getInitParameterNames()`
