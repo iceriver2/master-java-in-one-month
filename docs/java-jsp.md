@@ -18,6 +18,7 @@
   - [DatabaseMetaData](#databasemetadata)
   - [ResultSetMetaData](#resultsetmetadata)
 - [JavaBean](#javabean)
+- [Servlet](#servlet)
 - [框架](#%e6%a1%86%e6%9e%b6)
 - [服务器](#%e6%9c%8d%e5%8a%a1%e5%99%a8)
 
@@ -477,21 +478,25 @@ ResultSetMetaData 用于获得 ResultSet 的类型和属性信息。通过 Resul
 
 # JavaBean
 
+> 注：JavaBean只是一种规范，按规范编写的类都是JavaBean。
+
 JavaBean 是一种组件技术。
 
 JavaBean分为两种：可视化JavaBean、非可视化JavaBean。可视化JavaBean是指带有界面的类，如按钮、文本框等，CS模式多用这种，类似控件；非可视化就是没有界面，Web开发多用这种，可以执行复杂的任务（如计算、数据处理）。
 
-JavaBean类的规则：
+编写JavaBean：
 - **默认的无参数构造方法**
 - `getXXX()` / `setXXX()` 获取和设置变量值
 - 如果是 boolean 数据，多一种 `isXXX()`
 - 所有方法都是 public
 
-部署JavaBean
+部署JavaBean（先编译）
 - 部署其class。将class文件复制到`WEB_INFO/classes`目录；如果该class属于某个包，则按包的路径存放。
-- 部署jar。将jar复制到`WEB-INFO/lib`目录。
+- 或，部署jar。将jar复制到`WEB-INFO/lib`目录。
 
-在JSP中使用JavaBean，使用`<jsp:useBean>`指令，在`class`字段中指定JavaBean类的全名。也可通过`<%@ page import="">`引入。
+使用JavaBean：
+- 使用`<jsp:useBean>`指令，在`class`字段中指定JavaBean类的全名。
+- 也可通过`<%@ page import="">`引入类。
 
 
 一个完整的例子，包括JaveBean类和JSP文件：
@@ -514,6 +519,106 @@ public class Print {
 <jsp:getProperty name="myprint" property="name"/> <!-- // hello -->
 ```
 
+# Servlet
+
+> 注：Servlet每写一个，都要配置web.xml，有点麻烦。看样子，web.xml的作用相当于Httpd的 .htaccess 。
+
+Servlet是用Java编写的运行在Web服务器中的程序，也是一个类。
+
+Servlet由Web服务器引擎负责编译执行。当客户端访问Servlet时，服务器将启动一个线程，加载该Servlet，由Servlet接受HTTP请求并做出响应。
+
+Servlet的生命周期有3个过程：
+- Servlet的初始化。服务器引擎生成Servlet类的对象并加载，通过这个对象的 `init()` 完成初始化工作。
+- 生成的Servlet类的对象调用 `service()` 方法来响应请求。每发生一次请求， `service()`都会被调用一次。
+- Servlet类的对象常驻内存直至Web服务器关闭。当Web服务器关闭时，将调用Servlet类的对象的 `destory()` 方法来消除此对象。
+
+
+Tomcat/lib 下有2个与Servlet相关的包：jsp-api.jar，servlet-api.jar 包。其中：
+- servlet-api.jar包实现了 javax.servlet / javax.servlet.http 。
+  - javax.servlet提供了实现 Servlet类的基类和接口。
+  - javax.servlet.http提供了基于HTTP协议实现Servlet类的基类与接口。
+- jsp-api.jar包实现了 javax.servlet.jsp 。
+
+JSP页面也是一种Servlet，继承了HttpJspBase类。运行JSP，比运行Servlet，多一步：JSP要先编译为Servlet。
+```
+java.lang.Object
+--javax.servlet.GenericServlet
+----javax.servlet.http.HttpServlet (普通Servlet)
+------org.apache.jasper.runtime.HttpJspBase (JSP)
+```
+
+HttpServlet类（抽象）继承GenericServlet类（抽象），用于创建一个基于HTTP协议的Servlet。  
+继承它的类需要实现这些方法：`doGet()`, `doPost()`, `doPut()`, `doDelete()`, `init()`/`destory()`, `getServletInfo()`。此外，还可以重载`service()`，此方法处理标准的HTTP请求，并转发需求到各个 doXXX() 方法。
+```java
+public abstract class HttpServlet extends GenericServlet implements java.io.Seriaizable {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+
+    protected void service(HttpServletRequest req, HttpServletResponse resp)
+
+    protected void init(ServletConfig config)
+
+    public void destory()
+}
+```
+
+
+编写Servlet
+- 类继承HttpServlet。
+- 至少要实现`init()`和`service()`。
+- 编译时指定 classpath 。Maven项目直接在依赖中加入 tomcat-servlet-api 包。
+
+部署Servlet
+- 部署其class。将class文件复制到`WEB_INFO/classes`目录；如果该class属于某个包，则按包的路径存放。
+- 在`WEB-INFO/web.xml`中`<web-app>`部分加入Servlet的配置。
+```xml
+<!-- 注意：这不是两种格式！一个servlet的配置，就需要2个部分。 -->
+<servlet>
+    <servlet-name>Servlet Name</servlet-name>
+    <!-- 这是class文件的名称 -->
+    <servlet-class>Servlet class</servlet-class>
+</servlet>
+<servlet-mapping>
+    <servlet-name>Servlet Name</servlet-name>
+    <!-- 这是class文件的路径，相对于当前应用的路径，也就是URL -->
+    <url-pattern>Servlet path</url-pattern>
+</servlet-mapping>
+```
+
+一个完整的例子：
+```java
+// 一定要引入servlet相关的包，否则无法编译
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class FirstServlet extends HttpServlet {
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+    }
+
+    @Override
+    public void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        out.println("Hello, world !");
+    }
+}
+```
+```xml
+<web-app>
+  <servlet>
+    <servlet-name>first</servlet-name>
+    <servlet-class>FirstServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>first</servlet-name>
+    <url-pattern>/first</url-pattern> <!-- 这是访问路径 -->
+  </servlet-mapping>
+</web-app>
+```
 
 # 框架
 
