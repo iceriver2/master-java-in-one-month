@@ -12,7 +12,13 @@
   - [out](#out)
   - [config](#config)
 - [JDBC](#jdbc)
+  - [Connection](#connection)
+  - [Statement](#statement)
+  - [ResultSet](#resultset)
+  - [DatabaseMetaData](#databasemetadata)
+  - [ResultSetMetaData](#resultsetmetadata)
 - [框架](#%e6%a1%86%e6%9e%b6)
+- [服务器](#%e6%9c%8d%e5%8a%a1%e5%99%a8)
 
 - JavaWeb编程
   - Web编程基础：Tomcat服务器、EL、Servlet API、Listener和Filter
@@ -45,8 +51,6 @@
 
 JSP本质上是一个Servlet，编译后会变成一个HttpJspPage类（HttpServlet的一个子类）。
 
-支持JSP的服务器 Tomcat,WebLogic,WebSphere, JBoss 。
-
 ## JSP页面
 
 JSP页面(`.jsp`)支持混写。
@@ -60,7 +64,7 @@ JSP页面(`.jsp`)支持混写。
 <%="23"%> <!-- 表达式 -->
 ```
 
-默认情况下，jsp会导入的类： java.lang, javax.servlet, javax.servlet.jsp, javax.servlet.http 。
+**jsp默认导入的类： java.lang, javax.servlet, javax.servlet.jsp, javax.servlet.http 。**
 
 一个相对较全的例子，包括2个页面：`/a/a.jsp`, `/b/b.jsp`，其中 `/a/a.jsp` 向 `/b/b.jsp?id=a&date=xxx` 提交表单，`b.jsp` 将结果打印到页面。
 ```jsp
@@ -237,54 +241,37 @@ JSP的内置对象：**request**、**response**、**session**、**application**�
 
 > 注：当一个变量同时出现在get/post方式中时，会以数组形式保存。
 
+request是 HttpServletRequest/ServletRequest 的一个实例。
 
-request对象的常用方法：`getAttrbute()`获取属性 / `removeAttribute()`删除属性 / `setAttribute()`设置属性 / `getAttributeNames()`获取属性枚举, `getCharacterEncoding()`获取请求的字符编码 / `setCharacterEncoding()`设置请求的字符编码, `getContentType()`获取内容的MIME, `getContextPath()`获取相对ROOT的应用的位置, `getLocalAddr()`获取服务器地址, `getLocalName()`获取服务器名称, `getMethod()`获取请求类型, `getParameter()`获取参数值, `getParameterMap()`获取参数值的映射, `getParameterNames()`获取参数名称的枚举, `getParameterValues()`获取参数值的数组, `getProtocol()`获取协议及版本号, `getQueryString()`获取查询字符串, `getRemoteAddr()`获取客户地址, `getRemoteHost()`获取客户名称, `getRemotePort()`获取客户端口, `getRequestURI()`获取请求路径, `getRequestURL()`获取标准全路径, `getServerPort()`获取服务端端口, `getServletPath()`获取servlet路径（JSP路径）, `getSession()`获得关联的会话。
-
-
-ServletRequest(接口)
-- `AsyncContext getAsyncContext()` / `boolean isAsyncStarted()` / `boolean isAsyncSupported()` / `AsyncContext startAsync()` / `AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse)`
-- 属性：`Enumeration<String> getAttributeNames()` / `Object getAttribute(String name)` / `void setAttribute(String name, Object o)` / `void removeAttribute(String name)`
-- 字符集：`void setCharacterEncoding(String env)` / `String getCharacterEncoding()`
-- 内容：`String getContentType()` / `int getContentLength()` / `long getContentLengthLong()`
-- `DispatcherType getDispatcherType()` / `RequestDispatcher getRequestDispatcher(String path)`
-- 流：`ServletInputStream getInputStream()` / `BufferedReader getReader()`
-- 请求信息：`String getProtocol()` / `String getLocalAddr()` / `String getLocalName()` / `int getLocalPort()` / `String getRealPath(String path)` / `String getRemoteAddr()` / `String getRemoteHost()` / `int getRemotePort()` / `String getScheme()` / `String getServerName()` / `int getServerPort()` / `ServletContext getServletContext()` / `boolean isSecure()`
-- `Enumeration<Locale> getLocales()` / `Locale getLocale()`
-- 参数：`Enumeration<String> getParameterNames()` / `String getParameter(String name)` / `Map<String,String[]> getParameterMap()` / `String[] getParameterValues(String name)`
-
-HttpServletRequest（接口，继承 ServletRequest）
-- 方法：`String getMethod()`
-- Cookie：`Cookie[] getCookies()` 
-- Session:`String changeSessionId()` / `String getRequestedSessionId()` / `HttpSession getSession()` / `HttpSession getSession(boolean create)` / `boolean isRequestedSessionIdFromCookie()` / `boolean isRequestedSessionIdFromURL()` / `boolean isRequestedSessionIdValid()`
-- 路径：`String getContextPath()` / `String getServletPath()` / `String getRequestURI()` / `StringBuffer getRequestURL()` / `String getQueryString()` / `String getPathInfo()` / `String getPathTranslated()`
-- 授权：`boolean authenticate(HttpServletResponse response)` / `String getAuthType()` / `String getRemoteUser()` / `Principal getUserPrincipal()` / `void login(String username, String password)` / `void logout()` / `boolean isUserInRole(String role)`
-- 头部：`Enumeration<String> getHeaderNames()` / `Enumeration<String> getHeaders(String name)` / `String getHeader(String name)` / `long getDateHeader(String name)` / `int getIntHeader(String name)`
-- `Collection<Part> getParts()` / `Part getPart(String name)`
-- `<T extends HttpUpgradeHandler>T upgrade(Class<T> handlerClass)`
+request对象的常用方法：
+- `getAttrbute()`获取属性 / `removeAttribute()`删除属性 / `setAttribute()`设置属性 / `getAttributeNames()`获取属性枚举
+- `getCharacterEncoding()`获取请求的字符编码 / `setCharacterEncoding()`设置请求的字符编码
+- `getContentType()`获取内容的MIME
+- `getContextPath()`获取相对ROOT的应用的位置
+- `getLocalAddr()`获取服务器地址 / `getLocalName()`获取服务器名称
+- `getMethod()`获取请求类型
+- `getParameter()`获取参数值 / `getParameterMap()`获取参数值的映射 / `getParameterNames()`获取参数名称的枚举 / `getParameterValues()`获取参数值的数组
+- `getProtocol()`获取协议及版本号
+- `getQueryString()`获取查询字符串
+- `getRemoteAddr()`获取客户地址 / `getRemoteHost()`获取客户名称 / `getRemotePort()`获取客户端口
+- `getRequestURI()`获取请求路径 / `getRequestURL()`获取标准全路径
+- `getServerPort()`获取服务端端口
+- `getServletPath()`获取servlet路径（JSP路径）
+- `getSession()`获得关联的会话
 
 ## Response
 
-response 对象的常用方法：`flushBuffer()`强制输出缓冲, `getBufferSize()`获得缓冲区大小 / `setBufferSize()`设置缓冲区大小, `getCharacterEncoding()`获得响应的字符编码 / `setCharacterEncoding()`设置响应的字符编码, `getContentType()`获得响应的MIME / `setContentType()`设置响应的MIME, `getOutputStream()`获得输出流, `getWriter()`获得PrintWriter对象, `sendRedirect()`重定向, `setHeader()`设置头部。
+response 是 HttpServletResponse/ServletResponse 的一个实例。
 
-
-ServletResponse（接口）
-- `void flushBuffer()` / `void reset()` / `void resetBuffer()`
-- `int getBufferSize()` / `void setBufferSize(int size)`
-- `String getCharacterEncoding()` / `void setCharacterEncoding(String charset)`
-- `String getContentType()` / `void setContentType(String type)` / `void setContentLength(int len)` / `void setContentLengthLong(long len)`
-- `Locale getLocale()` / `void setLocale(Locale loc)`
-- `ServletOutputStream getOutputStream()` / `PrintWriter getWriter()`
-- `boolean isCommitted()`
-
-HttpServletResponse（接口，继承ServletResponse）
-- 若干 `SC_XX` 常量表示 status code
-- `void addCookie(Cookie cookie)`
-- `void addHeader(String name, String value)` / `void addDateHeader(String name, long date)` / `void addIntHeader(String name, int value)` / `void setHeader(String name, String value)` / `void setDateHeader(String name, long date)` / `void setIntHeader(String name, int value)` / `boolean containsHeader(String name)`
-- `String encodeRedirectURL(String url)` / `String encodeURL(String url)`
-- `Collection<String> getHeaders(String name)` / `Collection<String> getHeaderNames()` / `String getHeader(String name)`
-- `int getStatus()` / `void setStatus(int sc)`
-- `void sendError(int sc)` / `void sendError(int sc, String msg)`
-- `void sendRedirect(String location)`
+response 对象的常用方法：
+- `flushBuffer()`强制输出缓冲
+- `getBufferSize()`获得缓冲区大小 / `setBufferSize()`设置缓冲区大小
+- `getCharacterEncoding()`获得响应的字符编码 / `setCharacterEncoding()`设置响应的字符编码
+- `getContentType()`获得响应的MIME / `setContentType()`设置响应的MIME
+- `getOutputStream()`获得输出流
+- `getWriter()`获得PrintWriter对象
+- `sendRedirect()`重定向
+- `setHeader()`设置头部
 
 ## Cookie
 
@@ -292,65 +279,35 @@ Cookie在安全性较高的场合不要使用。浏览器只允许存放300个Co
 
 Cookie的使用，先创建一个 Cookie 对象，然后通过 response.addCookie() 将其发送到客户端，通过 request.getCookies() 方法查找获取。
 
-Cookie对象自身也有一些方法可以设置属性，如 `getComment()`/`setComment()`获取/设置注释, `getDomain()`/`setDomian()`获取/设置域, `getMaxAge()`/`setMaxAge()`获取/设置有效时间, `getName()`/`setName()`获取设置名称, `getPath()`/`getPath()`获取/设置路径, `getSecure()`/`setSecure()`获取设置SSL, `getValue()`/`setValue()`获取/设置值。
-
-
-Cookie(类)
-- `Cookie(String name, String value)`
-- `Object clone()`
-- `String getComment()` / `void setComment(String purpose)`
-- `String getDomain()` / `void setDomain(String domain)`
-- `int getMaxAge()` / `void setMaxAge(int expiry)`
-- `String getName()`
-- `String getPath()` / `void setPath(String uri)`
-- `boolean getSecure()` / `void setSecure(boolean flag)`
-- `String getValue()` / `void setValue(String newValue)`
-- `int getVersion()` / `void setVersion(int v)`
-- `boolean isHttpOnly()` / `void setHttpOnly(boolean isHttpOnly)`
+Cookie对象自身也有一些方法可以设置属性，如:
+- `getComment()`/`setComment()`获取/设置注释
+- `getDomain()`/`setDomian()`获取/设置域
+- `getMaxAge()`/`setMaxAge()`获取/设置有效时间
+- `getName()`/`setName()`获取设置名称
+- `getPath()`/`getPath()`获取/设置路径
+- `getSecure()`/`setSecure()`获取设置SSL
+- `getValue()`/`setValue()`获取/设置值
 
 ## Session
 
-session对象的常用方法有：`getAttribute()`获取属性 / `removeAttribute()`删除属性 / `getAttributeNames()`获取属性的枚举, `getMaxInactiveInterval()`获取有效时间 / `setMaxInactiveInterval()`设置有效时间, `getServletContext()`获得会话所属上下文, `invalidate()`使会话失效, `isNew()`是否新会话。
-
-
-HttpSession（接口）
-- `void removeAttribute(String name)` / `Object getAttribute(String name)` / `void setAttribute(String name, Object value)` / `Enumeration<String> getAttributeNames()`
-- `long getCreationTime()` / `long getLastAccessedTime()`
-- `String getId()`
-- `int getMaxInactiveInterval()` / `void setMaxInactiveInterval(int interval)`
-- `ServletContext getServletContext()`
-- `void invalidate()`
-- `boolean isNew()`
+session对象的常用方法有：
+- `getAttribute()`获取属性 / `removeAttribute()`删除属性 / `getAttributeNames()`获取属性的枚举
+- `getMaxInactiveInterval()`获取有效时间 / `setMaxInactiveInterval()`设置有效时间
+- `getServletContext()`获得会话所属上下文
+- `invalidate()`使会话失效
+- `isNew()`是否新会话。
 
 ## application
 
 application对象在多个程序或多个用户之间共享数据。服务器一启动，就会自动创建 application 对象，会一直持续到服务器关闭。
 
-application对象的常用方法：`getAttribute()`获得属性 / `removeAttribute()`删除属性 / `setAttribute()`设置属性 / `getAttributeNames()`获得属性的枚举, `getContext()`获得指定URI的上下文, `getInitParameter()`获得默认参数值 /  `getInitParameterName()`获得默认参数名称, `getRealPath()`返回path的物理路径, `getServletContextName()`获得上下文的显示名称。 
+application对象的常用方法：
+- `getAttribute()`获得属性 / `removeAttribute()`删除属性 / `setAttribute()`设置属性 / `getAttributeNames()`获得属性的枚举
+- `getContext()`获得指定URI的上下文
+- `getInitParameter()`获得默认参数值 /  `getInitParameterName()`获得默认参数名称
+- `getRealPath()`返回path的物理路径
+- `getServletContextName()`获得上下文的显示名称。 
 
-
-ServletContext(接口)
-- `<T extends Filter>T createFilter(Class<T> clazz)` / `FilterRegistration.Dynamic addFilter(String filterName, Class<? extends Filter> filterClass)` / `FilterRegistration.Dynamic addFilter(String filterName, Filter filter)` / `FilterRegistration.Dynamic addFilter(String filterName, String className)`
-- `<T extends EventListener>T createListener(Class<T> clazz)` / `void addListener(Class<? extends EventListener> listenerClass)` / `void addListener(String className)` / `<T extends EventListener>void addListener(T t)`
-- `<T extends Servlet>T createServlet(Class<T> clazz)` / `ServletRegistration.Dynamic addServlet(String servletName, Class<? extends Servlet> servletClass)` / `ServletRegistration.Dynamic addServlet(String servletName, Servlet servlet)` / `ServletRegistration.Dynamic addServlet(String servletName, String className)`
-- `void declareRoles(String... roleNames)`
-- `Enumeration<String> getAttributeNames()` / `Object getAttribute(String name)` / `void removeAttribute(String name)` / `void setAttribute(String name, Object object)`
-- `ClassLoader getClassLoader()`
-- `ServletContext getContext(String uripath)` / `String getContextPath()`
-- `int getEffectiveMajorVersion()` / `int getEffectiveMinorVersion()` / `int getMajorVersion()` / `int getMinorVersion()`
-- `Set<SessionTrackingMode> getDefaultSessionTrackingModes()` / `Set<SessionTrackingMode> getEffectiveSessionTrackingModes()` / `void setSessionTrackingModes(Set<SessionTrackingMode> sessionTrackingModes)`
-- `Map<String,? extends FilterRegistration> getFilterRegistrations()` / `FilterRegistration getFilterRegistration(String filterName)`
-- `Enumeration<String> getInitParameterNames()` / `String getInitParameter(String name)` / `boolean setInitParameter(String name, String value)`
-- `JspConfigDescriptor getJspConfigDescriptor()`
-- `String getMimeType(String file)`
-- `RequestDispatcher getNamedDispatcher(String name)` / `RequestDispatcher getRequestDispatcher(String path)`
-- `String getRealPath(String path)`
-- `URL getResource(String path)` / `InputStream getResourceAsStream(String path)` / `Set<String> getResourcePaths(String path)`
-- `String getServerInfo()`
-- `Servlet getServlet(String name)` / `String getServletContextName()` / `Enumeration<String> getServletNames()` / `ServletRegistration getServletRegistration(String servletName)` / `Map<String,? extends ServletRegistration> getServletRegistrations()` / `Enumeration<Servlet> getServlets()`
-- `SessionCookieConfig getSessionCookieConfig()`
-- `String getVirtualServerName()`
-- `void log(Exception exception, String msg)` / `void log(String msg)` / `void log(String message, Throwable throwable)`
 
 ## out
 
@@ -358,21 +315,10 @@ ServletContext(接口)
 
 out对象向客户端输出内容，由 Web容器指定为 javax.servlet.jsp.JspWriter 类的一个子类。
 
-out对象的常用方法包括：`clear()`清空缓冲区, `clearBuffer()`清空缓冲区, `close()`刷新缓冲区后关闭, `flush()`刷新缓冲区, `getBufferSize()`获得缓冲区大小, `isAutoFlush()`是否自动刷新, `print()`打印 。
-
-
-JspWriter(抽象)
-- `protected JspWriter(int bufferSize, boolean autoFlush)`
-- `abstract void clear()`
-- `abstract void clearBuffer()`
-- `abstract void close()`
-- `abstract void flush()`
-- `int getBufferSize()`
-- `abstract int getRemaining()`
-- `boolean isAutoFlush()`
-- `abstract void newLine()`
-- `abstract void print(boolean b)` / `abstract void print(char c)` / `abstract void print(char[] s)` / `abstract void print(double d)` / `abstract void print(float f)` / `abstract void print(int i)` / `abstract void print(long l)` / `abstract void print(Object obj)` / `abstract void print(String s)`
--  `abstract void println()` / `abstract void println(boolean x)` / `abstract void println(char x)` / `abstract void println(char[] x)` / `abstract void println(double x)` / `abstract void println(float x)` / `abstract void println(int x)` / `abstract void println(long x)` / `abstract void println(Object x)` / `abstract void println(String x)`
+out对象的常用方法包括：
+- `clear()`清空缓冲区, `clearBuffer()`清空缓冲区, `close()`刷新缓冲区后关闭, `flush()`刷新缓冲区, `getBufferSize()`获得缓冲区大小
+- `isAutoFlush()`是否自动刷新
+- `print()`打印
 
 ## config
 
@@ -380,7 +326,147 @@ config对象是 servletConfig 类的一个对象，用于处理当前页面的�
 
 # JDBC
 
+使用方法：
+- 下载JDBC驱动文件，将jar文件放入应用的 `WEB-INF/lib` 目录（JEE应用中的标准三方包路径）。
+- 在使用页面，引入SQL包： `import java.sql.*`
+- 在使用页面，注册驱动 `Class.forName("com.mysql.jdbc.Driver");`
+- 获取数据库连接 `Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/testdb", "root", "root")`。连接数据库时需要捕获异常。
 
+> 注：书上说，放入 `WEB-INF/lib` 的驱动会被DriverManager自动搜索，但并没有。Stackoverflow说，应该放入 `$CATALINA_HOME/lib` ，但也有说没用的。只有 `Class.forName()` 最保险。
+
+如果在 Maven 中使用，应该在 pom.xml 的 `<dependencies>` 中加入依赖关系。
+
+
+数据库连接池负责分配、管理和释放数据库连接，允许重复使用一个现有的数据库连接。
+
+Tomcat内置的数据库连接池是 DBCP（Database Connection Pool），DBCP 是 jakarata Commons 的一个子项目。DBCP的组件包是 tomcat-dbcp.jar，位于 Tomcat/lib 目录。
+
+
+一个完整的例子
+```java
+try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/dwing", "root", "root")) {
+    try {
+        String sql = "select * from d_city where code = ? limit 1";
+        PreparedStatement s = conn.prepareStatement(sql); // 预编译语句
+        s.setString(1, "XXX"); // 设置参数
+        ResultSet rs = s.executeQuery(); // 查询得到ResultSet，指针 beforeFirst
+        rs.next(); // 移动指针到first
+        return rs.getString(1); // 通过 getXXX(index) 获得字段值
+    } catch (SQLException e) {
+        return null;
+    }
+    out.print(a.toString());
+} catch (Exception e) {
+    out.print(e.getMessage());
+}
+```
+
+
+一些注意点：
+- JDBC使用`getConnection()`连接数据库，使用`close()`释放连接。操作期间会保持长连接。
+- 基本步骤是：`getConnection()`, `createStatement()`, `executeQuery()`, `close()`。
+- ResultSet指针默认beforeFirst，而不是first。需要通过`next()`获得数据。
+- ResultSet的行数，通过 `rs.last()` 移动到最后一行后，使用 `rs.getRow()` 读取行号。
+- 插入/更新/删除语句，Statement的`executeQuery()`会返回受到影响的行数。
+- 在`createStatement`时，可以指定标志位`ResultSet.CONCUR_UPDATABLE`，允许对ResultSet只读或读写。使用ResultSet的`moveToInsertRow()`后，对内存中的数据进行更新，连接关闭时，会自动写入数据库。
+
+
+PHP和JS中使用数据库短连接，查询结果立即断开连接。因此，总是把查询结果作为数组（对象数组或二维数组）一次性返回。分页需要两步查询：查询全部数量，查询本页数据。  
+JDBC使用数据库长连接，只在需要时读取相应数据。因此，分页可以只需一步查询，通过`last()`获得总数，通过`absolute()`控制指针移动到需要读取的本页数据。当然，更好的方法，仍然是两步查询：查询全部数量，查询本页数据。
+
+事务的处理也比较简单，先设置不自动提交 `setAutoCommit(false)`，然后，正常执行各种`executeQuery()`，最后再`commit()`或`rollback()`。
+
+## Connection
+
+一个Connection对象表示一个连接。Connection默认自动提交。  
+Connection的常用方法：
+- `close()` / `isClosed()` 释放连接
+- `commit()`提交, `rollback()`回滚
+- `createStatement()`创建Statement对象, `prepareStatement()`创建PreparedStatement对象, `prepareCall()`创建CallableStatement对象
+- `getAutoCommit()` / `setAutoCommit()` 自动提交
+- `getMetaData()` 获取DatabaseMetaData对象，关于数据库的信息
+- `getTransationIsolation()` / `setTransactionIsolation()` 事务隔离级别
+- `isReadOnly()` / `setReadonly()` 只读
+- `setHoldability()` 可保存性
+
+## Statement
+
+Statement对象表示SQL语句。存在三种Statement对象
+- Statement，用于执行基本的SQL语句；
+- PreparedStatement，继承Statement，用于提供可以与查询信息一起预编译的语句
+- CallableStatement，继承PreparedStatement，用于执行数据库中的存储过程。
+
+Statement用于执行静态SQL语句并返回它所生成的对象。默认情况下，同一时刻每个Statement对象只能打开一个 Result 对象。  
+Statement接口的常用方法：
+- `addBatch()`添加批处理 / `executeBatch()`执行批处理 / `clearBatch()`清除批处理
+- `cancel()`取消
+- `close()` / `isClosed()` 释放连接
+- `execute()`执行（返回boolean）, `executeQuery()`执行（有返回ResultSet）, `executeUpdate()`执行（返回int）
+- `getConnection()`
+- `getMaxFieldSize()` / `setMaxFieldSize()` 最大字节数
+- `getMaxRows()` / `setMaxRows()` 最大行数
+- `getMoreResults()` 是否还有下一个
+- `getResultSet()` 获得当前ResultSet
+- `getUpdateCount()` 更新结果计数器
+
+PreparedStatement 用于表示预编译SQL语句的对象。SQL语句被预编译并且存储在 PreparedStatement 对象中，然后多次被执行。  
+PreparedStatement 扩展了 Statement 接口，PreparedStatement 增加了一系列 setXXX 方法。（注意：setXXX的索引从1开始。）
+
+CallableStatement 是用于执行SQL存储过程的接口。存储过程的输入参数值，必须在执行前注册类型，其值是通过本类的 get 方法获取的。注册输出参数用 registerParameter() 方法。  
+CallableStatement 返回一个 ResultSet 对象或多个 ResultSet 对象。多个 Result 对象是使用从 Statement 中继承的操作处理的。
+
+## ResultSet
+
+ResultSet 表示数据库结果记录集。ResultSet对象具有指向其当前数据行的指针，通过 next() 返回下一个结果。
+
+ResultSet 接口提供从当前行返回值的方法（如 getBoolean(), getLong() ）。  
+ResultSet的常用方法：
+- `absolute()`移动到某行, `relative()`移动多少行
+- `afterLast()`移动到最后 / `isAfterLast()`, `beforeFirst()`移动到最前 / `isBeforeFirst()`
+- `first()`移动到第一行 / `isFirst()`, `last()`移动到最后一行 / `isLast()`
+- `next()`下一行, `previous()`上一行
+- `moveToInsertRow()`移动到插入行
+- `cancelRowUpdates()`取消更新
+- `close()`释放连接
+- `deleteRow()`删除行, `insertRow()`插入行, `updateRow()`更新行
+- getXxxx() 获得某个列的值，按序号或名称
+- `getRow()`获得行号
+- `getType()`获得ResultSet类型
+- updateXxx() 更新某个列的值，按序号或名称
+
+getXXX 和 updateXXX，需要注意数据库字段类型与Java数据类型的对应与转换。  
+JDBC规范（3.0）的数据类型转换
+| JDBC类型 | Java类型 | JDBC类型 | Java类型 |
+|----------|---------|---------|----------|
+| CHAR | java.lang.String | BINARY | byte[] |
+| VARCHAR | java.lang.String | VARBINARY | byte[] |
+| LONGVARCHAR | java.lang.String | LONGVARBINARY | byte[] |
+| NUMERIC | java.math.BigDecimal | DATE | java.sql.Date |
+| DECIMAL | java.math.BigDecimal | TIME | java.sql.Time |
+| BIT | boolean | TIMESTAMP | java.sql.Timestamp |
+| BOOLEAN | boolean | CLOB | java.sql.Clob |
+| TINYINT | byte | BLOB | java.sql.Blob |
+| SMALLINT | short | ARRAY | java.sql.Array |
+| INTEGER | int | DISTINCT | 基础类型映射 |
+| BIGINT | long | STRUCT | java.sql.Struct |
+| REAL | float | REF | java.sql.Ref |
+| FLOAT | double | DATALINK | java.net.URL |
+| DOUBLE | double | JAVA_OBJECT | 基础Java类 |
+
+
+## DatabaseMetaData
+
+DatabaseMetaData用于得到有关数据库的信息。通过 Connection 的 `getMetaData()` 获得一个实例。
+
+不同的数据库实现的方式不同。有些数据库以 ResultSet 对象的形式返回信息列表，有些使用 String 。  
+
+DatabaseMetaData 的常用方法： `getURL()`, `getUserName()`, `getTables()` 。
+
+## ResultSetMetaData
+
+ResultSetMetaData 用于获得 ResultSet 的类型和属性信息。通过 ResultSet 的 `getMetaData()` 获得一个实例。
+
+常用方法有： `getColumnCount()`, `getColumnName()`, `getColumnTypeName()` 。
 
 # 框架
 
@@ -388,4 +474,10 @@ SSH 通常指的是 Struts2 做控制器(controller)，spring 管理各层的组
 SSM 则指的是 SpringMVC 做控制器(controller)，Spring 管理各层的组件，MyBatis 负责持久化层。  
 共同点：Spring依赖注入DI来管理各层的组件；用面向切面编程AOP来管理事物、日志、权限等。
 
+# 服务器
+
+支持JSP的服务器 Tomcat,WebLogic,WebSphere, JBoss 。
+- Tomcat，是支持JSP和Servlet的容器，也是Web服务器。占用资源小，扩展性好。Tomcat小型轻量，在中小型系统和并发量不大时实用。（为什么跟Apache Http一个尿性？） Tomcat 需要JDK支持。最新版本 9.0 。
+- WebLogic原是BEA公司产品，被Oracle买了。WebLogic Server支持企业级、分布式的Web应用，支持包括JSP、Servlet、EJB在内的JEE体系。WebLogic功能强大，操作简单，大量用于电子商务。最新版本 12c 。
+- IBM WebSphere是一系列产品，包括 WebSphere Performance Pack、Cache Manager、Studio、Web应用开发工具以及WebSphere Application Server。其中 Application Server基于Java的应用环境。WebSphere Application Server是行业领先的企业级Web应用服务器，支持行业内最广泛的平台，能够为不同类型的应用提供不同的解决方案。它使用基于开放标准的编程模型，包括 JavaEE, OGSi应用，Web2.0和Mobile、Java Batch、XML、Service Component Architecture(SCA)、Communications Enabled Applications(CEA)、Session Initiation Protocol(SIP)和动态脚本。
 
